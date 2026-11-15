@@ -7,7 +7,7 @@ Use this procedure for a **new repository-to-draft request**, not every continua
 Inspect the tracked tree and local instructions before choosing files. Read the README, relevant implementation, tests and any retained experiments. Work in a new directory outside the installed skill. Use absolute paths; replace example paths with actual files:
 
 ```sh
-python /path/to/paper-factory/scripts/research_workspace.py repository --url https://github.com/owner/repository --paths README.md path/to/implementation.py path/to/relevant_test.py --output-dir /work/repo-article/source-snapshot
+python /path/to/think-tank/scripts/research_workspace.py repository --url https://github.com/owner/repository --paths README.md path/to/implementation.py path/to/relevant_test.py --output-dir /work/repo-article/source-snapshot
 ```
 
 Add `--ref BRANCH_OR_TAG` when needed. The helper clones without checkout and saves selected bytes under `sources/`, with the resolved commit and hashes in `repository.json`. Base the analysis on that revision. Capture success is not reading or execution evidence. Record access failures instead of inventing a snapshot.
@@ -25,10 +25,10 @@ Write one actual `paper.md` and a bibliography of verified relevant records. Use
 Reuse the existing claim ledger and its literal source witnesses. The [input contracts](researcher-convenience.md) define bibliography, reading-card and evidence records; [tools.md](tools.md) describes output options.
 
 ```sh
-python /path/to/paper-factory/scripts/import_references.py --input /work/repo-article/paper.bib --output-dir /work/repo-article/imported
-python /path/to/paper-factory/scripts/research_workspace.py evidence --root /work/repo-article --ledger /work/repo-article/claims.json --output-dir /work/repo-article/evidence
-python /path/to/paper-factory/scripts/export_manuscript.py preflight --manuscript /work/repo-article/paper.md --venue SELECTED_ID
-python /path/to/paper-factory/scripts/export_manuscript.py export --manuscript /work/repo-article/paper.md --venue SELECTED_ID --output-dir /work/repo-article/exported
+python /path/to/think-tank/scripts/import_references.py --input /work/repo-article/paper.bib --output-dir /work/repo-article/imported
+python /path/to/think-tank/scripts/research_workspace.py evidence --root /work/repo-article --ledger /work/repo-article/claims.json --output-dir /work/repo-article/evidence
+python /path/to/think-tank/scripts/export_manuscript.py preflight --manuscript /work/repo-article/paper.md --venue SELECTED_ID
+python /path/to/think-tank/scripts/export_manuscript.py export --manuscript /work/repo-article/paper.md --venue SELECTED_ID --output-dir /work/repo-article/exported
 ```
 
 Run export only when prerequisites are available. Access/JORS require `--template ABSOLUTE_FILE` for preflight and export. JOSS uses genuine YAML metadata, `paper.bib` and referenced local figures; it does not render the publisher PDF. Bibliography import preserves supplied BibTeX/RIS/CSL-JSON metadata; it neither verifies publications nor converts RIS to JOSS BibTeX. Keep failures visible and deliver the incomplete source when rendering or author facts are unavailable.
@@ -40,7 +40,7 @@ Create one `bundle-plan.json` for `submission_support.py bundle`. Allowlist only
 Set `article_type`, `draft_status` (`draft` or `incomplete`), `guidance_status` (`verified`, `partial` or `blocked`) and explicit `missing_evidence`. Leave unsupplied declarations/confirmations pending. For JSON evidence, the bundle compares the saved manuscript hash and carries failed, empty, malformed or inconsistent claim results into the checklist. Original bytes survive even when the status becomes incomplete. Authored text notes are manual records, not machine-verified reports; changed source witnesses require the existing evidence/impact tools.
 
 ```sh
-python /path/to/paper-factory/scripts/submission_support.py bundle --root /work/repo-article --plan /work/repo-article/bundle-plan.json --output-dir /work/repo-article-bundle
+python /path/to/think-tank/scripts/submission_support.py bundle --root /work/repo-article --plan /work/repo-article/bundle-plan.json --output-dir /work/repo-article-bundle
 ```
 
 The output directory must be new and outside the source root. Inspect the actual files, manifest and checklist. Report commands/exit codes and separate completed file preparation from unverified rendering, scientific evidence and human approval. Exit 0 means a bundle was written, not that its evidence passed or it is submission-ready. Formatting or declarations cannot clear a draft's research gaps. Deliver the actual bundle and stop.

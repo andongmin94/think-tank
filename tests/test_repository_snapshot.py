@@ -140,10 +140,10 @@ def test_capture_isolates_repository_paths_and_preserves_transport_environment(t
         "GIT_ASKPASS": str(tmp_path / "configured-askpass"),
         "HTTPS_PROXY": "http://proxy.invalid:8080",
         "GIT_SSL_CAINFO": str(tmp_path / "configured-ca.pem"),
-        "GIT_CONFIG_PARAMETERS": "'http.userAgent'='paper-factory-test'",
+        "GIT_CONFIG_PARAMETERS": "'http.userAgent'='think-tank-test'",
         "GIT_CONFIG_COUNT": "1",
         "GIT_CONFIG_KEY_0": "http.extraHeader",
-        "GIT_CONFIG_VALUE_0": "X-Paper-Factory-Test: retained",
+        "GIT_CONFIG_VALUE_0": "X-Think-Tank-Test: retained",
     }
     for name, value in {**inherited, **transport}.items():
         monkeypatch.setenv(name, value)

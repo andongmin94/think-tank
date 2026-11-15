@@ -400,7 +400,7 @@ def test_real_pandoc_hides_only_author_controls_and_preserves_code_and_relative_
     from PIL import Image
     binary = _real_pandoc()
     source = tmp_path / "article.md"
-    start, end = "<!-- paper-factory:authors:start -->", "<!-- paper-factory:authors:end -->"
+    start, end = "<!-- think-tank:authors:start -->", "<!-- think-tank:authors:end -->"
     front = "# Shared configuration cleanup\n\n" + start + "\n\nAlice Example | alice@example.org\n\n" + end + "\n\n"
     body = ARTICLE.split("## Abstract", 1)[1]
     examples = ("\n\n## Control marker examples\n\nInline example: `" + start + "` is code.\n\n"
@@ -432,14 +432,14 @@ def test_real_pandoc_hides_only_author_controls_and_preserves_code_and_relative_
 def test_real_pandoc_does_not_hide_unpaired_or_inline_code_only_marker(tmp_path):
     from docx import Document
     binary = _real_pandoc()
-    start = "<!-- paper-factory:authors:start -->"
+    start = "<!-- think-tank:authors:start -->"
     source = tmp_path / "unpaired.md"
-    source.write_text("# Title\n\n" + start + "\n\n`<!-- paper-factory:authors:end -->`\n\n## Abstract\n\nA bounded example.\n\n## Analysis\n\nAn example is preserved.\n", encoding="utf-8")
+    source.write_text("# Title\n\n" + start + "\n\n`<!-- think-tank:authors:end -->`\n\n## Abstract\n\nA bounded example.\n\n## Analysis\n\nAn example is preserved.\n", encoding="utf-8")
     output = tmp_path / "unpaired.docx"
     converter.convert_docx(source, output, venue_id="ieee-software", pandoc=str(binary))
     paragraphs = [paragraph.text for paragraph in Document(output).paragraphs]
     assert start in paragraphs
-    assert "<!-- paper-factory:authors:end -->" in paragraphs
+    assert "<!-- think-tank:authors:end -->" in paragraphs
 
 
 @pytest.mark.parametrize("missing", [True, False])
@@ -700,7 +700,7 @@ def test_skill_copy_preflight_works_without_old_checkout(tmp_path):
     shutil.copytree(ROOT / "assets" / "templates", isolated / "assets" / "templates")
     manuscript = tmp_path / "input.md"
     manuscript.write_text(ARTICLE, encoding="utf-8")
-    env = {key: value for key, value in os.environ.items() if key not in {"PYTHONPATH", "PAPER_FACTORY_ROOT"}}
+    env = {key: value for key, value in os.environ.items() if key not in {"PYTHONPATH", "THINK_TANK_ROOT"}}
     env["PYTHONIOENCODING"] = "cp1252"  # Match the Windows pipe encoding that broke UTF-8 JSON consumers.
     result = subprocess.run([sys.executable, str(isolated / "scripts" / "export_manuscript.py"),
                              "preflight", "--manuscript", str(manuscript), "--venue", "ieee-software"],

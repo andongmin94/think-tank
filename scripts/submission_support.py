@@ -22,8 +22,8 @@ from _publication_venues import VENUES
 
 
 BIO_HEADINGS = {"author biography", "author biographies", "about the author", "about the authors"}
-AUTHOR_START = "<!-- paper-factory:authors:start -->"
-AUTHOR_END = "<!-- paper-factory:authors:end -->"
+AUTHOR_START = "<!-- think-tank:authors:start -->"
+AUTHOR_END = "<!-- think-tank:authors:end -->"
 DECLARATIONS = ("originality", "rights", "author_approval", "funding", "conflicts", "ai_disclosure")
 
 
@@ -106,7 +106,7 @@ def _without_author_block(preamble):
     ends = list(re.finditer(r"(?m)^" + re.escape(AUTHOR_END) + r"[ \t]*\r?$", protected))
     if not starts and not ends:
         if preamble.strip():
-            raise ValueError("Ambiguous pre-Abstract content: preserve this prose, or explicitly mark only the intended byline with <!-- paper-factory:authors:start --> and <!-- paper-factory:authors:end --> in a new manuscript copy")
+            raise ValueError("Ambiguous pre-Abstract content: preserve this prose, or explicitly mark only the intended byline with <!-- think-tank:authors:start --> and <!-- think-tank:authors:end --> in a new manuscript copy")
         return preamble
     if len(starts) != 1 or len(ends) != 1 or starts[0].start() >= ends[0].start():
         raise ValueError("Author block requires exactly one ordered start/end marker pair")

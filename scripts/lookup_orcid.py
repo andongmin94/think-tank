@@ -174,7 +174,7 @@ def _public_record(orcid, section, opener, deadline):
     remaining = deadline - time.monotonic()
     if remaining <= 0:
         raise OrcidLookupError("The ORCID public lookup timed out.")
-    request = Request(url, headers={"Accept": "application/json", "User-Agent": "Paper-Factory-Public-ORCID"})
+    request = Request(url, headers={"Accept": "application/json", "User-Agent": "Think-Tank-Public-ORCID"})
     try:
         # Subtracting float clock values can round just above the request limit.
         with opener.open(request, timeout=min(remaining, REQUEST_TIMEOUT)) as response:

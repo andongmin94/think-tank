@@ -14,11 +14,11 @@ support = importlib.import_module("submission_support")
 
 ARTICLE = """# A shared setting
 
-<!-- paper-factory:authors:start -->
+<!-- think-tank:authors:start -->
 
 Old Author | old@example.org
 
-<!-- paper-factory:authors:end -->
+<!-- think-tank:authors:end -->
 
 ## Abstract
 
@@ -114,7 +114,7 @@ def test_unrecognized_pre_abstract_section_is_not_silently_replaced(tmp_path, in
 def test_unmarked_pre_abstract_prose_is_refused_without_any_deletion(tmp_path, inputs):
     article, profile = inputs
     prose = "This practical argument follows an important boundary condition."
-    put(article, ARTICLE.replace("<!-- paper-factory:authors:start -->\n\nOld Author | old@example.org\n\n<!-- paper-factory:authors:end -->", prose))
+    put(article, ARTICLE.replace("<!-- think-tank:authors:start -->\n\nOld Author | old@example.org\n\n<!-- think-tank:authors:end -->", prose))
     original = article.read_bytes()
     with pytest.raises(ValueError, match="Ambiguous pre-Abstract content"):
         support.prepare_authors(profile, article, tmp_path / "new")
@@ -125,7 +125,7 @@ def test_unmarked_pre_abstract_prose_is_refused_without_any_deletion(tmp_path, i
 def test_prose_next_to_explicit_author_block_and_repeated_preparation_survive(tmp_path, inputs):
     article, profile = inputs
     prose = "Scope note: the article analyzes a retained source snapshot."
-    put(article, ARTICLE.replace("<!-- paper-factory:authors:end -->", "<!-- paper-factory:authors:end -->\n\n" + prose))
+    put(article, ARTICLE.replace("<!-- think-tank:authors:end -->", "<!-- think-tank:authors:end -->\n\n" + prose))
     support.prepare_authors(profile, article, tmp_path / "first", anonymous=True)
     support.prepare_authors(profile, tmp_path / "first/manuscript.md", tmp_path / "second", anonymous=True)
     for folder in ("first", "second"):
@@ -137,7 +137,7 @@ def test_prose_next_to_explicit_author_block_and_repeated_preparation_survive(tm
 
 def test_author_markers_in_front_matter_code_are_not_deletion_instructions(tmp_path, inputs):
     article, profile = inputs
-    example = "```html\n<!-- paper-factory:authors:start -->\nA literal marker example.\n<!-- paper-factory:authors:end -->\n```"
+    example = "```html\n<!-- think-tank:authors:start -->\nA literal marker example.\n<!-- think-tank:authors:end -->\n```"
     source = "# Title\n\n" + example + "\n\n## Abstract\n\nBounded text.\n"
     put(article, source)
     with pytest.raises(ValueError, match="Ambiguous pre-Abstract content"):

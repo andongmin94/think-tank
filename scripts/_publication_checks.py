@@ -113,8 +113,8 @@ def _insights(markdown: str) -> list[list[str]]:
 
 def _author_blocks(front: str, authors: list[dict]) -> tuple[dict[str, str], bool]:
     """Associate plain byline blocks with exact leading names, never global facts."""
-    starts = list(re.finditer(r"(?m)^[ \t]*<!-- paper-factory:authors:start -->[ \t]*$", front))
-    ends = list(re.finditer(r"(?m)^[ \t]*<!-- paper-factory:authors:end -->[ \t]*$", front))
+    starts = list(re.finditer(r"(?m)^[ \t]*<!-- think-tank:authors:start -->[ \t]*$", front))
+    ends = list(re.finditer(r"(?m)^[ \t]*<!-- think-tank:authors:end -->[ \t]*$", front))
     if starts or ends:
         if len(starts) != 1 or len(ends) != 1 or starts[0].start() >= ends[0].start():
             return {}, False

@@ -75,7 +75,7 @@ def capture_repository(url: str, output_dir: Path, *, paths: list[str], ref: str
     if output_dir.exists():
         raise FileExistsError(f"Repository capture output already exists: {output_dir}")
 
-    with tempfile.TemporaryDirectory(prefix="paper-factory-repository-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="think-tank-repository-") as temporary:
         temporary = Path(temporary)
         hooks = temporary / "empty-hooks"
         hooks.mkdir()

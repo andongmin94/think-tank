@@ -28,8 +28,8 @@ local function marker(block)
     if inline.t ~= 'Str' and inline.t ~= 'Space' then return nil end
   end
   local value = pandoc.utils.stringify(block.content)
-  if value == '<!-- paper-factory:authors:start -->' then return 'start' end
-  if value == '<!-- paper-factory:authors:end -->' then return 'end' end
+  if value == '<!-- think-tank:authors:start -->' then return 'start' end
+  if value == '<!-- think-tank:authors:end -->' then return 'end' end
   return nil
 end
 
@@ -233,7 +233,7 @@ def convert_docx(markdown: Path, output: Path, *, venue_id: str,
     if resource_dir is not None:
         command += ["--resource-path", str(resource_dir.resolve())]
     # A short reference path avoids native Windows path-length restrictions.
-    with TemporaryDirectory(prefix="paper-factory-convert-") as temporary:
+    with TemporaryDirectory(prefix="think-tank-convert-") as temporary:
         staged_reference = Path(temporary) / template_path.name
         staged_reference.write_bytes(template_path.read_bytes())
         staged_filter = Path(temporary) / "author-control-markers.lua"

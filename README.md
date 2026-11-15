@@ -1,20 +1,28 @@
-# Paper Factory
+# Think Tank
 
 GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Codex 스킬입니다. **IEEE Software, IEEE Security & Privacy, IEEE Access, Journal of Open Research Software(JORS), Journal of Open Source Software(JOSS)**를 지원합니다. 에이전트가 연구 질문 선정부터 기존 연구 비교·집필·검토까지 직접 조율하고, 파일 도구가 매체별 원고 출력과 투고 준비를 돕습니다.
+
+## 이름과 제품 구분
+
+**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 기존 소프트웨어 연구 논문 5개 매체 지원과 파일 도구를 유지하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
+
+**Paper Factory**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱, LaTeX 편집기 또는 Claude Code 연동이 구현된 것은 아닙니다.
+
+GitHub 저장소 주소는 아직 `andongmin94/paper-factory`입니다. 저장소 자체의 `think-tank` 개명과 별도 앱 저장소 생성은 미완료이며, 아래 설치 명령은 현재 주소에서 **새 스킬 이름의 폴더**로 설치합니다. 과거 `docs/*verification*` 기록과 기존 연구 산출물은 당시의 기록으로 보존합니다. 이전 호출명을 위한 별칭이나 자동 마이그레이션은 제공하지 않습니다.
 
 ## 빠른 시작
 
 새 PC에서는 이 저장소를 Codex의 스킬 폴더에 설치합니다.
 
 ```powershell
-git clone https://github.com/andongmin94/paper-factory.git "$env:USERPROFILE/.codex/skills/paper-factory"
-Set-Location "$env:USERPROFILE/.codex/skills/paper-factory"
+git clone https://github.com/andongmin94/paper-factory.git "$env:USERPROFILE/.codex/skills/think-tank"
+Set-Location "$env:USERPROFILE/.codex/skills/think-tank"
 ```
 
-Codex에서 `$paper-factory`와 대상 저장소를 지정하세요.
+Codex에서 `$think-tank`와 대상 저장소를 지정하세요.
 
 ```text
-$paper-factory https://github.com/owner/repository
+$think-tank https://github.com/owner/repository
 
 저장소와 관련 원문을 읽고, 현재 지원하는 매체 중 정확히 세 후보의 근거 적합성과 article type을 비교해.
 한 곳을 조건부로 추천한 뒤 실제 근거로 뒷받침할 수 있는 영문 초안 한 편을 작성해.

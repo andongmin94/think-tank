@@ -96,7 +96,7 @@ def profile():
 def with_authors(blocks, *, marked=True):
     front = "\n\n".join(blocks)
     if marked:
-        front = "<!-- paper-factory:authors:start -->\n\n" + front + "\n\n<!-- paper-factory:authors:end -->"
+        front = "<!-- think-tank:authors:start -->\n\n" + front + "\n\n<!-- think-tank:authors:end -->"
     return ARTICLE.replace("\n\n## Abstract", "\n\n" + front + "\n\n## Abstract", 1)
 
 
@@ -131,7 +131,7 @@ def test_actual_ordered_byline_is_supported_with_or_without_markers(marked):
 
 
 def test_names_or_controls_in_code_cannot_supply_byline_facts():
-    example = "```markdown\n<!-- paper-factory:authors:start -->\nAlice Research | Lab A | alice@example.org\nBob Scientist | Lab B | bob@example.org\n<!-- paper-factory:authors:end -->\n```"
+    example = "```markdown\n<!-- think-tank:authors:start -->\nAlice Research | Lab A | alice@example.org\nBob Scientist | Lab B | bob@example.org\n<!-- think-tank:authors:end -->\n```"
     result = checks.validate_manuscript(ARTICLE.replace("\n\n## Abstract", "\n\n" + example + "\n\n## Abstract", 1), "ieee-software", profile())
     assert item(result, "author_profile_binding")["status"] == "pending"
     assert all("display_name" in row["missing_byline_values"] for row in result["metrics"]["authors"])
