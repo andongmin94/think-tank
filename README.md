@@ -6,16 +6,16 @@ GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Co
 
 **Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 기존 소프트웨어 연구 논문 5개 매체 지원과 파일 도구를 유지하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
 
-**Paper Factory**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱, LaTeX 편집기 또는 Claude Code 연동이 구현된 것은 아닙니다.
+**[Paper Factory](https://github.com/andongmin94/paper-factory)**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱, LaTeX 편집기 또는 Claude Code 연동이 구현된 것은 아닙니다.
 
-GitHub 저장소 주소는 아직 `andongmin94/paper-factory`입니다. 저장소 자체의 `think-tank` 개명과 별도 앱 저장소 생성은 미완료이며, 아래 설치 명령은 현재 주소에서 **새 스킬 이름의 폴더**로 설치합니다. 과거 `docs/*verification*` 기록과 기존 연구 산출물은 당시의 기록으로 보존합니다. 이전 호출명을 위한 별칭이나 자동 마이그레이션은 제공하지 않습니다.
+기존 스킬 저장소는 [`andongmin94/think-tank`](https://github.com/andongmin94/think-tank)로 개명했으며, 구현과 Git 이력을 유지합니다. 아래 설치 명령은 Think Tank 저장소를 `think-tank` 스킬 폴더에 설치합니다. 과거 `docs/*verification*` 기록과 기존 연구 산출물은 당시의 기록으로 보존합니다. 이전 호출명을 위한 별칭이나 자동 마이그레이션은 제공하지 않습니다.
 
 ## 빠른 시작
 
 새 PC에서는 이 저장소를 Codex의 스킬 폴더에 설치합니다.
 
 ```powershell
-git clone https://github.com/andongmin94/paper-factory.git "$env:USERPROFILE/.codex/skills/think-tank"
+git clone https://github.com/andongmin94/think-tank.git "$env:USERPROFILE/.codex/skills/think-tank"
 Set-Location "$env:USERPROFILE/.codex/skills/think-tank"
 ```
 
@@ -100,7 +100,7 @@ python -m pip install -r requirements.txt "pytest>=8,<10"
 python -m pytest -q
 ```
 
-Windows CI에서 실제 Pandoc 식별과 문서 변환을 필수로 검사합니다. 현재 변경 사항과 테스트 결과는 [커밋 이력](https://github.com/andongmin94/paper-factory/commits/main/)과 [GitHub Actions](https://github.com/andongmin94/paper-factory/actions/workflows/skill.yml)에서 확인할 수 있습니다. 누락·손상된 그림의 정상 출력 처리, 확인 도중 바뀐 근거, 과거 출력 파일의 평가 재사용과 저자 검사 누락을 방지합니다. Garak·REA의 기존 질문·기여 선택 기록과 프론트론의 공식 원고·평가·횟수는 유지합니다.
+Windows CI에서 실제 Pandoc 식별과 문서 변환을 필수로 검사합니다. 현재 변경 사항과 테스트 결과는 [커밋 이력](https://github.com/andongmin94/think-tank/commits/main/)과 [GitHub Actions](https://github.com/andongmin94/think-tank/actions/workflows/skill.yml)에서 확인할 수 있습니다. 누락·손상된 그림의 정상 출력 처리, 확인 도중 바뀐 근거, 과거 출력 파일의 평가 재사용과 저자 검사 누락을 방지합니다. Garak·REA의 기존 질문·기여 선택 기록과 프론트론의 공식 원고·평가·횟수는 유지합니다.
 
 - [스킬 지침](SKILL.md)
 - [연구·평가 기준](references/research-and-review.md)
