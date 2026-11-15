@@ -6,7 +6,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   tests:
@@ -15,85 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
+          # Test PR heads once, rather than both branch pushes and PR merge refs.
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          persist-credentials: true
+          persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: '3.11'
-      - name: Rename the research skill
-        if: github.event_name == 'push' && github.event.head_commit.message == 'Prepare verified Think Tank rename'
-        shell: python
-        env:
-          PYTHONUTF8: '1'
-        run: |
-          from pathlib import Path
-          import subprocess
-
-          root = Path.cwd()
-          paths = [root / 'README.md', root / 'SKILL.md']
-          for directory in ('agents', 'references', 'scripts', 'tests'):
-              paths.extend(path for path in (root / directory).rglob('*')
-                           if path.is_file() and path.suffix in ('.md', '.py', '.yaml', '.yml'))
-          replacements = (
-              (b'paper-factory', b'think-tank'),
-              (b'Paper Factory', b'Think Tank'),
-              (b'Paper-Factory', b'Think-Tank'),
-              (b'PaperFactory', b'ThinkTank'),
-              (b'PAPER_FACTORY', b'THINK_TANK'),
-              (b'paper_factory', b'think_tank'),
-          )
-          for path in paths:
-              source = path.read_bytes()
-              updated = source
-              for old, new in replacements:
-                  updated = updated.replace(old, new)
-              if path.name == 'README.md':
-                  # The repository itself has not been renamed. Keep live links usable.
-                  updated = updated.replace(b'https://github.com/andongmin94/think-tank',
-                                            b'https://github.com/andongmin94/paper-factory')
-              if updated != source:
-                  path.write_bytes(updated)
-                  print(path.relative_to(root))
-
-          readme = root / 'README.md'
-          text = readme.read_text(encoding='utf-8')
-          heading = '## 빠른 시작\n'
-          assert text.count(heading) == 1
-          section = '''## 이름과 제품 구분
-
-          **Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 기존 소프트웨어 연구 논문 5개 매체 지원과 파일 도구를 유지하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
-
-          **Paper Factory**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱, LaTeX 편집기 또는 Claude Code 연동이 구현된 것은 아닙니다.
-
-          GitHub 저장소 주소는 아직 `andongmin94/paper-factory`입니다. 저장소 자체의 `think-tank` 개명과 별도 앱 저장소 생성은 미완료이며, 아래 설치 명령은 현재 주소에서 **새 스킬 이름의 폴더**로 설치합니다. 과거 `docs/*verification*` 기록과 기존 연구 산출물은 당시의 기록으로 보존합니다. 이전 호출명을 위한 별칭이나 자동 마이그레이션은 제공하지 않습니다.
-
-          '''
-          readme.write_text(text.replace(heading, section + heading), encoding='utf-8', newline='\n')
-
-          test = root / 'tests/test_skill_identity.py'
-          assert not test.exists()
-          test.write_text('''"""The installed research skill has one current public identity."""
-          from pathlib import Path
-
-          ROOT = Path(__file__).resolve().parents[1]
-
-          def test_think_tank_skill_identity():
-              skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
-              metadata = (ROOT / "agents/openai.yaml").read_text(encoding="utf-8")
-              readme = (ROOT / "README.md").read_text(encoding="utf-8")
-              assert "name: think-tank" in skill.split("---", 2)[1].splitlines()
-              assert "# Think Tank" in skill.splitlines()
-              assert 'display_name: "Think Tank"' in metadata
-              assert "$think-tank" in metadata
-              assert readme.startswith("# Think Tank\\n")
-              assert ".codex/skills/think-tank" in readme
-              assert "$think-tank" in readme
-              for source in (skill, metadata, readme):
-                  assert "$paper-factory" not in source
-                  assert ".codex/skills/paper-factory" not in source
-          ''', encoding='utf-8', newline='\n')
-          subprocess.run(['git', 'diff', '--check'], check=True)
-          subprocess.run(['git', 'diff', '--stat'], check=True)
       - name: Install document and test dependencies
         run: python -m pip install -r requirements.txt "pytest>=8,<10"
       - name: Check standalone scripts
@@ -102,15 +29,3 @@ jobs:
         run: python -c "import sys; sys.path.insert(0, 'scripts'); from _publication_convert import pandoc_binary, pandoc_version; print(pandoc_version(pandoc_binary()))"
       - name: Run isolated tool tests
         run: python -m pytest -q
-      - name: Publish the verified skill rename
-        if: github.event_name == 'push' && github.event.head_commit.message == 'Prepare verified Think Tank rename'
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add README.md SKILL.md agents references scripts tests
-          git diff --cached --check
-          git commit -m 'Rename research skill to Think Tank'
-          git push origin HEAD:main
-          git rev-parse HEAD
