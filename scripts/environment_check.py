@@ -122,7 +122,7 @@ def diagnose(pandoc: str | None = None) -> dict:
             "packages": packages, "pandoc": pandoc_result, "powershell": powershell, "osascript": osascript,
             "word": word, "official_templates": templates,
             "native_export_prerequisites_detected": detected,
-            "native_export_scope": "Bundled Word venues only; IEEE Access and JORS additionally require their explicit verified external template. JOSS produces source files, not native Word/PDF.",
+            "native_export_scope": "Bundled IEEE Software and IEEE Security & Privacy Word templates only. JOSS produces source files, not native Word/PDF.",
             "native_export_verified": False,
             "limitations": ["Registration and package metadata do not verify imports, Word licensing or PDF rendering.",
                             "pypandoc_binary is an optional Pandoc provider when a usable executable is already selected.",

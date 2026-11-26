@@ -418,16 +418,6 @@ def apply_official_styles(output: Path, template: Path, *, citation_style: str) 
             "font_policy": "Official font names retained; Microsoft Word substitutes locally unavailable fonts. Exact proprietary font fidelity is not attested."}
 
 
-def _word_style_arguments(venue_id: str) -> list[str]:
-    if venue_id == "ieee-access":
-        return ["-ReferenceHeadingStyle", "H1", "-ReferenceEntryStyle", "References",
-                "-AbstractLabel", "ABSTRACT ", "-TemplateFonts", "Helvetica,Times New Roman"]
-    if venue_id == "jors":
-        return ["-ReferenceHeadingStyle", "UP Section Heading", "-ReferenceEntryStyle", "References",
-                "-AbstractLabel", "", "-TemplateFonts", "Arial"]
-    return []
-
-
 MAC_WORD_ID = "com.microsoft.Word"
 MAC_SCRIPT = ROOT / "render-word-mac.applescript"
 METRIC_KEYS = ("pages", "whole_words", "abstract_words", "reference_count", "reference_heading_found", "body_words",
@@ -443,12 +433,8 @@ def word_backend() -> str | None:
     return None
 
 
-def _mac_style_arguments(venue_id: str) -> list[str]:
-    if venue_id == "ieee-access":
-        return ["H1", "References", "ABSTRACT ", "Helvetica,Times New Roman"]
-    if venue_id == "jors":
-        return ["UP Section Heading", "References", "", "Arial"]
-    return ["ReferenceHead", "Bib_entry", "Abstract\u2014", "Helvetica-Light,Cheltenham-Book"]
+# Both IEEE magazine templates share these styles; render-word.ps1 uses the same defaults.
+MAC_STYLE_ARGUMENTS = ("ReferenceHead", "Bib_entry", "Abstract\u2014", "Helvetica-Light,Cheltenham-Book")
 
 
 def _mac_staging_root() -> Path:
@@ -463,7 +449,7 @@ def _mac_staging_root() -> Path:
 
 
 def _run_mac_word(mode: str, staged_docx: Path, staged_pdf: Path | None, venue_id: str) -> tuple[list[str], dict, str]:
-    heading, entry, label, fonts = _mac_style_arguments(venue_id)
+    heading, entry, label, fonts = MAC_STYLE_ARGUMENTS
     command = ["osascript", str(MAC_SCRIPT.resolve()), mode, str(staged_docx), str(staged_pdf or ""), heading, entry, label, fonts]
     try:
         result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=240,
@@ -555,7 +541,7 @@ def word_pdf(docx: Path, output: Path, *, venue_id: str = "ieee-software") -> di
         if digest_file(staged_docx) != source_sha:
             raise ValueError("The short-path Word rendering source differs from the native export")
         command = [str(shell), "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", str(script.resolve()),
-                   "-SourceDocx", str(staged_docx), "-OutputPdf", str(staged_pdf), *_word_style_arguments(venue_id)]
+                   "-SourceDocx", str(staged_docx), "-OutputPdf", str(staged_pdf)]
         try:
             result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180,
                                     creationflags=subprocess.CREATE_NO_WINDOW)
@@ -597,7 +583,7 @@ def measure_word(docx: Path, *, venue_id: str = "ieee-software") -> dict:
         staged = Path(temporary) / "source.docx"
         shutil.copyfile(docx, staged)
         command = [str(shell), "-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", str(script.resolve()),
-                   "-SourceDocx", str(staged), "-MetricsOnly", *_word_style_arguments(venue_id)]
+                   "-SourceDocx", str(staged), "-MetricsOnly"]
         try:
             result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180,
                                     creationflags=subprocess.CREATE_NO_WINDOW)

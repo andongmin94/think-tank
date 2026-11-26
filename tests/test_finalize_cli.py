@@ -24,7 +24,7 @@ def test_finalize_cli_pending_json_survives_cp1252_and_preserves_inputs(tmp_path
     }, ensure_ascii=False), encoding="utf-8")
     record = root / "record.json"
     record.write_text(json.dumps({
-        "venue_id": "jors", "manuscript": "paper.md", "docx": None, "pdf": None,
+        "venue_id": "ieee-software", "manuscript": "paper.md", "docx": None, "pdf": None,
         "format_report": None, "visual_review": None, "bundle_report": "bundle.json",
         "scientific_review": None, "pages": ["not-rendered.png"], "confirmations": {},
     }), encoding="utf-8")

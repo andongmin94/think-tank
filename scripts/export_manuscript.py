@@ -190,7 +190,7 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--manuscript", type=Path, required=True)
         command.add_argument("--venue", choices=EXPORT_VENUES, required=True)
         command.add_argument("--profile", type=Path)
-        command.add_argument("--template", type=Path, help="Official downloaded Word template for IEEE Access or JORS; exact retained SHA required")
+        command.add_argument("--template", type=Path, help="Absolute path to a copy of the bundled official Word template; exact retained SHA required")
         command.add_argument("--bibliography", type=Path, help="JOSS original BibTeX file; defaults to paper.bib beside the manuscript")
         command.add_argument("--pandoc", help="Existing absolute Pandoc executable; otherwise uses an installed Pandoc")
         command.add_argument("--resource-dir", type=Path, help="Existing absolute directory for authored relative media")

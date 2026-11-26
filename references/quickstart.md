@@ -40,7 +40,7 @@ A new folder `article-ieee-software-<date>-<time>` is created next to the manusc
 
 ## Options
 
-- `--venue ieee-access` (or `ieee-security-privacy`, `jors`, `joss`) selects another venue; Access and JORS also need `--template` with the downloaded official file.
+- `--venue ieee-security-privacy` (or `joss`) selects another venue.
 - `--json` prints the full machine-readable report.
 - `--lang ko|en` overrides the message language (default: system locale, or `THINK_TANK_LANG`).
 

@@ -270,7 +270,7 @@ def test_numeric_citation_gate_fails_compliance_with_actual_docx(manuscript, tmp
         "input_sha256": exporter.digest_file(manuscript), "output_sha256": exporter.digest_file(pdf),
         "official_template": receipt["official_template"], "source_docx_sha256": docx_sha,
         "word_rendering": {"source_docx_sha256": docx_sha}}}
-    monkeypatch.setattr(templates, "measure_word", lambda _: {"metrics": {
+    monkeypatch.setattr(templates, "measure_word", lambda _, **__: {"metrics": {
         "body_words": 300, "body_table_words": 0, "body_tables": 0, "body_figures": 0,
         "abstract_words": 10, "reference_heading_found": True, "reference_count": 3}})
     monkeypatch.setattr(checks, "render_pdf_pages", lambda *_: {
@@ -813,7 +813,7 @@ def test_native_reference_counts_must_match_canonical_entries(manuscript, tmp_pa
     native_docx = tmp_path / "native.docx"
     doc.save(native_docx)
     templates.apply_official_styles(native_docx, template, citation_style=record["citation_style"])
-    monkeypatch.setattr(templates, "measure_word", lambda _: {"metrics": {
+    monkeypatch.setattr(templates, "measure_word", lambda _, **__: {"metrics": {
         "body_words": 300, "body_table_words": 0, "body_tables": 0, "body_figures": 0,
         "abstract_words": 10, "reference_heading_found": True, "reference_count": word_count}})
     native_pdf = tmp_path / "native.pdf"

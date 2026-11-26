@@ -192,7 +192,7 @@ def _new(args, words: dict) -> int:
 def _check(args, words: dict) -> int:
     from export_manuscript import preflight
     manuscript = _path(args.manuscript)
-    report = preflight(manuscript, args.venue, template_path=_path(args.template) if args.template else None)
+    report = preflight(manuscript, args.venue)
     if args.json:
         print(json.dumps(report, ensure_ascii=True, indent=2))
     else:
@@ -205,8 +205,7 @@ def _export(args, words: dict) -> int:
     from export_manuscript import export
     manuscript = _path(args.manuscript)
     output = _path(args.out) if args.out else _default_output(manuscript, args.venue)
-    result = export(manuscript, args.venue, output, docx_only=args.docx_only,
-                    template_path=_path(args.template) if args.template else None)
+    result = export(manuscript, args.venue, output, docx_only=args.docx_only)
     report = json.loads(Path(result["format_report"]).read_text(encoding="utf-8"))
     if args.json:
         print(json.dumps(result, ensure_ascii=True, indent=2))
@@ -238,7 +237,6 @@ def main(argv: list[str] | None = None) -> int:
         command.add_argument("--venue", choices=EXPORT_VENUES, default=DEFAULT_VENUE,
                              help=f"Target venue (default: {DEFAULT_VENUE})")
         if name in {"check", "export"}:
-            command.add_argument("--template", help="Downloaded official template (IEEE Access, JORS)")
             command.add_argument("--json", action="store_true", help="Print the full machine-readable report")
         if name == "export":
             command.add_argument("--out", help="New output folder (default: next to the manuscript, timestamped)")

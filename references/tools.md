@@ -22,15 +22,9 @@ Run the installed scripts' `--help` before using unfamiliar options. Replace `$p
 | Venue identifier | Template/input | Export |
 | --- | --- | --- |
 | `ieee-software`, `ieee-security-privacy` | Retained official DOCX | DOCX and native Word PDF |
-| `ieee-access`, `jors` | Official DOCX supplied with `--template ABSOLUTE_FILE` | DOCX and native Word PDF |
 | `joss` | Authored YAML Markdown, `paper.bib`, local figures | Submission source package |
 
-For Access and JORS, download the original linked by [Access guidance](ieee-access.md) or [JORS guidance](jors.md), and supply its absolute path to both commands. The exact file must match the recorded publisher SHA-256; the tools do not fetch a template or accept a generic substitute.
-
-```powershell
-& $python "$skillDirectory/scripts/export_manuscript.py" preflight --manuscript $manuscript --venue ieee-access --template $officialTemplate
-& $python "$skillDirectory/scripts/export_manuscript.py" export --manuscript $manuscript --venue jors --template $officialTemplate --output-dir $newOutputDirectory
-```
+The retained template must match the recorded publisher SHA-256; the tools do not fetch a template or accept a generic substitute. IEEE Access and JORS are not offered because they always charge an article processing charge.
 
 Use the corresponding venue's template for each command. Word `preflight` reads the manuscript and checks the template without launching Word. Word `export` requires a new output directory, retains exact Markdown bytes, produces DOCX, renders that exact saved DOCX through hidden read-only Word to PDF, measures native counts, and retains conversion/format/provenance reports and all-page PNGs. A failed export retains its directory for diagnosis; do not overwrite it or reuse an earlier export as a successful result.
 
@@ -44,7 +38,7 @@ Conversion warnings stop the export, including Pandoc replacing a missing figure
 
 Body figures are reduced proportionally when needed to fit the publisher's column width and printable page height; smaller figures are not enlarged. This preserves image bytes but cannot ensure that labels remain readable after reduction. Inspect their actual final size during page review.
 
-For Word venues, optional `--profile ABSOLUTE_FILE` uses the multi-author profile from `submission_support.py authors`, including its generated `authors.json`. Preparation and export report missing author facts, checking identity fields within that author's own byline block and order. Access requires biographies; JORS does not. The manuscript must already carry the intended author blocks; export does not insert them from metadata. Field presence is not proof of factual accuracy or consent. Optional `--pandoc ABSOLUTE_EXECUTABLE` selects an existing Pandoc binary; otherwise the helper resolves an available installation. Diagnostics and conversion verify the actual Pandoc identity. Do not silently replace the publisher-template export with a generic alternative if Word, Pandoc, or required assets are unavailable.
+For Word venues, optional `--profile ABSOLUTE_FILE` uses the multi-author profile from `submission_support.py authors`, including its generated `authors.json`. Preparation and export report missing author facts, checking identity fields within that author's own byline block and order. Both IEEE magazines require biographies. The manuscript must already carry the intended author blocks; export does not insert them from metadata. Field presence is not proof of factual accuracy or consent. Optional `--pandoc ABSOLUTE_EXECUTABLE` selects an existing Pandoc binary; otherwise the helper resolves an available installation. Diagnostics and conversion verify the actual Pandoc identity. Do not silently replace the publisher-template export with a generic alternative if Word, Pandoc, or required assets are unavailable.
 
 Exit status distinguishes passed content-format checks, a completed report with failed checks, and input/conversion errors; inspect both `--help` and the actual result. Each failed check that has repair guidance also appears in the report's `fixes` list with `how_to_fix` and an `example` in Markdown the checker accepts; examples show syntax only and never supply facts. [quickstart.md](quickstart.md) walks through one preflight-and-export cycle from [the IEEE Software skeleton](../assets/examples/ieee-software-skeleton.md). For people, `scripts/think_tank.py` (`doctor`, `new`, `check`, `export`) wraps these tools with relative paths, automatic new output folders and plain-language summaries; its `--json` output is the same report. A passing format report is not scientific approval. `submission_ready: false` can remain while author information, declarations, page approval, or current guidance checks are pending.
 
@@ -95,7 +89,7 @@ The same reference describes `research_workspace.py impact` for revisiting only 
 
 ## Exact-file verification
 
-Retained templates and acquisition metadata are in `assets/templates/`; Access and JORS originals are supplied externally because their redistribution license was not established. Verify the selected asset hash against its provenance. JOSS includes the MIT-licensed Inara source example with its license notice. A template proves the bytes used, not current rules, exact proprietary font availability, or acceptance.
+Retained templates and acquisition metadata are in `assets/templates/`. Verify the selected asset hash against its provenance. JOSS includes the MIT-licensed Inara source example with its license notice. A template proves the bytes used, not current rules, exact proprietary font availability, or acceptance.
 
 After export, inspect every PNG of the exact final PDF at readable original size. Check source-derived title and author layout, column order, technical notation, table captions/continuations, references, glyphs, clipping, page furniture, and final-page balance. Native bounds and glyph checks cannot replace visual inspection. Record the actual PDF and ordered page-image hashes, reviewer, and limitations separately from human author approval.
 

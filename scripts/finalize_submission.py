@@ -38,7 +38,7 @@ def check(root: Path, record_path: Path, output_dir: Path) -> dict:
             len(set(supplied["pages"])) != len(supplied["pages"])):
         raise ValueError("pages must explicitly list distinct ordered page-image paths")
     confirmations = supplied["confirmations"]
-    if not isinstance(confirmations, dict) or set(confirmations) - {"author_identity", "author_photo", "current_guidance", "required_files", "software_availability", "page_length_review"}:
+    if not isinstance(confirmations, dict) or set(confirmations) - {"author_identity", "author_photo", "current_guidance", "required_files"}:
         raise ValueError("Unsupported final preparation confirmation")
     snapshots, checks = {record_path: hashlib.sha256(record_bytes).hexdigest()}, []
 
@@ -154,8 +154,6 @@ def check(root: Path, record_path: Path, output_dir: Path) -> dict:
     item("supplied_author_facts", facts_complete, "Every author's supplied facts, byline association and any required biography must already be complete in the existing format report.")
     human = {}
     human_names = ["author_identity", "current_guidance", "required_files"]
-    human_names.extend(row["id"] for row in native.get("items", [])
-                       if row.get("id") in {"software_availability", "page_length_review"} and row.get("status") == "pending")
     if supplied["venue_id"] == "ieee-software":
         human_names.append("author_photo")
     for name in human_names:

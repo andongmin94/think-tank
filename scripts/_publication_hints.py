@@ -59,10 +59,6 @@ FIX_HINTS = {
         "how_to_fix": "Bring the estimate within the venue limit by cutting repetition, not evidence; each table or figure counts as a fixed word allowance.",
         "example": "",
     },
-    "required_sections": {
-        "how_to_fix": "Add each missing section as a '## ' heading with real content, using the names the venue guide lists.",
-        "example": "## <Required section name>\n\n<Section content from actual evidence.>",
-    },
 }
 
 

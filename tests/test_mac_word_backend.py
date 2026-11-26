@@ -62,7 +62,7 @@ def test_complete_metrics_are_returned(tmp_path, monkeypatch, mac):
     monkeypatch.setattr(templates.subprocess, "run", fake(FULL_METRICS))
     docx = tmp_path / "article.docx"
     docx.write_bytes(b"docx bytes")
-    measured = templates.measure_word(docx, venue_id="ieee-access")
+    measured = templates.measure_word(docx, venue_id="ieee-security-privacy")
     assert measured["metrics"]["body_words"] == 1000 and measured["source_unchanged"] is True
 
 

@@ -8,10 +8,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import _publication_checks as checks
-import _publication_templates as templates
 import export_manuscript as exporter
 import submission_support as support
-from _author_profile import normalize_profile
 
 
 def article(abstract_words=150, reference_count=1, keyword_count=3):
@@ -35,57 +33,16 @@ def status(result, name):
     return next(row["status"] for row in result["items"] if row["id"] == name)
 
 
-@pytest.mark.parametrize("words,expected", [(149, "failed"), (150, "passed"), (250, "passed"), (251, "failed")])
-def test_access_abstract_bounds(words, expected):
-    result = checks.validate_manuscript(article(words), "ieee-access")
-    assert status(result, "abstract") == expected
-    assert result["checked_at"] == "2026-11-02"
-
-
-@pytest.mark.parametrize("count,expected", [(2, "failed"), (3, "passed"), (10, "passed"), (11, "failed")])
-def test_access_keyword_bounds(count, expected):
-    assert status(checks.validate_manuscript(article(keyword_count=count), "ieee-access"), "keywords") == expected
-
-
 @pytest.mark.parametrize("venue", ["ieee-access", "jors"])
-def test_research_articles_do_not_inherit_magazine_limits(venue):
-    source = article(reference_count=20).replace("## Availability", "word " * 7300 + "\n\n## Availability")
-    result = checks.validate_manuscript(source, venue)
-    assert status(result, "word_count") == status(result, "reference_count") == "passed"
-    assert not any(row["id"] == "actionable_insights" for row in result["items"])
-    assert checks.format_guidance("ieee-software")["checked_at"] == "2026-10-18"
-    assert "sp/" not in checks.format_guidance(venue)["source_urls"][0]
+def test_venues_with_mandatory_publication_fees_are_not_offered(tmp_path, venue):
+    # IEEE Access and JORS always charge an article processing charge; the
+    # skill only targets venues with a fee-free publication route.
+    assert venue not in exporter.EXPORT_VENUES and venue not in support.VENUES
+    with pytest.raises(ValueError):
+        checks.validate_manuscript(article(), venue)
 
 
-def test_jors_abstract_target_and_biography_are_not_hard_requirements():
-    profile = normalize_profile({"authors": [{"id": "alice", "author": {
-        "display_name": "Alice Research", "affiliation": "Research Lab", "email": "alice@example.org"}}],
-        "order": ["alice"]})
-    result = checks.validate_manuscript(article(180), "jors", profile)
-    assert result["prefilter_passed"]
-    assert status(result, "author_profile_binding") == "passed"
-    assert result["metrics"]["authors"][0]["supplied_fields_complete"]
-    assert not any(row["id"] in {"author_biography", "author_photo"} for row in result["items"])
-    assert not result["submission_ready"]
-    broken = checks.validate_manuscript(article().replace("## Reuse potential", "## Unrelated"), "jors")
-    assert status(broken, "required_sections") == "failed"
-
-
-@pytest.mark.parametrize("venue", ["ieee-access", "jors"])
-def test_external_templates_are_explicit_and_hash_bound(tmp_path, venue):
-    with pytest.raises(ValueError, match="requires --template"):
-        templates.official_template(venue)
-    wrong = tmp_path / "wrong.docx"
-    wrong.write_bytes(b"Not the publisher's original")
-    with pytest.raises(ValueError, match="provenance SHA"):
-        templates.official_template(venue, wrong)
-    source = tmp_path / "article.md"
-    source.write_text(article(), encoding="utf-8")
-    with pytest.raises(ValueError, match="requires --template"):
-        exporter.preflight(source, venue)
-
-
-@pytest.mark.parametrize("venue", ["ieee-access", "jors", "joss"])
+@pytest.mark.parametrize("venue", ["ieee-software", "ieee-security-privacy", "joss"])
 def test_submission_bundle_accepts_each_new_venue_and_keeps_pending(tmp_path, venue):
     root = tmp_path / "sources"
     root.mkdir()

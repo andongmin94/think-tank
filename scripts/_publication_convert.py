@@ -248,11 +248,9 @@ def convert_docx(markdown: Path, output: Path, *, venue_id: str,
             raise ValueError("Pandoc conversion timed out after 120 seconds") from exc
     if result.returncode or not output.is_file():
         raise ValueError(f"Pandoc failed ({result.returncode}): {result.stderr[:2000]}")
-    if template["layout"] == "ieee-magazine":
-        styles = apply_official_styles(output, template_path, citation_style=template["citation_style"])
-    else:
-        from _publication_research_word import apply_research_styles
-        styles = apply_research_styles(output, template_path, venue_id)
+    if template["layout"] != "ieee-magazine":
+        raise ValueError(f"Unsupported official template layout: {template['layout']}")
+    styles = apply_official_styles(output, template_path, citation_style=template["citation_style"])
     proof = {**template, **styles}
     _format_docx(output)
     # Retain the existing converter's deterministic native ZIP bytes.

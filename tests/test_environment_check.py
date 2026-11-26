@@ -19,11 +19,11 @@ def test_missing_package_is_reported(monkeypatch):
     assert all(row["status"] == "missing" for row in rows)
 
 
-def test_new_template_prerequisites_distinguish_external_and_source_formats():
+def test_every_offered_template_is_bundled_and_verified():
     result = environment.diagnose()
     rows = {row["venue"]: row for row in result["official_templates"]}
-    assert rows["jors"]["status"] == rows["ieee-access"]["status"] == "external_template_required"
-    assert rows["joss"]["status"] == "verified"
+    assert set(rows) == {"ieee-software", "ieee-security-privacy", "joss"}
+    assert all(row["status"] == "verified" for row in rows.values())
     assert not result["native_export_verified"]
 
 

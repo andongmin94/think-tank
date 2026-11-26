@@ -32,13 +32,11 @@ Write in English unless requested otherwise. Lead with the reader's problem, the
 | --- | --- | --- |
 | [IEEE Software](references/ieee-software.md) | Practitioner decisions, alternatives and lessons | Retained official DOCX, native Word/PDF |
 | [IEEE Security & Privacy](references/ieee-security-privacy.md) | Substantive security/privacy contribution | Retained official DOCX, native Word/PDF |
-| [IEEE Access](references/ieee-access.md) | Engineering research with supported methods/results | Supplied official DOCX, native Word/PDF |
-| [JORS](references/jors.md) | Reusable research software, Software Metapaper | Supplied official DOCX, native Word/PDF |
 | [JOSS](references/joss.md) | Research software with demonstrated use/development | Authored Markdown, BibTeX and local figures |
 | [Empirical Software Engineering](references/emse.md) | Empirical or replication study with an assessable design, observations and analysis | Author-prepared editable DOCX; no journal Word template |
 | [JMLR MLOSS](references/jmlr-mloss.md) | Open ML implementation with demonstrated community and distinct software contribution | Official-style LaTeX → review PDF; separate cover letter |
 
-Choose by contribution and evidence, not impact factor. A generic application is not automatically research software; topic labels are not approved-journal lists. Verify current official article rules and template provenance directly, including licensing and AI policy. Retained templates do not prove current compliance. For JOSS, automated review is author-side diagnostics only; publication verdicts belong to humans, and editor/reviewer conversations must not be AI-written except for translation.
+Every supported venue has a route to publish without a mandatory fee; do not recommend venues that always charge an article processing charge. Choose by contribution and evidence, not impact factor. A generic application is not automatically research software; topic labels are not approved-journal lists. Verify current official article rules and template provenance directly, including licensing and AI policy. Retained templates do not prove current compliance. For JOSS, automated review is author-side diagnostics only; publication verdicts belong to humans, and editor/reviewer conversations must not be AI-written except for translation.
 
 ## Preserve and deliver
 

@@ -124,31 +124,6 @@ def test_supplied_approvals_cannot_clear_a_draft_or_missing_research_evidence(pr
     assert report["native_format_passed"] and report["page_inspection_recorded"]
 
 
-@pytest.mark.parametrize("venue,pending_check", [("jors", "software_availability"), ("ieee-access", "page_length_review")])
-def test_new_venue_preparation_requires_actual_confirmation(prepared, tmp_path, venue, pending_check):
-    root, record_path, record = prepared
-    template = finalizer.template_record(venue)
-    for filename in ("format.json", "bundle/report.json", "scientific.json"):
-        value = json.loads((root / filename).read_text(encoding="utf-8"))
-        value["venue_id"] = venue
-        if filename == "format.json":
-            value["binding"]["template_sha256"] = template["sha256"]
-            if venue == "jors":
-                value["items"] = [row for row in value["items"] if row["id"] != "author_biography"]
-            value["items"].append({"id": pending_check, "stage": "submission", "status": "pending"})
-        put(root / filename, value)
-    record["venue_id"] = venue
-    put(record_path, record)
-    result = finalizer.check(root, record_path, tmp_path / "pending")
-    assert pending_check in result["pending"] and not result["submission_ready"]
-    assert next(row["status"] for row in result["checks"] if row["id"] == "supplied_author_facts") == "passed"
-    files = json.loads((root / "bundle/report.json").read_text(encoding="utf-8"))["approval_files"]
-    record["confirmations"][pending_check] = confirmation("Synthetic author confirmation for " + pending_check, files)
-    put(record_path, record)
-    confirmed = finalizer.check(root, record_path, tmp_path / "confirmed")
-    assert confirmed["submission_ready"] and not confirmed["actual_submission_performed"]
-
-
 def test_generated_cover_letter_change_invalidates_current_human_records(prepared, tmp_path):
     root, record, _ = prepared
     put(root / "bundle/cover-letter.md", "Changed bytes without fresh confirmation.\n")

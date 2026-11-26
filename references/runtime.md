@@ -15,8 +15,8 @@ Check only the prerequisites needed for the requested task. Use the local Python
 | `research_workspace.py repository` | Python 3.11+, Git and permitted GitHub access; captures files, never executes the input project |
 | Bibliography import | Python; `pyparsing` is used for BibTeX parsing; missing literature facts are not filled in |
 | Preflight, document conversion, JOSS source export | Relevant dependencies in `requirements.txt`; JOSS also needs Pandoc and genuine YAML/BibTeX metadata |
-| `export_manuscript.py export --docx-only` | Pandoc and document dependencies; Access/JORS also need the supplied official template. No Word/PDF or page verification is performed |
-| Native Word/PDF export | An already installed/licensed Microsoft Word on Windows (PowerShell automation) or macOS (osascript automation; quit Word first), plus the document dependencies; Access/JORS need the supplied official template. The macOS route is unverified until run on a Mac with Word (`dev/verify_mac_word.py`) |
+| `export_manuscript.py export --docx-only` | Pandoc and document dependencies. No Word/PDF or page verification is performed |
+| Native Word/PDF export | An already installed/licensed Microsoft Word on Windows (PowerShell automation) or macOS (osascript automation; quit Word first), plus the document dependencies. The macOS route is unverified until run on a Mac with Word (`dev/verify_mac_word.py`) |
 
 For a document-environment problem, the existing diagnostic is:
 

@@ -1,6 +1,6 @@
 # Think Tank
 
-GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Agent Skills 형식의 스킬입니다. **Claude Code·Claude.ai·Codex에서 같은 지침과 Python 도구를 재사용**합니다. **IEEE Software, IEEE Security & Privacy, IEEE Access, Journal of Open Research Software(JORS), Journal of Open Source Software(JOSS), Empirical Software Engineering(EMSE), JMLR의 MLOSS 트랙**을 지원합니다. 에이전트가 연구 질문 선정부터 기존 연구 비교·집필·검토까지 직접 조율하고, 파일 도구가 매체별 원고 출력과 투고 준비를 돕습니다.
+GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Agent Skills 형식의 스킬입니다. **Claude Code·Claude.ai·Codex에서 같은 지침과 Python 도구를 재사용**합니다. **IEEE Software, IEEE Security & Privacy, Journal of Open Source Software(JOSS), Empirical Software Engineering(EMSE), JMLR의 MLOSS 트랙**을 지원합니다. 모두 **게재료 없이 낼 수 있는 경로가 있는 곳**만 다루며, 게재료(APC)가 반드시 드는 IEEE Access와 JORS는 지원하지 않습니다. 에이전트가 연구 질문 선정부터 기존 연구 비교·집필·검토까지 직접 조율하고, 파일 도구가 매체별 원고 출력과 투고 준비를 돕습니다.
 
 ## 3분 사용법
 
@@ -25,7 +25,7 @@ python scripts/think_tank.py export article.md         # 공식 템플릿 DOCX(+
 
 - `check`는 **고쳐야 할 것**(예시 포함)과 **사람이 확인할 것**(저자 정보, 사진, 최종 승인 등)을 나눠 보여 줍니다. 뼈대의 `<...>` 자리를 비워 두면 검사에서 잡힙니다.
 - `export`는 원고 옆에 `article-ieee-software-날짜-시간` 폴더를 새로 만듭니다. Word가 없으면 `--docx-only`를 붙이세요.
-- 다른 매체는 `--venue ieee-access`처럼 지정합니다. 전체 기계용 보고서가 필요하면 `--json`을 붙입니다.
+- 다른 매체는 `--venue ieee-security-privacy`처럼 지정합니다. 전체 기계용 보고서가 필요하면 `--json`을 붙입니다.
 - macOS는 `python` 대신 `python3`을 씁니다. 먼저 `python -m pip install -r requirements.txt`로 문서 패키지를 설치합니다.
 
 자세한 흐름은 [빠른 시작 문서](references/quickstart.md)에 있습니다.
@@ -48,7 +48,7 @@ Windows PowerShell에서는 `$HOME` 대신 `$env:USERPROFILE`을 사용할 수 �
 
 코드 실행·파일 생성을 활성화한 뒤 **Customize > Skills**의 **Skill 추가(+) > Skill 업로드(Upload a skill)**에서 `think-tank.zip`을 업로드하고 켭니다. [Skill tools CI](https://github.com/andongmin94/think-tank/actions/workflows/skill.yml)의 해당 커밋 실행에서 `think-tank-skill` artifact를 받으면 안에 설치용 ZIP이 있습니다. GitHub의 바깥 artifact ZIP을 한 번 풀고 **안쪽 `think-tank.zip`**을 업로드합니다.
 
-ZIP에는 `think-tank/SKILL.md`와 기존 스크립트·참조·에셋만 들어갑니다. 별도 Claude 전용 프롬프트나 API 키는 필요하지 않습니다. **업로드 형식 지원과 실제 Claude 실행 검증은 별개**이며, Word가 없는 환경에서는 원고 소스·서지·그림·checklist를 전달합니다. IEEE 3개 매체와 JORS는 Pandoc과 문서 의존성이 있으면 `export --docx-only`로 편집용 DOCX도 만들 수 있습니다. EMSE·JMLR MLOSS는 아래 매체별 안내를 따릅니다. Microsoft Word로 렌더링하지 않았다면 native Word/PDF 검증은 미완료입니다.
+ZIP에는 `think-tank/SKILL.md`와 기존 스크립트·참조·에셋만 들어갑니다. 별도 Claude 전용 프롬프트나 API 키는 필요하지 않습니다. **업로드 형식 지원과 실제 Claude 실행 검증은 별개**이며, Word가 없는 환경에서는 원고 소스·서지·그림·checklist를 전달합니다. IEEE 2개 매체는 Pandoc과 문서 의존성이 있으면 `export --docx-only`로 편집용 DOCX도 만들 수 있습니다. EMSE·JMLR MLOSS는 아래 매체별 안내를 따릅니다. Microsoft Word로 렌더링하지 않았다면 native Word/PDF 검증은 미완료입니다.
 
 ### Codex
 
@@ -77,7 +77,7 @@ $think-tank https://github.com/owner/repository
 
 에이전트가 실제 파일 트리를 확인하고 README·구현·테스트·기존 실험 자료를 읽습니다. `research_workspace.py repository`는 선택한 원본 파일과 저장소 커밋·해시를 새 작업 폴더에 보존합니다. 파일명이나 README의 설명만으로 프로젝트 분야·성능·연구소프트웨어 적격성을 판정하지 않습니다.
 
-지원하는 일곱 매체·트랙 안에서 **후보 세 곳을 비교하고 근거에 맞는 초안 한 편을 작성**합니다. 보완하면 투고할 수 있는 경우에는 조건을 적고, 신규 투고를 뒷받침할 근거가 없으면 비추천 결정을 유지합니다. 정적 소스 관찰, 실제 측정, 추론과 미확인 근거를 구분하며 저널의 현재 공식 지침과 article type을 확인합니다. 기존 서지 가져오기·근거 ledger·preflight·export·bundle 경로를 이어 사용합니다. [URL에서 초안까지 실행 절차](references/repository-to-draft.md)에 명령과 최소 결과물을 정리했습니다.
+지원하는 다섯 매체·트랙 안에서 **후보 세 곳을 비교하고 근거에 맞는 초안 한 편을 작성**합니다. 보완하면 투고할 수 있는 경우에는 조건을 적고, 신규 투고를 뒷받침할 근거가 없으면 비추천 결정을 유지합니다. 정적 소스 관찰, 실제 측정, 추론과 미확인 근거를 구분하며 저널의 현재 공식 지침과 article type을 확인합니다. 기존 서지 가져오기·근거 ledger·preflight·export·bundle 경로를 이어 사용합니다. [URL에서 초안까지 실행 절차](references/repository-to-draft.md)에 명령과 최소 결과물을 정리했습니다.
 
 저자 정보나 근거가 부족하면 이를 보완 과제로 남긴 소스 초안을 전달합니다. Word/PDF 또는 JOSS Inara 렌더링을 수행하지 못했으면 미검증으로 기록하며, 형식 검사를 통과시키기 위해 이름·결과·승인을 만들지 않습니다. 사용자 저장소 수정·코드 실행은 별도 허용 범위를 따르고, 한 사례의 초안 묶음을 전달하면 이번 작업을 마칩니다.
 
@@ -86,7 +86,7 @@ $think-tank https://github.com/owner/repository
 | 기능 | 제공 내용 |
 | --- | --- |
 | 연구·집필 | 저장소 분석, 연구 질문 선정, 1차 문헌 비교, 근거에 맞는 기여와 한계 정리 |
-| 원고 출력 | IEEE·JORS 공식 템플릿 Word/PDF와 형식·페이지 검사, JOSS 공식 형식의 Markdown·BibTeX·그림 소스 묶음 |
+| 원고 출력 | IEEE 공식 템플릿 Word/PDF와 형식·페이지 검사, JOSS 공식 형식의 Markdown·BibTeX·그림 소스 묶음 |
 | 문헌·근거 관리 | BibTeX/RIS/CSL-JSON 메타데이터 가져오기, 읽은 범위를 명시한 문헌 카드, 주장별 소스 위치·인용·해시 연결, 변경된 근거의 영향 표시 |
 | 연구 이어가기 | 자료와 결정의 포터블 저장, 현재·과거 버전 현황표, 필요한 주장만 재검토, 새 PC 환경 진단 |
 | 저자 정보 준비 | 공개 ORCID 조회, 재사용 가능한 공저자 프로필, 저자별 누락 정보, 익명 사본·메타데이터 점검 |
@@ -98,17 +98,15 @@ $think-tank https://github.com/owner/repository
 | --- | --- | --- |
 | [IEEE Software](references/ieee-software.md) / `ieee-software` | 실무자의 엔지니어링 판단·대안·교훈 | 보관된 공식 DOCX → Word PDF |
 | [IEEE Security & Privacy](references/ieee-security-privacy.md) / `ieee-security-privacy` | 실질적인 보안·프라이버시 기여 | 보관된 공식 DOCX → Word PDF |
-| [IEEE Access](references/ieee-access.md) / `ieee-access` | 완성된 공학 연구와 검증된 결과 | 지정한 공식 DOCX → Word PDF |
-| [JORS](references/jors.md) / `jors` | 재사용 가능한 공개 연구 소프트웨어의 Software Metapaper | 지정한 공식 DOCX → Word PDF |
 | [JOSS](references/joss.md) / `joss` | 실제 연구 활용과 공개 개발 이력이 있는 연구 소프트웨어 | `paper.md` + `paper.bib` + 로컬 그림 |
 | [EMSE](references/emse.md) / `emse` | 사례·자료·분석이 갖춰진 소프트웨어공학 실증 원저 또는 재현 연구 | 전용 Word 양식 없음. 에이전트가 준비한 편집용 DOCX를 묶음에 포함 |
 | [JMLR MLOSS](references/jmlr-mloss.md) / `jmlr-mloss` | 실제 사용자 기반이 있는 비자명한 공개 ML 구현 | 공식 LaTeX 스타일로 빌드한 심사용 PDF와 별도 커버레터 준비 |
 
-EMSE와 MLOSS의 저널별 지침에 따라 원고를 준비하고 `submission_support.py bundle`로 실제 파일을 보존합니다. 변환·검수 직후 `record-conversion`으로 입력과 출력 해시를 기록하면, 묶음을 만들 때 원고·서지·그림이나 DOCX/PDF가 달라진 경우 재생성이 필요하다고 표시합니다. 이는 기록 이후 버전 일치 검사이며 변환 성공이나 내용·레이아웃의 증명은 아닙니다. [입력과 기록 선택 방법](references/tools.md#host-prepared-cs-manuscripts)을 따르세요. 두 곳에는 `export_manuscript.py`의 기존 IEEE/JORS/JOSS 변환기를 적용하지 않습니다.
+EMSE와 MLOSS의 저널별 지침에 따라 원고를 준비하고 `submission_support.py bundle`로 실제 파일을 보존합니다. 변환·검수 직후 `record-conversion`으로 입력과 출력 해시를 기록하면, 묶음을 만들 때 원고·서지·그림이나 DOCX/PDF가 달라진 경우 재생성이 필요하다고 표시합니다. 이는 기록 이후 버전 일치 검사이며 변환 성공이나 내용·레이아웃의 증명은 아닙니다. [입력과 기록 선택 방법](references/tools.md#host-prepared-cs-manuscripts)을 따르세요. 두 곳에는 `export_manuscript.py`의 기존 IEEE/JOSS 변환기를 적용하지 않습니다.
 
-IEEE 3개 매체와 JORS의 `export`는 정본 Markdown과 Markdown 그림 문법으로 참조한 로컬 파일을 같은 상대경로·원본 바이트로 보존하고 manifest에 해시를 기록합니다. `--resource-dir`은 그림을 읽을 원본 디렉터리를 지정합니다. 출력 폴더를 옮겨 같은 변환기와 필요한 공식 템플릿으로 다시 출력할 수 있으며, Word·글꼴 등 렌더링 환경은 별도로 준비해야 합니다. 지원하는 그림 경로와 제한은 [출력 도구 안내](references/tools.md#manuscript-preflight-and-official-export)를 따릅니다.
+IEEE 2개 매체의 `export`는 정본 Markdown과 Markdown 그림 문법으로 참조한 로컬 파일을 같은 상대경로·원본 바이트로 보존하고 manifest에 해시를 기록합니다. `--resource-dir`은 그림을 읽을 원본 디렉터리를 지정합니다. 출력 폴더를 옮겨 같은 변환기와 필요한 공식 템플릿으로 다시 출력할 수 있으며, Word·글꼴 등 렌더링 환경은 별도로 준비해야 합니다. 지원하는 그림 경로와 제한은 [출력 도구 안내](references/tools.md#manuscript-preflight-and-official-export)를 따릅니다.
 
-Access·JORS·JOSS는 2026-11-02에 공식 지침과 템플릿 원문을 확인했습니다. Access·JORS 템플릿은 재배포 허가를 확인하지 못해 포함하지 않으며, 각 매체 문서의 공식 원본을 내려받아 `--template`으로 지정합니다. 도구는 확인된 SHA-256과 일치하는 파일을 사용합니다. JOSS는 YAML·인용·서지·그림 경로를 검사해 실제 제출 소스를 보존하며, Inara PDF 렌더링은 수행하지 않습니다.
+JOSS는 2026-11-02에 공식 지침을 확인했습니다. 도구는 확인된 SHA-256과 일치하는 템플릿 파일만 사용합니다. JOSS는 YAML·인용·서지·그림 경로를 검사해 실제 제출 소스를 보존하며, Inara PDF 렌더링은 수행하지 않습니다.
 
 ## 결과물과 작업 원칙
 
@@ -124,7 +122,7 @@ Access·JORS·JOSS는 2026-11-02에 공식 지침과 템플릿 원문을 확인�
 | 연구·집필 | Claude 또는 Codex와 대상 저장소·문헌에 대한 접근 |
 | 저장소 URL 자료 보존 | 설치된 Git과 대상 GitHub 저장소 읽기 권한; 프로젝트 코드 실행 없음 |
 | 파일 도구 | PC에 설치된 로컬 Python(`PATH`의 `python`, macOS는 `python3`). 3.15 기준으로 개발·테스트하며 3.11 이상 지원. 문서 처리 의존성은 [requirements.txt](requirements.txt) 참조 |
-| IEEE 3개 매체·JORS DOCX (`export --docx-only`) | Pandoc, 문서 처리 의존성, 해당 공식 템플릿. Word 불필요; native Word/PDF 검증은 미완료 |
+| IEEE 2개 매체 DOCX (`export --docx-only`) | Pandoc, 문서 처리 의존성, 해당 공식 템플릿. Word 불필요; native Word/PDF 검증은 미완료 |
 | 공식 Word/PDF 출력 | 설치된 Microsoft Word가 있는 Windows(PowerShell) 또는 macOS(osascript), Pandoc, 문서 처리 의존성. macOS 경로는 Mac+Word 실기 검증 전까지 미검증 |
 | JOSS 소스 검사·출력 | Python, Pandoc, 기존 서지 파서. Word 불필요; 공식 PDF는 별도 Inara 환경에서 검증 |
 | EMSE / JMLR MLOSS | EMSE는 편집용 DOCX, MLOSS는 공식 스타일로 컴파일한 PDF를 준비해 `bundle`에 포함 |
@@ -139,7 +137,7 @@ python -m pip install -r requirements.txt
 
 ## 이름과 제품 구분
 
-**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 소프트웨어 연구 논문 7개 매체 지원과 파일 도구를 제공하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
+**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 소프트웨어 연구 논문 5개 매체 지원과 파일 도구를 제공하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
 
 **[Paper Factory](https://github.com/andongmin94/paper-factory)**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱이나 LaTeX 편집기가 구현된 것은 아닙니다.
 
