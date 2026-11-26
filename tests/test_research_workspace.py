@@ -521,3 +521,17 @@ def test_impact_rejects_source_replaced_during_snapshot(materials, tmp_path, mon
     with pytest.raises(ValueError, match="Impact source changed"):
         notes.impact(materials, prior, tmp_path / "raced")
     assert not (tmp_path / "raced").exists()
+
+
+def test_author_interview_statements_have_their_own_evidence_kind(materials, tmp_path):
+    (materials / "author-interview.md").write_text(
+        "Q: Why reduce the journal?\nA: To reduce complexity; the features were too much.\n", encoding="utf-8")
+    (materials / "article.md").write_text("# A decision\n\nWe simplified it to reduce complexity.\n", encoding="utf-8")
+    path = json_file(tmp_path / "author-ledger.json", {"manuscript": "article.md", "claims": [
+        {"id": "A1", "claim": "The author simplified the journal to reduce complexity", "kind": "author_stated",
+         "manuscript_quote": "We simplified it to reduce complexity.", "sources": [
+             {"path": "author-interview.md", "start_line": 2, "end_line": 2,
+              "quote": "A: To reduce complexity; the features were too much."}]}]})
+    assert notes.evidence(materials, path, tmp_path / "author-evidence")["bindings_match"]
+    report = json.loads((tmp_path / "author-evidence" / "evidence.json").read_text(encoding="utf-8"))
+    assert report["claims"][0]["kind"] == "author_stated"

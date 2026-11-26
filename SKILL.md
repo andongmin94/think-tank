@@ -28,6 +28,8 @@ Write in English unless requested otherwise. Lead with the reader's problem, the
 
 Caution limits what you claim, not how concretely you show what is supported. Before drafting, read [writing-quality.md](references/writing-quality.md): make each main point concrete with a verified code excerpt, figure, number or commit; mine the project's history for decisions that changed; compare real alternatives on the same criteria; write lessons that could only come from this work; and run its self-review before export.
 
+Two optional sources raise a draft beyond what the records show. When the user built the project and agrees, interview them about reasons, incidents and rejected options as described in [author-interview.md](references/author-interview.md), and record the answers as author-stated evidence. When the user explicitly authorizes execution, measure the article's central claims in an isolated copy as described in [measurement.md](references/measurement.md), and record the results as measured evidence.
+
 ## Venue and output
 
 | Venue guide | Appropriate contribution | Output route |

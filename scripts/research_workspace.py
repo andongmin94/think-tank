@@ -15,7 +15,7 @@ import sys
 
 from _publication_files import digest_file, ensure_unlinked
 
-KINDS = {"source_declared", "observed_static", "derived", "proposed", "measured"}
+KINDS = {"source_declared", "observed_static", "derived", "proposed", "measured", "author_stated"}
 
 
 def _absolute(path: Path) -> Path:

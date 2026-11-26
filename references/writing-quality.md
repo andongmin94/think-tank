@@ -13,6 +13,7 @@ Accuracy is necessary but not sufficient. A draft that only avoids unsupported c
 - Read the commit log, changelog, issues and design documents for **decisions that changed**: reverts, rewrites, removed features, fixes after incidents, abandoned approaches. Why something was undone is often the most useful lesson for practitioners.
 - Tell that story only from what the records show. Verify order from the commit graph (`git log --topo-order`, merge parents, tags), not commit timestamps alone, which can be rewritten. Quote commit titles exactly; mark translations as translations.
 - Do not supply motives, user reactions or timelines the records do not state. Write "the commit message says" or "the change removed", not "the team realised".
+- When a commit's size illustrates a design change, exclude lockfiles, generated and vendored files (`git diff --stat -- . ':!package-lock.json'` and similar), and report net rather than gross line changes, or label which one you use.
 
 ## Compare real alternatives
 
