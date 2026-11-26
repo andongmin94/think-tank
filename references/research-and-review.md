@@ -61,7 +61,17 @@ Set `as_written_publication_target_met` true only for `accept`. A `minor_revisio
 
 Numerical ratings are optional when useful or requested. If supplied, use integer scores from zero to ten across all nine criteria, retain uncertainty, and explain the evidence behind them. Scores and averages never determine readiness by a fixed threshold or override an essential defect. If a simple arithmetic mean is displayed, calculate it from all nine scores without rounding individual judgments or choosing a favorable subset. Keep the original assessment and reviewed article/output hashes, whether the assessment is qualitative or scored. Different one-pass reviewers are not a controlled paired comparison, and a score change does not prove improvement or deterioration. Do not call a replacement reviewer to obtain a preferred result.
 
-Separate an independent agent review from human author approval and publisher peer review. If independent review is unavailable or interrupted, deliver its actual status rather than inventing an assessment or silently treating self-review as independent. Report content recommendation, native format checks, page inspection and human preparation separately; administrative completion and actual submission do not establish acceptance. After the one review, deliver the result and stop automatic rewriting or rating loops.
+Separate an independent agent review from human author approval and publisher peer review. If independent review is unavailable or interrupted, deliver its actual status rather than inventing an assessment or silently treating self-review as independent. Report content recommendation, native format checks, page inspection and human preparation separately; administrative completion and actual submission do not establish acceptance. After the one review, deliver the result and stop automatic rewriting or rating loops, except for the single revision below when the request was to write a draft.
+
+## One revision after review (drafting requests)
+
+When the user asked for a draft, make exactly one revision after the independent review, then stop:
+
+- Keep the reviewed draft, its hash and the review unchanged; write the revision as a new file.
+- Make every localized correction the review identifies that the retained evidence supports: wrong or stretched claims, table cells not backed by an actual run, numbers that mix gross and net or include generated files, quotations stretched beyond their words, missing baselines, rule violations, placeholders, and unclear structure. Re-verify each changed claim against its source, log or interview record.
+- Do not add claims the evidence does not support to satisfy a reviewer. If a requested change needs new evidence (a new measurement, an interview answer, a source you cannot read), leave it as an explicit open item instead.
+- Record a short change log mapping each review finding to the change made or to why it stays open.
+- Rerun the deterministic checks (preflight, editorial checks, evidence ledger) on the revision. Do not request a second review or rerate the revision yourself; report that the revision is unreviewed unless the user asks for another review.
 
 ## Evidence and delivery record
 

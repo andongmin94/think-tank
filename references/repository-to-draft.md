@@ -33,7 +33,11 @@ python /path/to/think-tank/scripts/export_manuscript.py export --manuscript /wor
 
 For [EMSE](emse.md), [JMLR MLOSS](jmlr-mloss.md), [SPE](spe.md), [SCP OSP](scico-osp.md), [JSS](jsys.md), [IST](ist.md), [ASE](ase.md) and [JStatSoft](jstatsoft.md), skip the two `export_manuscript.py` commands: prepare the DOCX or compile the official-style review PDF as described in the venue guide. Include that file in the bundle as `editable_docx` or `review_pdf`, alongside the evidence-bound `manuscript`. If it is unavailable, preserve the incomplete source. For the other three routes run the applicable export only when its prerequisites are available. For editable DOCX without Word, explicitly add `--docx-only`; this preserves conversion records while leaving native Word/PDF and page review pending. JOSS uses genuine YAML metadata, `paper.bib` and referenced local figures; it does not render the publisher PDF. Bibliography import preserves supplied BibTeX/RIS/CSL-JSON metadata; it neither verifies publications nor converts RIS to JOSS BibTeX. Keep failures visible and deliver the incomplete source when rendering or author facts are unavailable.
 
-## 4. Bundle and stop
+## 4. Review once and revise once
+
+Freeze the checked draft and obtain one independent review as described in [research-and-review.md](research-and-review.md#one-independent-review). Then make the single post-review revision described there: fix every localized, evidence-supported finding, keep open what needs new evidence, record a change log, and rerun the deterministic checks on the revision. Do not review or rerate it again unless the user asks.
+
+## 5. Bundle and stop
 
 Create one `bundle-plan.json` for `submission_support.py bundle`. Allowlist only the manuscript source (`manuscript`), bibliography (`bibliography`), selection (`venue_selection`), existing `evidence/evidence.json` (`evidence`), guidance (`guidance`), needed figures and requested exports. Include a genuine MLOSS cover letter as `cover_letter` if supplied. Paths are relative to the source root; do not copy the entire repository or unrelated logs.
 
