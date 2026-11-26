@@ -85,7 +85,7 @@ def test_anonymous_dedicated_fields_removed_body_match_reported(tmp_path, inputs
 @pytest.mark.parametrize("field,value", [("order", ["alice", "alice"]), ("order", ["alice"]), ("corresponding_author", "absent")])
 def test_invalid_author_order_and_selection_rejected(tmp_path, inputs, field, value):
     article, profile = inputs
-    content = json.loads(profile.read_text())
+    content = json.loads(profile.read_text(encoding="utf-8"))
     content[field] = value
     put(profile, content)
     with pytest.raises(ValueError):
@@ -100,7 +100,7 @@ def test_author_preparation_refuses_existing_output(tmp_path, inputs):
     keep = put(folder / "keep", "original")
     with pytest.raises(FileExistsError):
         support.prepare_authors(profile, article, folder)
-    assert keep.read_text() == "original"
+    assert keep.read_text(encoding="utf-8") == "original"
 
 
 def test_unrecognized_pre_abstract_section_is_not_silently_replaced(tmp_path, inputs):
@@ -129,10 +129,10 @@ def test_prose_next_to_explicit_author_block_and_repeated_preparation_survive(tm
     support.prepare_authors(profile, article, tmp_path / "first", anonymous=True)
     support.prepare_authors(profile, tmp_path / "first/manuscript.md", tmp_path / "second", anonymous=True)
     for folder in ("first", "second"):
-        text = (tmp_path / folder / "manuscript.md").read_text()
+        text = (tmp_path / folder / "manuscript.md").read_text(encoding="utf-8")
         assert text.count(prose) == 1
         assert text.count("Bob Scientist | Lab B") == 1
-        assert prose in (tmp_path / folder / "anonymous.md").read_text()
+        assert prose in (tmp_path / folder / "anonymous.md").read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize("code_open,code_close", [
@@ -235,7 +235,7 @@ def test_responses_check_actual_after_section_and_do_not_infer_resolution(tmp_pa
     assert not result["comments"][1]["changes"][0]["present_in_revised_manuscript"]
     assert result["comments"][1]["issues"]
     assert not result["scientific_resolution_verified"]
-    assert "Response pending." in (tmp_path / "replies/response-letter.md").read_text()
+    assert "Response pending." in (tmp_path / "replies/response-letter.md").read_text(encoding="utf-8")
     assert original == (before.read_bytes(), after.read_bytes(), comments.read_bytes())
 
 
@@ -316,12 +316,12 @@ def test_bundle_only_allowlisted_files_and_exact_hashes(tmp_path):
     result = support.prepare_bundle(plan, root, tmp_path / "package")
     assert (tmp_path / "package/files/article.md").read_bytes() == manuscript.read_bytes()
     assert not (tmp_path / "package/files/private-profile.json").exists()
-    assert "Please consider" in (tmp_path / "package/cover-letter.md").read_text()
+    assert "Please consider" in (tmp_path / "package/cover-letter.md").read_text(encoding="utf-8")
     assert any("photographs" in x for x in result["pending"])
     assert "Confirm actual originality" in result["pending"]
     assert result["declaration_status"]["originality"]["status"] == "pending"
     assert not result["submission_ready"] and not result["actual_submission_performed"]
-    manifest = json.loads((tmp_path / "package/manifest.json").read_text())
+    manifest = json.loads((tmp_path / "package/manifest.json").read_text(encoding="utf-8"))
     assert all(support.digest_file(tmp_path / "package" / row["path"]) == row["sha256"] for row in manifest["files"])
 
 
@@ -331,17 +331,17 @@ def test_conversion_record_preserves_files_and_requires_a_new_output(tmp_path):
     output.write_bytes(b"Supplied synthetic output, not a valid Word document.")
     original = {path.name: path.read_bytes() for path in (source, output)}
     record = support.record_conversion(tmp_path, [source.name], output.name, tmp_path / "conversion")
-    saved = json.loads((tmp_path / "conversion/conversion.json").read_text())
+    saved = json.loads((tmp_path / "conversion/conversion.json").read_text(encoding="utf-8"))
     assert {key: value for key, value in record.items() if key != "output_dir"} == saved
     for row in [*record["inputs"], record["output"]]:
         assert (tmp_path / row["path"]).read_bytes() == original[row["path"]]
         assert row["sha256"] == support.digest_file(tmp_path / row["path"])
     assert record["conversion_executed_by_tool"] is False
-    manifest = json.loads((tmp_path / "conversion/manifest.json").read_text())
+    manifest = json.loads((tmp_path / "conversion/manifest.json").read_text(encoding="utf-8"))
     assert manifest["files"][0]["sha256"] == support.digest_file(tmp_path / "conversion/conversion.json")
     with pytest.raises(FileExistsError):
         support.record_conversion(tmp_path, [source.name], output.name, tmp_path / "conversion")
-    assert json.loads((tmp_path / "conversion/conversion.json").read_text()) == saved
+    assert json.loads((tmp_path / "conversion/conversion.json").read_text(encoding="utf-8")) == saved
 
 
 @pytest.mark.parametrize("inputs", [["../private.md"], ["paper.md", "paper.pdf"], []])
@@ -360,7 +360,7 @@ def test_conversion_record_refuses_files_that_change_during_capture(tmp_path, mo
 
     def changed(path):
         if path == output:
-            source.write_text("A different manuscript")
+            source.write_text("A different manuscript", encoding="utf-8")
         return digest(path)
 
     monkeypatch.setattr(support, "digest_file", changed)

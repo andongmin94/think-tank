@@ -70,7 +70,7 @@ def test_checkpoint_refuses_existing_or_nested_output(materials, tmp_path):
 @pytest.mark.parametrize("name", ["../outside", "/absolute", "C:/outside", "a\\b", "a/../b", "./source.txt", "a//b"])
 def test_unsafe_material_paths_rejected(materials, tmp_path, name):
     payload = state(materials, tmp_path)
-    data = json.loads(payload.read_text())
+    data = json.loads(payload.read_text(encoding="utf-8"))
     data["files"] = [name]
     json_file(payload, data)
     with pytest.raises(ValueError):
@@ -114,7 +114,7 @@ def test_evidence_checks_exact_witness_without_claiming_truth(materials, tmp_pat
     before = {p.name: p.read_bytes() for p in materials.iterdir()}
     output = tmp_path / "evidence"
     assert notes.evidence(materials, ledger(materials, tmp_path), output)["bindings_match"]
-    report = json.loads((output / "evidence.json").read_text())
+    report = json.loads((output / "evidence.json").read_text(encoding="utf-8"))
     assert "do not establish claim truth" in report["scope"]
     assert before == {p.name: p.read_bytes() for p in materials.iterdir()}
     assert (output / "manifest.json").is_file()
@@ -150,7 +150,7 @@ def test_evidence_rejects_file_replaced_after_reading_its_anchor(materials, tmp_
 def test_evidence_rechecks_earlier_sources_after_later_witnesses(materials, tmp_path, monkeypatch, initially_missing):
     """A report must describe one source snapshot, including files initially absent."""
     payload = ledger(materials, tmp_path)
-    value = json.loads(payload.read_text())
+    value = json.loads(payload.read_text(encoding="utf-8"))
     first = materials / "source.txt"
     later = materials / "later.txt"
     later.write_bytes(b"later witness\n")
@@ -175,7 +175,7 @@ def test_evidence_rechecks_earlier_sources_after_later_witnesses(materials, tmp_
 
 def test_evidence_reuses_one_source_snapshot_for_multiple_witnesses(materials, tmp_path, monkeypatch):
     payload = ledger(materials, tmp_path)
-    value = json.loads(payload.read_text())
+    value = json.loads(payload.read_text(encoding="utf-8"))
     first_claim = value["claims"][0]
     second = {**first_claim, "id": "C2", "sources": [{**first_claim["sources"][0],
               "start_line": 3, "end_line": 3, "quote": "third"}]}
@@ -192,7 +192,7 @@ def test_evidence_reuses_one_source_snapshot_for_multiple_witnesses(materials, t
     monkeypatch.setattr(Path, "read_bytes", observe_source_reads)
     output = tmp_path / "evidence"
     assert notes.evidence(materials, payload, output)["bindings_match"]
-    report = json.loads((output / "evidence.json").read_text())
+    report = json.loads((output / "evidence.json").read_text(encoding="utf-8"))
     assert reads == [source]
     assert len({claim["sources"][0]["observed_sha256"] for claim in report["claims"]}) == 1
     assert [claim["sources"][0]["quote"] for claim in report["claims"]] == ["claim survives", "third"]
@@ -201,7 +201,7 @@ def test_evidence_reuses_one_source_snapshot_for_multiple_witnesses(materials, t
 @pytest.mark.parametrize("change,issue", [("quote", "source_quote_mismatch"), ("sha256", "source_hash_mismatch"), ("anchor", "manuscript_quote_not_found"), ("missing", "missing_source")])
 def test_evidence_retains_mismatches_instead_of_approving(materials, tmp_path, change, issue):
     payload = ledger(materials, tmp_path)
-    data = json.loads(payload.read_text())
+    data = json.loads(payload.read_text(encoding="utf-8"))
     item = data["claims"][0]
     if change == "quote":
         item["sources"][0]["quote"] = "invented"
@@ -214,12 +214,12 @@ def test_evidence_retains_mismatches_instead_of_approving(materials, tmp_path, c
     json_file(payload, data)
     output = tmp_path / "evidence"
     assert not notes.evidence(materials, payload, output)["bindings_match"]
-    assert issue in json.loads((output / "evidence.json").read_text())["claims"][0]["issues"]
+    assert issue in json.loads((output / "evidence.json").read_text(encoding="utf-8"))["claims"][0]["issues"]
 
 
 def test_evidence_rejects_unsafe_source_paths(materials, tmp_path):
     payload = ledger(materials, tmp_path)
-    data = json.loads(payload.read_text())
+    data = json.loads(payload.read_text(encoding="utf-8"))
     data["claims"][0]["sources"][0]["path"] = "../outside"
     json_file(payload, data)
     with pytest.raises(ValueError):
@@ -239,12 +239,12 @@ def test_compare_reports_exact_text_and_structure(materials, tmp_path):
     original = before.read_bytes(), after.read_bytes()
     output = tmp_path / "comparison"
     assert not notes.compare(before, after, output)["identical_bytes"]
-    report = json.loads((output / "comparison.json").read_text())
+    report = json.loads((output / "comparison.json").read_text(encoding="utf-8"))
     assert report["before"]["citation_labels"] == ["1"]
     assert report["after"]["citation_labels"] == ["2"]
     assert report["after"]["markdown_table_count"] == 1
-    assert "-# A decision" in (output / "changes.diff").read_text()
-    assert "+# New decision" in (output / "changes.diff").read_text()
+    assert "-# A decision" in (output / "changes.diff").read_text(encoding="utf-8")
+    assert "+# New decision" in (output / "changes.diff").read_text(encoding="utf-8")
     assert original == (before.read_bytes(), after.read_bytes())
 
 
@@ -262,7 +262,7 @@ def test_compare_preserves_missing_final_newlines(tmp_path, old, new, hunk):
     original = before.read_bytes(), after.read_bytes()
     output = tmp_path / "comparison"
     assert not notes.compare(before, after, output)["identical_bytes"]
-    assert (output / "changes.diff").read_text() == "--- before.md\n+++ after.md\n" + hunk
+    assert (output / "changes.diff").read_text(encoding="utf-8") == "--- before.md\n+++ after.md\n" + hunk
     assert original == (before.read_bytes(), after.read_bytes())
 
 
@@ -288,7 +288,7 @@ def test_linked_material_is_rejected(materials, tmp_path):
     except OSError:
         pytest.skip("Symlink creation is not available to this Windows account")
     payload = state(materials, tmp_path)
-    data = json.loads(payload.read_text())
+    data = json.loads(payload.read_text(encoding="utf-8"))
     data["files"] = ["linked.txt"]
     json_file(payload, data)
     with pytest.raises(ValueError, match="symlinks"):
@@ -313,10 +313,10 @@ def test_status_distinguishes_stale_review_missing_output_and_changed_bytes(mate
     output = tmp_path / "status-output"
     result = notes.status(materials, payload, output)
     assert result["artifact_counts"] == {"current": 1, "stale": 1, "changed": 1, "missing": 1, "unbound": 1}
-    report = json.loads((output / "status.json").read_text())
+    report = json.loads((output / "status.json").read_text(encoding="utf-8"))
     assert report["historical_counts"] == {"calls": 19, "unknown": None}
     assert report["artifacts"][1]["status"] == "stale"
-    assert manuscript_hash in (output / "status.md").read_text()
+    assert manuscript_hash in (output / "status.md").read_text(encoding="utf-8")
     assert original == {p.name: p.read_bytes() for p in materials.iterdir()}
 
 
@@ -337,7 +337,7 @@ def test_status_requires_actual_revision_binding_for_a_current_review(materials,
 def prior_evidence(materials, tmp_path, *, shared=False):
     payload = ledger(materials, tmp_path)
     if shared:
-        value = json.loads(payload.read_text())
+        value = json.loads(payload.read_text(encoding="utf-8"))
         value["claims"].append({**value["claims"][0], "id": "C2", "claim": "Second supported decision"})
         value["claims"].append({"id": "C3", "claim": "Independent source condition", "kind": "source_declared",
                                 "manuscript_quote": "The unchanged claim survives.", "sources": [
@@ -418,7 +418,7 @@ def test_impact_deleted_source_and_removed_article_claim_need_attention(material
 def test_impact_retains_reusable_witness_after_unrelated_manuscript_change(materials, tmp_path):
     prior = prior_evidence(materials, tmp_path)
     revised = materials / "current.md"
-    revised.write_text((materials / "article.md").read_text() + "\nA revised author note.\n", encoding="utf-8")
+    revised.write_text((materials / "article.md").read_text(encoding="utf-8") + "\nA revised author note.\n", encoding="utf-8")
     _, report = impact_report(materials, tmp_path, prior, manuscript_name="current.md")
     assert report["manuscript_bytes_changed"]
     assert report["reusable_binding_claim_ids"] == ["C1"]
@@ -443,7 +443,7 @@ def test_impact_source_focus_distinguishes_case_sensitive_paths(materials, tmp_p
         pytest.skip("Filesystem does not distinguish source.txt from Source.txt")
     other_source.write_text("independent witness\n", encoding="utf-8")
     payload = ledger(materials, tmp_path)
-    value = json.loads(payload.read_text())
+    value = json.loads(payload.read_text(encoding="utf-8"))
     value["claims"].append({"id": "C2", "claim": "Independent source condition", "kind": "source_declared",
                             "manuscript_quote": "The unchanged claim survives.", "sources": [
                                 {"path": "Source.txt", "start_line": 1, "end_line": 1, "quote": "independent witness"}]})
@@ -470,7 +470,7 @@ def test_impact_direct_claim_focus_does_not_guess_relevance_for_other_claims(mat
 
 def test_impact_prior_unverified_binding_is_not_upgraded_to_reuse(materials, tmp_path):
     payload = ledger(materials, tmp_path)
-    value = json.loads(payload.read_text())
+    value = json.loads(payload.read_text(encoding="utf-8"))
     value["claims"][0]["sources"][0]["sha256"] = "0" * 64
     json_file(payload, value)
     notes.evidence(materials, payload, tmp_path / "prior-evidence")

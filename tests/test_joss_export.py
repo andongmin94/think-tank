@@ -106,7 +106,7 @@ def test_author_name_forms_match_publisher_and_preserve_source(sources, tmp_path
     original = manuscript.read_bytes()
     output = tmp_path / "named-authors"
     result = joss.export(manuscript, output)
-    report = json.loads(Path(result["format_report"]).read_text())
+    report = json.loads(Path(result["format_report"]).read_text(encoding="utf-8"))
     assert report["metrics"]["authors"][0] == {
         "name": expected, "affiliations": ["1", "2"], "valid": True}
     assert report["source_package_passed"]
@@ -130,11 +130,11 @@ def test_export_retains_bibtex_and_images_and_records_source_only_scope(sources,
     assert not result["publisher_pdf_rendered"] and not result["submission_ready"]
     for relative, data in expected.items():
         assert (output / relative).read_bytes() == data
-    report = json.loads((output / "format-report.json").read_text())
+    report = json.loads((output / "format-report.json").read_text(encoding="utf-8"))
     assert report["mode"] == "joss_source_export"
     assert report["bibliography_sha256"] == hashlib.sha256(BIBLIOGRAPHY).hexdigest()
     assert report["visual_review_status"] == "not_rendered"
-    manifest = json.loads((output / "manifest.json").read_text())
+    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     assert {row["path"] for row in manifest["files"]} == {*expected, "format-report.json"}
     for row in manifest["files"]:
         assert row["sha256"] == hashlib.sha256((output / row["path"]).read_bytes()).hexdigest()
@@ -260,10 +260,10 @@ def test_existing_output_is_preserved(sources, tmp_path):
     output = tmp_path / "existing"
     output.mkdir()
     marker = output / "keep.txt"
-    marker.write_text("unchanged")
+    marker.write_text("unchanged", encoding="utf-8")
     with pytest.raises(ValueError, match="must be new"):
         joss.export(manuscript, output)
-    assert marker.read_text() == "unchanged"
+    assert marker.read_text(encoding="utf-8") == "unchanged"
     assert list(output.iterdir()) == [marker]
 
 
@@ -875,9 +875,9 @@ def test_bibtex_field_comments_reach_joss_package_without_rewriting(sources, tmp
     assert (output / "paper.bib").read_bytes() == original_bib
     assert (output / "paper.md").read_bytes() == original_md
     assert (manuscript.read_bytes(), bibliography.read_bytes()) == (original_md, original_bib)
-    report = json.loads((output / "format-report.json").read_text())
+    report = json.loads((output / "format-report.json").read_text(encoding="utf-8"))
     assert report["bibliography_sha256"] == hashlib.sha256(original_bib).hexdigest()
-    manifest = json.loads((output / "manifest.json").read_text())
+    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
     for row in manifest["files"]:
         assert row["sha256"] == hashlib.sha256((output / row["path"]).read_bytes()).hexdigest()
 

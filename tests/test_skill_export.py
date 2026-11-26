@@ -350,7 +350,7 @@ def test_same_multi_author_profile_reaches_preflight_and_export_without_losing_c
     output = tmp_path / "export"
     exporter.export(prepared / "manuscript.md", "ieee-software", output, profile=prepared / "authors.json")
     assert (output / "authors.json").read_bytes() == (prepared / "authors.json").read_bytes()
-    provenance = json.loads((output / "provenance.json").read_text())
+    provenance = json.loads((output / "provenance.json").read_text(encoding="utf-8"))
     assert [entry["id"] for entry in provenance["author_metadata"]["authors"]] == ["bob", "alice"]
 
 

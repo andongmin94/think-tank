@@ -39,7 +39,7 @@ def test_card_is_portable_and_does_not_inflate_selected_reading(reading, tmp_pat
     output = tmp_path / "cards-output"
     result = cards.prepare(root, payload, output)
     assert result["bindings_match"]
-    report = json.loads((output / "literature-cards.json").read_text())
+    report = json.loads((output / "literature-cards.json").read_text(encoding="utf-8"))
     recorded = report["cards"][0]
     assert recorded["reading_scope"] == "selected_sections"
     assert recorded["unread_sections"] == ["Appendix"]
@@ -68,7 +68,7 @@ def test_nested_fences_preserve_literal_witnesses_and_following_card(reading, tm
     assert [row["witnesses"][0]["quote"] for row in report["cards"]] == [quote, quote]
     parsed = subprocess.run([str(converter.pandoc_binary()), "--from=markdown", "--to=json",
                              str(output / "literature-cards.md")],
-                            capture_output=True, text=True, check=True, timeout=30)
+                            capture_output=True, text=True, encoding="utf-8", check=True, timeout=30)
     blocks = json.loads(parsed.stdout)["blocks"]
     assert [block["c"][1] for block in blocks if block["t"] == "CodeBlock"] == [quote, quote]
     assert [block["c"][2][0]["c"] for block in blocks
@@ -90,7 +90,7 @@ def test_cards_report_missing_or_mismatched_evidence(reading, tmp_path, change, 
     payload.write_text(json.dumps({"cards": [card]}), encoding="utf-8")
     output = tmp_path / "cards-output"
     assert not cards.prepare(root, payload, output)["bindings_match"]
-    assert issue in json.loads((output / "literature-cards.json").read_text())["cards"][0]["issues"]
+    assert issue in json.loads((output / "literature-cards.json").read_text(encoding="utf-8"))["cards"][0]["issues"]
 
 
 def test_abstract_only_record_never_counts_as_reported_body_reading(reading, tmp_path):
@@ -99,7 +99,7 @@ def test_abstract_only_record_never_counts_as_reported_body_reading(reading, tmp
     payload.write_text(json.dumps({"cards": [card]}), encoding="utf-8")
     output = tmp_path / "cards-output"
     assert cards.prepare(root, payload, output)["bindings_match"]
-    assert not json.loads((output / "literature-cards.json").read_text())["cards"][0]["body_reading_reported"]
+    assert not json.loads((output / "literature-cards.json").read_text(encoding="utf-8"))["cards"][0]["body_reading_reported"]
 
 
 def test_full_body_claim_cannot_hide_explicit_unread_sections(reading, tmp_path):

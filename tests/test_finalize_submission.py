@@ -84,9 +84,9 @@ def prepared(tmp_path):
 
 def test_generated_evidence_and_bundle_can_close_preparation_without_claiming_submission(prepared, tmp_path):
     root, record, _ = prepared
-    evidence = json.loads((root / "bundle/files/evidence/evidence.json").read_text())
+    evidence = json.loads((root / "bundle/files/evidence/evidence.json").read_text(encoding="utf-8"))
     assert evidence["bindings_match"] and evidence["manuscript_sha256"] == sha(root / "raw/article.md")
-    assert not json.loads((root / "bundle/report.json").read_text())["missing_evidence"]
+    assert not json.loads((root / "bundle/report.json").read_text(encoding="utf-8"))["missing_evidence"]
     before = {p.relative_to(root).as_posix(): p.read_bytes() for p in root.rglob("*") if p.is_file()}
     result = finalizer.check(root, record, tmp_path / "final")
     assert result["submission_ready"]
@@ -171,7 +171,7 @@ def test_changed_native_file_cannot_reuse_a_successful_format_report(prepared, t
 @pytest.mark.parametrize("change", ["missing", "companion", "duplicate"])
 def test_final_bundle_requires_distinct_source_and_native_roles(prepared, tmp_path, role, change):
     root, record, _ = prepared
-    bundle = json.loads((root / "bundle/report.json").read_text())
+    bundle = json.loads((root / "bundle/report.json").read_text(encoding="utf-8"))
     row = next(row for row in bundle["approval_files"] if row["role"] == role)
     if change == "missing":
         bundle["approval_files"].remove(row)
@@ -190,7 +190,7 @@ def test_final_bundle_requires_distinct_source_and_native_roles(prepared, tmp_pa
 @pytest.mark.parametrize("role", ["manuscript", "editable_docx", "review_pdf"])
 def test_confirmed_bundle_files_must_match_the_checked_source_and_exports(prepared, tmp_path, role):
     root, record_path, record = prepared
-    bundle = json.loads((root / "bundle/report.json").read_text())
+    bundle = json.loads((root / "bundle/report.json").read_text(encoding="utf-8"))
     row = next(row for row in bundle["approval_files"] if row["role"] == role)
     put(root / "bundle" / row["path"], "Different selected bytes; explicitly synthetic fresh confirmations below.")
     row["sha256"] = sha(root / "bundle" / row["path"])
@@ -218,7 +218,7 @@ def test_old_scientific_review_is_not_assigned_to_changed_manuscript(prepared, t
 @pytest.mark.parametrize("matching", [True, False])
 def test_explicit_scientific_review_export_bindings_must_match(prepared, tmp_path, formats, matching):
     root, record_path, _ = prepared
-    review = json.loads((root / "scientific.json").read_text())
+    review = json.loads((root / "scientific.json").read_text(encoding="utf-8"))
     review.update({name + "_sha256": sha(root / "raw" / ("article." + name)) if matching else "0" * 64
                    for name in formats})
     put(root / "scientific.json", review)
@@ -240,7 +240,7 @@ def test_missing_human_information_stays_pending(prepared, tmp_path):
 
 def test_wrong_or_missing_page_inspection_does_not_get_implicit_approval(prepared, tmp_path):
     root, record_path, record = prepared
-    visual = json.loads((root / "visual.json").read_text())
+    visual = json.loads((root / "visual.json").read_text(encoding="utf-8"))
     visual["page_image_sha256"].reverse()
     put(root / "visual.json", visual)
     first = finalizer.check(root, record_path, tmp_path / "wrong-order")
@@ -254,7 +254,7 @@ def test_wrong_or_missing_page_inspection_does_not_get_implicit_approval(prepare
 @pytest.mark.parametrize("reviewer", ["", "   ", True, {"name": "Synthetic fixture visual reviewer"}])
 def test_page_inspection_requires_a_nonblank_reviewer_name(prepared, tmp_path, reviewer):
     root, record_path, _ = prepared
-    visual = json.loads((root / "visual.json").read_text())
+    visual = json.loads((root / "visual.json").read_text(encoding="utf-8"))
     visual["reviewer"] = reviewer
     put(root / "visual.json", visual)
     report = finalizer.check(root, record_path, tmp_path / "final")
@@ -265,7 +265,7 @@ def test_page_inspection_requires_a_nonblank_reviewer_name(prepared, tmp_path, r
 
 def test_essential_error_prevents_unqualified_scientific_recommendation(prepared, tmp_path):
     root, record_path, _ = prepared
-    review = json.loads((root / "scientific.json").read_text())
+    review = json.loads((root / "scientific.json").read_text(encoding="utf-8"))
     review["essential_errors"] = ["Synthetic essential factual defect."]
     put(root / "scientific.json", review)
     report = finalizer.check(root, record_path, tmp_path / "final")
@@ -274,7 +274,7 @@ def test_essential_error_prevents_unqualified_scientific_recommendation(prepared
 
 def test_missing_author_facts_cannot_be_overridden_by_a_confirmation(prepared, tmp_path):
     root, record_path, _ = prepared
-    native = json.loads((root / "format.json").read_text())
+    native = json.loads((root / "format.json").read_text(encoding="utf-8"))
     native["metrics"]["authors"][0]["supplied_fields_complete"] = False
     put(root / "format.json", native)
     report = finalizer.check(root, record_path, tmp_path / "final")
@@ -285,7 +285,7 @@ def test_missing_author_facts_cannot_be_overridden_by_a_confirmation(prepared, t
                                                ("author_profile_binding", "author_biography")])
 def test_each_author_fact_check_must_be_present_once(prepared, tmp_path, missing, duplicate):
     root, record_path, _ = prepared
-    native = json.loads((root / "format.json").read_text())
+    native = json.loads((root / "format.json").read_text(encoding="utf-8"))
     next(row for row in native["items"] if row["id"] == missing)["id"] = duplicate
     put(root / "format.json", native)
     report = finalizer.check(root, record_path, tmp_path / "final")
@@ -307,12 +307,12 @@ def test_paths_cannot_escape_and_existing_final_report_is_preserved(prepared, tm
     keep = put(existing / "keep", "Retain me")
     with pytest.raises(FileExistsError):
         finalizer.check(root, record_path, existing)
-    assert keep.read_text() == "Retain me"
+    assert keep.read_text(encoding="utf-8") == "Retain me"
 
 
 def test_blank_statement_is_not_actual_confirmation(prepared, tmp_path):
     root, record_path, record = prepared
-    files = json.loads((root / "bundle/report.json").read_text())["approval_files"]
+    files = json.loads((root / "bundle/report.json").read_text(encoding="utf-8"))["approval_files"]
     record["confirmations"]["author_identity"] = confirmation("   ", files)
     put(record_path, record)
     report = finalizer.check(root, record_path, tmp_path / "final")
@@ -323,7 +323,7 @@ def test_blank_statement_is_not_actual_confirmation(prepared, tmp_path):
                                                 ("bundle/report.json", "approval_files", {"not": "a list"})])
 def test_malformed_existing_report_is_refused_before_output(prepared, tmp_path, filename, field, value):
     root, record_path, _ = prepared
-    supplied = json.loads((root / filename).read_text())
+    supplied = json.loads((root / filename).read_text(encoding="utf-8"))
     supplied[field] = value
     put(root / filename, supplied)
     with pytest.raises(ValueError):

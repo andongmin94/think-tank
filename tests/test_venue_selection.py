@@ -127,13 +127,13 @@ def test_prepared_cs_bundle_needs_the_selected_format_and_conversion_record(tmp_
             'article_type': 'Research Article' if venue == 'emse' else 'MLOSS', 'guidance_status': 'verified',
             'files': [{'role': 'manuscript', 'path': source.name}, {'role': 'supplement', 'path': prepared.name}]}
     plan_path = root / 'plan.json'
-    plan_path.write_text(json.dumps(plan))
+    plan_path.write_text(json.dumps(plan), encoding="utf-8")
     missing = support.prepare_bundle(plan_path, root, tmp_path / 'without-manuscript')
     assert any(role in gap and suffix in gap for gap in missing['missing_evidence'])
     assert missing['draft_status'] == 'incomplete'
     plan['files'][1]['role'] = role
     plan['recommendation_status'] = 'not_recommended'
-    plan_path.write_text(json.dumps(plan))
+    plan_path.write_text(json.dumps(plan), encoding="utf-8")
     supplied = support.prepare_bundle(plan_path, root, tmp_path / 'supplied')
     assert not any(role in gap and suffix in gap for gap in supplied['missing_evidence'])
     assert any('conversion_record' in gap for gap in supplied['missing_evidence'])

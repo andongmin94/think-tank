@@ -84,11 +84,11 @@ def test_cli_retains_existing_output(tmp_path):
     folder = tmp_path / "existing"
     folder.mkdir()
     marker = folder / "keep.txt"
-    marker.write_text("unchanged")
+    marker.write_text("unchanged", encoding="utf-8")
     script = Path(environment.__file__)
     result = subprocess.run([sys.executable, str(script), "--output-dir", str(folder)], capture_output=True, text=True)
     assert result.returncode == 2
-    assert marker.read_text() == "unchanged"
+    assert marker.read_text(encoding="utf-8") == "unchanged"
     assert list(folder.iterdir()) == [marker]
 
 

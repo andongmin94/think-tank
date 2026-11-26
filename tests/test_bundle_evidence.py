@@ -108,7 +108,7 @@ def test_bundle_matches_selected_sources_and_ledgers_to_their_actual_reports(tmp
     files.remove({"role": "evidence", "path": "evidence.json"})
     for idx, (ledger, witness) in enumerate(((root / "claims.json", "observation.txt"),
                                              (tmp_path / "external.json", "unselected.txt")), 1):
-        (root / witness).write_text("original observation\na second observation\n")
+        (root / witness).write_text("original observation\na second observation\n", encoding="utf-8")
         value = {"manuscript": "paper.md", "claims": [
             {"id": f"C{idx}", "claim": "A retained claim.", "manuscript_quote": "A retained claim.",
              "kind": "source_declared", "sources": [{"path": witness, "start_line": line, "end_line": line,
@@ -117,7 +117,7 @@ def test_bundle_matches_selected_sources_and_ledgers_to_their_actual_reports(tmp
         ledger.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8-sig")
         out = root / f"evidence-{idx}"
         assert evidence(root, ledger, out)["bindings_match"]
-        saved = json.loads((out / "evidence.json").read_text())
+        saved = json.loads((out / "evidence.json").read_text(encoding="utf-8"))
         assert saved["ledger_sha256"] == hashlib.sha256(ledger.read_bytes()).hexdigest()
         assert saved["ledger_path"] == (ledger.name if ledger.parent == root else None)
         files.append({"role": "evidence", "path": f"{out.name}/evidence.json"})
@@ -132,11 +132,11 @@ def test_bundle_matches_selected_sources_and_ledgers_to_their_actual_reports(tmp
     if changed:
         path = root / changed
         if changed == "observation.txt":
-            path.write_text("different outcome\n")
+            path.write_text("different outcome\n", encoding="utf-8")
         else:
             ledger = json.loads(path.read_text(encoding="utf-8-sig"))
             ledger["claims"][0]["claim"] = "A different assertion."
-            path.write_text(json.dumps(ledger))
+            path.write_text(json.dumps(ledger), encoding="utf-8")
     result = run_bundle(tmp_path, root, {f["path"]: (root / f["path"]).read_bytes() for f in files}, plan)
     if changed:
         assert result["draft_status"] == "incomplete"
@@ -148,14 +148,14 @@ def test_bundle_matches_selected_sources_and_ledgers_to_their_actual_reports(tmp
 def test_evidence_refuses_a_ledger_replaced_during_inspection(tmp_path, monkeypatch):
     root, _, _ = prepare_case(tmp_path, "matching")
     ledger = root / "ledger.json"
-    recorded = json.loads((root / "evidence.json").read_text())
-    ledger.write_text(json.dumps({"manuscript": "paper.md", "claims": recorded["claims"]}))
-    (root / "source.py").write_text("A retained claim.\n")
+    recorded = json.loads((root / "evidence.json").read_text(encoding="utf-8"))
+    ledger.write_text(json.dumps({"manuscript": "paper.md", "claims": recorded["claims"]}), encoding="utf-8")
+    (root / "source.py").write_text("A retained claim.\n", encoding="utf-8")
     read_bytes = Path.read_bytes
 
     def change_ledger(path):
         if path == root / "paper.md":
-            ledger.write_text("{}")
+            ledger.write_text("{}", encoding="utf-8")
         return read_bytes(path)
 
     monkeypatch.setattr(Path, "read_bytes", change_ledger)
@@ -209,7 +209,7 @@ def conversion_case(tmp_path, venue):
 def test_prepared_outputs_match_recorded_versions_after_moving_the_source_tree(tmp_path, venue, changed):
     root, plan, output = conversion_case(tmp_path, venue)
     root = root.rename(tmp_path / "moved")
-    record = json.loads((root / "conversion/conversion.json").read_text())
+    record = json.loads((root / "conversion/conversion.json").read_text(encoding="utf-8"))
     assert record["conversion_executed_by_tool"] is False
     if changed:
         (root / changed).write_bytes((root / changed).read_bytes() + b"\nChanged since conversion.\n")
@@ -259,11 +259,11 @@ def test_incomplete_conversion_records_are_gaps_not_approval(tmp_path, variant, 
     if variant == "absent":
         plan["files"] = [f for f in plan["files"] if f["role"] != "conversion_record"]
     elif variant == "malformed":
-        receipt.write_text('{"inputs":')
+        receipt.write_text('{"inputs":', encoding="utf-8")
     elif variant == "unbound":
-        record = json.loads(receipt.read_text())
+        record = json.loads(receipt.read_text(encoding="utf-8"))
         record["inputs"] = [item for item in record["inputs"] if item["path"] != "paper.bib"]
-        receipt.write_text(json.dumps(record))
+        receipt.write_text(json.dumps(record), encoding="utf-8")
     elif variant == "unselected":
         plan["files"] = [f for f in plan["files"] if f["path"] != "figure.svg"]
         (root / "figure.svg").unlink()  # The bundle must not read unselected receipt paths.
