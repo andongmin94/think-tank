@@ -15,6 +15,7 @@ import argparse
 import json
 from pathlib import Path
 import random
+import re
 import shutil
 import subprocess
 import sys
@@ -63,6 +64,25 @@ def prepare(run: Path, arms: list[str], subject: str, commit: str, python: str) 
     return meta
 
 
+IMAGE = re.compile(r"!\[[^\]]*\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
+
+
+def _copy_referenced_images(draft: Path, review: Path) -> None:
+    """Copy every local image the draft references, keeping its relative path."""
+    base = draft.parent.resolve()
+    for target in IMAGE.findall(draft.read_text(encoding="utf-8")):
+        if "://" in target or target.startswith(("/", "#")):
+            continue
+        source = (base / target).resolve()
+        if not source.is_file() or not source.is_relative_to(base):
+            continue
+        destination = review / target
+        if destination.exists():
+            raise ValueError(f"Two drafts reference different files at the same path: {target}")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
+
+
 def blind(run: Path, seed: int | None = None) -> dict:
     run = run.absolute()
     meta = json.loads((run / "run.json").read_text(encoding="utf-8"))
@@ -73,17 +93,13 @@ def blind(run: Path, seed: int | None = None) -> dict:
     review = run / "review"
     if review.exists():
         raise ValueError("Blind copies already exist; reveal or use a new run")
-    (review / "figures").mkdir(parents=True)
+    review.mkdir(parents=True)
     order = list(drafts)
     random.Random(seed).shuffle(order)
     key = {}
     for letter, arm in zip(LETTERS, order, strict=False):  # more letters than arms
         shutil.copyfile(drafts[arm], review / f"{letter}.md")
-        figures = drafts[arm].parent / "figures"
-        if figures.is_dir():
-            for figure in figures.iterdir():
-                if figure.is_file():
-                    shutil.copyfile(figure, review / "figures" / figure.name)
+        _copy_referenced_images(drafts[arm], review)
         key[letter] = arm
     (run / "key.json").write_text(json.dumps(key, indent=2) + "\n", encoding="utf-8")
     letters = ", ".join(sorted(key))

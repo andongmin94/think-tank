@@ -1,6 +1,6 @@
 Act as a demanding {VENUE} associate editor deciding on submitted feature-article drafts ({LETTERS}) about the open-source project {REPOSITORY}. You do not know how they were produced; judge only the text and its evidence.
 
-Read only these files, the repository and the web (for reference checks); figures are in the `figures` folder next to the drafts:
+Read only these files, the repository and the web (for reference checks); images a draft references are next to it at the referenced path:
 {DRAFTS}
 - Repository at the described commit (read-only): {SUBJECT}
 Do not open other folders under {RUN}.

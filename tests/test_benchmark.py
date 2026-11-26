@@ -44,15 +44,19 @@ def test_prepare_blind_reveal_round_trip(tmp_path, subject):
         bench.blind(run)
     for arm in ("skill", "plain"):
         (run / "arms" / arm / "article.md").write_text(f"# draft from {arm}\n", encoding="utf-8")
+    (run / "arms" / "skill" / "article.md").write_text(
+        "# draft from skill\n\n![Journal](figure1.png)\n![Remote](https://example.org/a.png)\n", encoding="utf-8")
+    (run / "arms" / "skill" / "figure1.png").write_bytes(b"png")
     result = bench.blind(run, seed=7)
     assert result["letters"] == ["P", "Q"]
+    assert (run / "review" / "figure1.png").read_bytes() == b"png"
     reviewer = (run / "prompts" / "reviewer-1.md").read_text(encoding="utf-8")
     assert "arms" not in reviewer and "plain" not in reviewer  # reviewers cannot see which arm is which
     assert str(run / "review" / "P.md") in reviewer and "{" not in reviewer
     key = bench.reveal(run)
     assert sorted(key.values()) == ["plain", "skill"]
     for letter, arm in key.items():
-        assert (run / "review" / f"{letter}.md").read_text(encoding="utf-8") == f"# draft from {arm}\n"
+        assert (run / "review" / f"{letter}.md").read_text(encoding="utf-8").startswith(f"# draft from {arm}\n")
 
 
 def test_prepare_refuses_existing_folder_and_unknown_arm(tmp_path, subject):

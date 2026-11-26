@@ -1,6 +1,6 @@
 You are an independent reviewer comparing manuscript drafts ({LETTERS}) written for an {VENUE} feature article about the open-source repository {REPOSITORY}. You do not know how any was produced; judge only the text and its evidence.
 
-Read only these files, the repository and the web (for reference checks); figures are in the `figures` folder next to the drafts:
+Read only these files, the repository and the web (for reference checks); images a draft references are next to it at the referenced path:
 {DRAFTS}
 - Repository at the described commit (read-only): {SUBJECT}
 Do not open other folders under {RUN}.
