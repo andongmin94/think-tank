@@ -19,6 +19,7 @@ from _publication_files import digest_file, ensure_unlinked
 from _author_profile import profile_completeness
 from _publication_text import mask_code, mask_inline_markup, mask_fenced_code, section_headers
 from _publication_venues import VENUE_RULES, WORD_VENUES, CS_GUIDANCE, AI_GUIDANCE
+from _publication_hints import fixes_for
 from editorial_checks import check_manuscript
 
 VENUE_LIMITS = {venue: rules["limits"] for venue, rules in VENUE_RULES.items()}
@@ -69,7 +70,7 @@ def _summarize(items, metrics, venue_id):
     blockers = [item["reason"] for item in content if item["status"] == "failed"]
     pending = [item["reason"] for item in items if item["status"] == "pending"]
     return {"venue_id": venue_id, "checked_at": VENUE_RULES[venue_id]["checked_at"], "items": items, "metrics": metrics,
-            "blockers": blockers, "pending": pending,
+            "blockers": blockers, "fixes": fixes_for(content), "pending": pending,
             "content_format_passed": bool(content) and all(item["status"] == "passed" for item in content),
             "submission_ready": all(item["status"] == "passed" for item in items),
             "prefilter_passed": not blockers, "scientific_merit_assessed": False, "author_approval_inferred": False}

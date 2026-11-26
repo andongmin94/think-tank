@@ -126,6 +126,7 @@ python -m pytest -q
 
 CI는 Windows와 macOS에서 Python 3.15와 3.11로 실제 Pandoc 식별과 문서 변환을 필수로 검사합니다. Microsoft Word 렌더링은 CI 서버에 Word가 없어 자동 검사 대상이 아닙니다. 현재 변경 사항과 테스트 결과는 [커밋 이력](https://github.com/andongmin94/think-tank/commits/main/)과 [GitHub Actions](https://github.com/andongmin94/think-tank/actions/workflows/skill.yml)에서 확인할 수 있습니다. 누락·손상된 그림의 정상 출력 처리, 확인 도중 바뀐 근거, 과거 출력 파일의 평가 재사용과 저자 검사 누락을 방지합니다. Garak·REA의 기존 질문·기여 선택 기록과 프론트론의 공식 원고·평가·횟수는 유지합니다.
 
+- [빠른 시작: 원고 하나 검사·출력하기](references/quickstart.md) — [IEEE Software 원고 뼈대](assets/examples/ieee-software-skeleton.md)에서 시작
 - [스킬 지침](SKILL.md)
 - [Claude 설치와 실행 환경](references/runtime.md)
 - [연구·평가 기준](references/research-and-review.md)
