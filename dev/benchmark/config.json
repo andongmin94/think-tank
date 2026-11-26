@@ -1,0 +1,9 @@
+{
+  "repository": "andongmin94/frontron",
+  "subject_url": "https://github.com/andongmin94/frontron",
+  "commit": "af5e88ac5ba030c1a4e7c06d247884933e88ef22",
+  "venue": "IEEE Software",
+  "arms": ["skill", "plain"],
+  "default_arms": ["skill", "plain"],
+  "venue_rules": "at most 4,200 effective words excluding references, each table or figure counting as 250 words; an abstract of at most 150 words in one paragraph without citations; at most 15 references; one explicitly labelled block of exactly three actionable insights; disclosure of AI-generated content in the acknowledgments"
+}
