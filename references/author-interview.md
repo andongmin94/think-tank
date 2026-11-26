@@ -18,6 +18,16 @@ After reading the repository and drafting the outline, list the places where the
 
 Name the commit, file or behaviour in each question so the answer attaches to a record. Do not ask leading questions that suggest the answer.
 
+## Follow up once on thin answers
+
+Short answers ("I just did it", "don't know", "people like it") are common and give the article little. After the first round, ask **one** follow-up round for the answers that matter most to the outline, at most three questions, each narrower and easier to answer than the original:
+
+- Ask for one concrete instance: "Can you name one problem the framework-first design caused, or one thing you wanted to try with it?"
+- Offer the records as memory aids: "Commit 05c968b removed the lock module; do you remember a failure or a maintenance cost behind that?"
+- Ask for evidence, not opinion: "Where did the positive feedback come from (issues, messages, downloads)? May the article mention it?"
+
+Accept "don't know" after the follow-up and leave the gap. Do not push further or rephrase until an answer fits the story.
+
 ## Record and use the answers
 
 - Save the questions and the author's answers verbatim with the date in the working folder (for example `author-interview.md`) and add each used statement to the evidence ledger with kind `author_stated`, distinct from source-declared, observed, measured and derived claims.

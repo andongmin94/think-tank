@@ -5,7 +5,7 @@ Accuracy is necessary but not sufficient. A draft that only avoids unsupported c
 ## Make every main point concrete
 
 - Back each main claim with a concrete, verified artefact the reader can see: a short code excerpt (5–15 lines, trimmed with `…`), a data structure, a command and its output, a configuration diff, a number, or a commit. Cite its exact file and line or commit.
-- Include **at least one figure or excerpt** that shows the central mechanism (an architecture or sequence diagram, a state machine, or the key code path). Draw diagrams from the inspected code, not from intuition. Count it against the venue's visual allowance.
+- Include **at least one figure or excerpt** that shows the central mechanism (an architecture or sequence diagram, a state machine, or the key code path). Draw diagrams from the inspected code, not from intuition, as SVG with explicit `width` and `height`, and render them with `scripts/render_figure.py figure.svg figure.png` (uses an installed Chrome or Edge). Keep text in figures short and large enough to read at column width. Count each figure against the venue's visual allowance.
 - Prefer one worked example followed end to end (an input, what the system does, the result) over several abstract descriptions.
 
 ## Mine the history, carefully
@@ -19,6 +19,7 @@ Accuracy is necessary but not sufficient. A draft that only avoids unsupported c
 
 - Name two or three alternatives practitioners actually use for the same problem (competing tools, frameworks, built-in features or manual practice). Compare them on the same few criteria in one table or paragraph: what each costs, what it guarantees, when it is the better choice.
 - Say when the described approach is the wrong choice. A counterexample makes the recommendation credible.
+- A table of documentation-only cells ("not described") is weak. When execution is authorized, run at least one alternative on the same input as described in [measurement.md](measurement.md); otherwise say plainly that the comparison is from documentation.
 
 ## Write lessons that could only come from this work
 
