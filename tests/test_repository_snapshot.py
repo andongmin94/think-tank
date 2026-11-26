@@ -20,7 +20,9 @@ def git(root, *arguments, input=None):
     return subprocess.run(
         ["git", "-c", "user.name=Repository fixture", "-c", "user.email=fixture@example.invalid",
          "-c", "commit.gpgSign=false", "-c", f"core.hooksPath={root / 'empty-hooks'}",
-         "-c", "core.autocrlf=false", *arguments],
+         "-c", "core.autocrlf=false",
+         # Detached auto-maintenance can repack fixture objects while a test compares bytes.
+         "-c", "maintenance.auto=false", "-c", "gc.auto=0", *arguments],
         cwd=root, input=input, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
     ).stdout
 

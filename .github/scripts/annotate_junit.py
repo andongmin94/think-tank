@@ -23,7 +23,8 @@ def main(report: str) -> int:
         for problem in list(case.findall("failure")) + list(case.findall("error")):
             name = f"{case.get('classname', '')}::{case.get('name', '')}"
             detail = (problem.text or problem.get("message") or "").strip().splitlines()
-            tail = "\n".join(detail[-12:])
+            # Keep the start (assertion and diff summary) and the end (location).
+            tail = "\n".join(detail if len(detail) <= 40 else [*detail[:25], "...", *detail[-12:]])
             source = case.get("file") or case.get("classname", "").replace(".", "/") + ".py"
             line = case.get("line")
             location = f"file={source}" + (f",line={int(line) + 1}" if line else "")
