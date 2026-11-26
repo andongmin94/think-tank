@@ -26,6 +26,8 @@ Read consequential code, README, tests, retained experiments and nearby primary 
 
 Write in English unless requested otherwise. Lead with the reader's problem, the supported contribution, competent alternatives, evidence and limitations. Remove repetition and defensive framing without hiding uncertainty. Keep collection logs, scores and missing author details outside the article. Do not invent results, adoption, citations, quotations, author facts, funding, consent or model identity. Deliver supported prose with an explicit incomplete status when evidence is missing, rather than padding or fabricating a finished study.
 
+Caution limits what you claim, not how concretely you show what is supported. Before drafting, read [writing-quality.md](references/writing-quality.md): make each main point concrete with a verified code excerpt, figure, number or commit; mine the project's history for decisions that changed; compare real alternatives on the same criteria; write lessons that could only come from this work; and run its self-review before export.
+
 ## Venue and output
 
 | Venue guide | Appropriate contribution | Output route |
