@@ -1,4 +1,4 @@
-"""Verified publisher Word templates and their native Windows PDF rendering."""
+"""Verified publisher Word templates and their native Word PDF rendering (Windows or macOS)."""
 
 from copy import deepcopy
 import json
@@ -7,7 +7,8 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
-from tempfile import TemporaryDirectory
+import sys
+from tempfile import TemporaryDirectory, mkdtemp
 
 from _publication_files import digest_file, ensure_unlinked
 
@@ -427,10 +428,118 @@ def _word_style_arguments(venue_id: str) -> list[str]:
     return []
 
 
+MAC_WORD_ID = "com.microsoft.Word"
+MAC_SCRIPT = ROOT / "render-word-mac.applescript"
+METRIC_KEYS = ("pages", "whole_words", "abstract_words", "reference_count", "reference_heading_found", "body_words",
+               "body_table_words", "body_tables", "tables", "figures", "body_figures")
+
+
+def word_backend() -> str | None:
+    """The native Word automation route for this platform, or None."""
+    if os.name == "nt":
+        return "windows"
+    if sys.platform == "darwin":
+        return "macos"
+    return None
+
+
+def _mac_style_arguments(venue_id: str) -> list[str]:
+    if venue_id == "ieee-access":
+        return ["H1", "References", "ABSTRACT ", "Helvetica,Times New Roman"]
+    if venue_id == "jors":
+        return ["UP Section Heading", "References", "", "Arial"]
+    return ["ReferenceHead", "Bib_entry", "Abstract\u2014", "Helvetica-Light,Cheltenham-Book"]
+
+
+def _mac_staging_root() -> Path:
+    """Word for Mac is sandboxed: files outside its container trigger a manual
+    file-access prompt that blocks automation. Stage exact copies inside it."""
+    container = Path.home() / "Library" / "Containers" / MAC_WORD_ID / "Data"
+    if not container.is_dir():
+        raise ValueError("Microsoft Word for Mac was not found or has never been opened; open Word once, then retry")
+    root = container / "Library" / "Caches" / "think-tank"
+    root.mkdir(parents=True, exist_ok=True)
+    return root
+
+
+def _run_mac_word(mode: str, staged_docx: Path, staged_pdf: Path | None, venue_id: str) -> tuple[list[str], dict, str]:
+    heading, entry, label, fonts = _mac_style_arguments(venue_id)
+    command = ["osascript", str(MAC_SCRIPT.resolve()), mode, str(staged_docx), str(staged_pdf or ""), heading, entry, label, fonts]
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=240,
+                                check=False)
+    except subprocess.TimeoutExpired as exc:
+        raise ValueError("Microsoft Word for Mac automation timed out after 240 seconds") from exc
+    except FileNotFoundError as exc:
+        raise ValueError("osascript is unavailable; native Word automation on macOS needs the system osascript") from exc
+    if result.returncode:
+        raise ValueError("Microsoft Word for Mac automation failed: " + result.stderr[:1500])
+    try:
+        details = json.loads(result.stdout.strip())
+    except json.JSONDecodeError as exc:
+        raise ValueError("Microsoft Word for Mac returned unreadable automation output") from exc
+    return command, details, result.stderr
+
+
+def _mac_word_pdf(docx: Path, output: Path, venue_id: str) -> dict:
+    ensure_unlinked(docx)
+    ensure_unlinked(output)
+    if output.exists():
+        raise ValueError("PDF export refuses an existing output file")
+    source_sha = digest_file(docx)
+    temporary = Path(mkdtemp(prefix="render-", dir=_mac_staging_root()))
+    try:
+        staged_docx, staged_pdf = temporary / "source.docx", temporary / "rendered.pdf"
+        shutil.copyfile(docx, staged_docx)
+        if digest_file(staged_docx) != source_sha:
+            raise ValueError("The staged Word rendering source differs from the native export")
+        command, details, diagnostics = _run_mac_word("render", staged_docx, staged_pdf, venue_id)
+        if not staged_pdf.is_file():
+            raise ValueError("Microsoft Word for Mac reported success but produced no PDF")
+        if digest_file(staged_docx) != source_sha:
+            raise ValueError("The staged Word document changed during its read-only rendering")
+        shutil.copyfile(staged_pdf, output)
+    finally:
+        shutil.rmtree(temporary, ignore_errors=True)
+    if digest_file(docx) != source_sha:
+        output.unlink(missing_ok=True)
+        raise ValueError("The official Word document changed during its read-only PDF rendering")
+    return {"engine": "Microsoft Word for Mac AppleScript save as PDF", "command": command,
+            "source_docx_sha256": source_sha, "renderer_script_sha256": digest_file(MAC_SCRIPT),
+            "source_docx_path": str(docx.resolve()), "exact_staged_copy": True,
+            "read_only": details.get("read_only") is True, "visible": None, "macros_disabled": None,
+            "diagnostics": diagnostics, "word": details}
+
+
+def _mac_measure_word(docx: Path, venue_id: str) -> dict:
+    ensure_unlinked(docx)
+    source_sha = digest_file(docx)
+    temporary = Path(mkdtemp(prefix="metrics-", dir=_mac_staging_root()))
+    try:
+        staged = temporary / "source.docx"
+        shutil.copyfile(docx, staged)
+        _, metrics, _ = _run_mac_word("metrics", staged, None, venue_id)
+        if digest_file(staged) != source_sha or digest_file(docx) != source_sha:
+            raise ValueError("The official Word source or its staged copy changed during read-only statistics")
+    finally:
+        shutil.rmtree(temporary, ignore_errors=True)
+    if metrics.get("read_only") is not True:
+        raise ValueError("Microsoft Word for Mac did not confirm opening the exact manuscript read-only")
+    missing = [key for key in METRIC_KEYS if key not in metrics]
+    if missing:
+        raise ValueError("Microsoft Word for Mac statistics are incomplete (" + ", ".join(missing) + "); native counts remain unverified")
+    return {"engine": "Microsoft Word for Mac AppleScript compute statistics", "source_docx_sha256": source_sha,
+            "source_unchanged": True, "visible": None, "macros_disabled": None,
+            "renderer_script_sha256": digest_file(MAC_SCRIPT), "metrics": metrics}
+
+
 def word_pdf(docx: Path, output: Path, *, venue_id: str = "ieee-software") -> dict:
     """Render the exact exported Word bytes, never a generic PDF substitute."""
-    if os.name != "nt":
-        raise ValueError("Official-template PDF export currently requires Windows with Microsoft Word installed; the official Word file remains available")
+    backend = word_backend()
+    if backend == "macos":
+        return _mac_word_pdf(docx, output, venue_id)
+    if backend != "windows":
+        raise ValueError("Official-template PDF export requires Windows or macOS with Microsoft Word installed; the official Word file remains available")
     ensure_unlinked(docx)
     script = ROOT / "render-word.ps1"
     shell = Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32/WindowsPowerShell/v1.0/powershell.exe"
@@ -475,8 +584,11 @@ def measure_word(docx: Path, *, venue_id: str = "ieee-software") -> dict:
     This opens neither the original nor an interactive Word window and never
     saves a document. It uses the renderer's native-profile isolation fix.
     """
-    if os.name != "nt":
-        raise ValueError("Definitive native Word counts require Windows with Microsoft Word installed")
+    backend = word_backend()
+    if backend == "macos":
+        return _mac_measure_word(docx, venue_id)
+    if backend != "windows":
+        raise ValueError("Definitive native Word counts require Windows or macOS with Microsoft Word installed")
     ensure_unlinked(docx)
     script = ROOT / "render-word.ps1"
     shell = Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32/WindowsPowerShell/v1.0/powershell.exe"

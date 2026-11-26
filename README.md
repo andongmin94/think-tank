@@ -105,7 +105,7 @@ Access·JORS·JOSS는 2026-11-02에 공식 지침과 템플릿 원문을 확인�
 | 저장소 URL 자료 보존 | 설치된 Git과 대상 GitHub 저장소 읽기 권한; 프로젝트 코드 실행 없음 |
 | 파일 도구 | PC에 설치된 로컬 Python(`PATH`의 `python`, macOS는 `python3`). 3.15 기준으로 개발·테스트하며 3.11 이상 지원. 문서 처리 의존성은 [requirements.txt](requirements.txt) 참조 |
 | IEEE 3개 매체·JORS DOCX (`export --docx-only`) | Pandoc, 문서 처리 의존성, 해당 공식 템플릿. Word 불필요; native Word/PDF 검증은 미완료 |
-| 공식 Word/PDF 출력 | Windows, 설치된 Microsoft Word, Pandoc, 문서 처리 의존성 |
+| 공식 Word/PDF 출력 | 설치된 Microsoft Word가 있는 Windows(PowerShell) 또는 macOS(osascript), Pandoc, 문서 처리 의존성. macOS 경로는 Mac+Word 실기 검증 전까지 미검증 |
 | JOSS 소스 검사·출력 | Python, Pandoc, 기존 서지 파서. Word 불필요; 공식 PDF는 별도 Inara 환경에서 검증 |
 | EMSE / JMLR MLOSS | EMSE는 편집용 DOCX, MLOSS는 공식 스타일로 컴파일한 PDF를 준비해 `bundle`에 포함 |
 

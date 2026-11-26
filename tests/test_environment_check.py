@@ -103,3 +103,30 @@ def test_windows_bundled_pandoc_suffix_is_resolved(tmp_path, monkeypatch):
     monkeypatch.setattr(converter.shutil, "which", lambda name: None)
     monkeypatch.setitem(sys.modules, "pypandoc", SimpleNamespace(get_pandoc_path=lambda: str(binary.with_suffix(""))))
     assert converter.pandoc_binary() == binary.resolve()
+
+
+def test_macos_word_and_osascript_count_as_native_prerequisites(monkeypatch):
+    monkeypatch.setattr(environment, "_packages", lambda: [{"name": "example", "status": "detected"}])
+    monkeypatch.setattr(environment.sys, "platform", "darwin")
+    monkeypatch.setattr(environment, "_word_registration", lambda: {"status": "detected"})
+    monkeypatch.setattr(environment.shutil, "which", lambda name: "/usr/bin/osascript" if name == "osascript" else None)
+    monkeypatch.setattr(environment, "pandoc_binary", lambda explicit: Path("/usr/local/bin/pandoc"))
+    monkeypatch.setattr(environment.subprocess, "run", lambda *a, **kw: subprocess.CompletedProcess(a, 0, "pandoc 3.8\n", ""))
+    monkeypatch.setattr(environment, "official_template", lambda venue: (Path("/t/template.docx"), {"sha256": "a" * 64}))
+    result = environment.diagnose()
+    assert result["osascript"] == "/usr/bin/osascript" and result["powershell"] is None
+    assert result["native_export_prerequisites_detected"] is True
+    assert result["native_export_verified"] is False
+
+
+def test_macos_word_bundle_is_read_without_launching_word(tmp_path, monkeypatch):
+    import plistlib
+    bundle = tmp_path / "Microsoft Word.app"
+    (bundle / "Contents").mkdir(parents=True)
+    with (bundle / "Contents" / "Info.plist").open("wb") as stream:
+        plistlib.dump({"CFBundleIdentifier": "com.microsoft.Word", "CFBundleShortVersionString": "16.99"}, stream)
+    monkeypatch.setattr(environment, "MAC_WORD_APPS", (tmp_path / "missing.app", bundle))
+    found = environment._mac_word_installation()
+    assert found["status"] == "detected" and found["version"] == "16.99"
+    monkeypatch.setattr(environment, "MAC_WORD_APPS", (tmp_path / "missing.app",))
+    assert environment._mac_word_installation()["status"] == "missing"

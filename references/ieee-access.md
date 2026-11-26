@@ -26,4 +26,4 @@ Use the existing authored Markdown path described in [tools.md](tools.md), with 
 
 Disclose actual AI-generated text and the system used in accordance with the current acknowledgments/citation policy. Obtain genuine author approval and biographies; a profile lookup cannot supply consent. Keep journal fees and submission choices as human decisions.
 
-Pandoc applies the verified reference DOCX, then native Windows Word produces and measures the exact PDF. DOCX/OOXML checks alone do not verify Word rendering, pagination, fonts, or every final page; leave those checks pending when Word is unavailable.
+Pandoc applies the verified reference DOCX, then the installed Microsoft Word (Windows, or macOS through osascript) produces and measures the exact PDF. DOCX/OOXML checks alone do not verify Word rendering, pagination, fonts, or every final page; leave those checks pending when Word is unavailable.

@@ -10,6 +10,7 @@ from importlib import metadata
 import json
 from pathlib import Path
 import platform
+import plistlib
 import re
 import shutil
 import subprocess
@@ -46,9 +47,32 @@ def _packages() -> list[dict]:
     return rows
 
 
+MAC_WORD_APPS = (Path("/Applications/Microsoft Word.app"), Path.home() / "Applications" / "Microsoft Word.app")
+
+
+def _mac_word_installation() -> dict:
+    method = "Application bundle Info.plist; Word not launched"
+    for bundle in MAC_WORD_APPS:
+        info = bundle / "Contents" / "Info.plist"
+        if not info.is_file():
+            continue
+        try:
+            with info.open("rb") as stream:
+                record = plistlib.load(stream)
+        except (OSError, plistlib.InvalidFileException) as exc:
+            return {"status": "unreadable", "path": str(bundle), "method": method, "detail": str(exc)}
+        if record.get("CFBundleIdentifier") != "com.microsoft.Word":
+            continue
+        return {"status": "detected", "path": str(bundle), "version": record.get("CFBundleShortVersionString"),
+                "method": method + "; startup, license, sandbox access and rendering not tested"}
+    return {"status": "missing", "method": method}
+
+
 def _word_registration() -> dict:
+    if sys.platform == "darwin":
+        return _mac_word_installation()
     if sys.platform != "win32":
-        return {"status": "unsupported_platform", "method": "Windows COM registry; Word not launched"}
+        return {"status": "unsupported_platform", "method": "Native Word automation needs Windows or macOS; Word not launched"}
     import winreg
     try:
         with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, r"Word.Application\CLSID") as key:
@@ -83,17 +107,19 @@ def diagnose(pandoc: str | None = None) -> dict:
             templates.append({"venue": venue, "status": "missing_or_changed", "detail": str(exc)})
     word = _word_registration()
     powershell = shutil.which("powershell.exe") if sys.platform == "win32" else None
+    osascript = shutil.which("osascript") if sys.platform == "darwin" else None
     python_ok = sys.version_info >= (3, 11)
     for package in packages:
         package["required_for_export"] = package["name"] != "pypandoc_binary"
-    detected = (python_ok and sys.platform == "win32" and bool(powershell) and
+    automation = bool(powershell) if sys.platform == "win32" else bool(osascript) if sys.platform == "darwin" else False
+    detected = (python_ok and automation and
                 word["status"] == "detected" and pandoc_result["status"] == "detected" and
                 all(x["status"] == "detected" for x in packages if x["required_for_export"]) and
                 all(x["status"] == "verified" for x in templates if x["status"] != "external_template_required"))
     return {"created_at": datetime.now(timezone.utc).isoformat(),
             "python": {"executable": sys.executable, "version": platform.python_version(), "supported": python_ok},
             "platform": platform.platform(), "skill_directory": str(Path(__file__).resolve().parents[1]),
-            "packages": packages, "pandoc": pandoc_result, "powershell": powershell,
+            "packages": packages, "pandoc": pandoc_result, "powershell": powershell, "osascript": osascript,
             "word": word, "official_templates": templates,
             "native_export_prerequisites_detected": detected,
             "native_export_scope": "Bundled Word venues only; IEEE Access and JORS additionally require their explicit verified external template. JOSS produces source files, not native Word/PDF.",
@@ -101,6 +127,7 @@ def diagnose(pandoc: str | None = None) -> dict:
             "limitations": ["Registration and package metadata do not verify imports, Word licensing or PDF rendering.",
                             "pypandoc_binary is an optional Pandoc provider when a usable executable is already selected.",
                             "Font substitution and all final pages must be checked during actual export.",
+                            "On macOS, Word is sandboxed; the export stages files inside Word's own container and Word must be closed before automation.",
                             "No software installation, account connection, credential inspection or network request was performed."]}
 
 
@@ -128,7 +155,7 @@ def main() -> int:
                  "Native export verified: False", "", "| Component | Status |", "| --- | --- |"]
         lines += [f"| {x['name']} {x['version'] or ''} | {x['status']} |" for x in result["packages"]]
         lines += [f"| Pandoc | {result['pandoc']['status']} |", f"| Word registration | {result['word']['status']} |",
-                  f"| PowerShell | {'detected' if result['powershell'] else 'missing'} |"]
+                  f"| Word automation ({'osascript' if sys.platform == 'darwin' else 'PowerShell'}) | {'detected' if result['powershell'] or result['osascript'] else 'missing'} |"]
         lines += [f"| {x['venue']} template | {x['status']} |" for x in result["official_templates"]]
         lines += ["", *result["limitations"]]
         (target / "environment.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
