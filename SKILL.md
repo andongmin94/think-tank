@@ -35,6 +35,12 @@ Write in English unless requested otherwise. Lead with the reader's problem, the
 | [JOSS](references/joss.md) | Research software with demonstrated use/development | Authored Markdown, BibTeX and local figures |
 | [Empirical Software Engineering](references/emse.md) | Empirical or replication study with an assessable design, observations and analysis | Author-prepared editable DOCX; no journal Word template |
 | [JMLR MLOSS](references/jmlr-mloss.md) | Open ML implementation with demonstrated community and distinct software contribution | Official-style LaTeX → review PDF; separate cover letter |
+| [Software: Practice and Experience](references/spe.md) | Practical experience building or operating real software systems | Author-prepared editable DOCX (or LaTeX PDF); scope form |
+| [Science of Computer Programming OSP](references/scico-osp.md) | The software itself: an open-licensed tool with a short description | Official OSP Word/LaTeX template |
+| [Journal of Systems and Software](references/jsys.md) | Evidence-backed SE research, In Practice industry reports, new ideas | Author-prepared editable DOCX or LaTeX; highlights |
+| [Information and Software Technology](references/ist.md) | Research or experience improving development practice; systematic reviews | Author-prepared editable DOCX; structured abstract |
+| [Automated Software Engineering](references/ase.md) | Automated SE techniques and tools with evaluation | Springer Nature LaTeX → review PDF |
+| [Journal of Statistical Software](references/jstatsoft.md) | GPL-compatible statistical software with replication materials | JSS-style LaTeX → review PDF; replication script |
 
 Every supported venue has a route to publish without a mandatory fee; do not recommend venues that always charge an article processing charge. Choose by contribution and evidence, not impact factor. A generic application is not automatically research software; topic labels are not approved-journal lists. Verify current official article rules and template provenance directly, including licensing and AI policy. Retained templates do not prove current compliance. For JOSS, automated review is author-side diagnostics only; publication verdicts belong to humans, and editor/reviewer conversations must not be AI-written except for translation.
 

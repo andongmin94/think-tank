@@ -39,5 +39,11 @@ WORD_VENUES = tuple(venue for venue in EXPORT_VENUES if VENUE_RULES[venue]["outp
 # These venues accept a host-prepared manuscript. They do not use a retained
 # Word template or the JOSS adapter. Roles refer to the private preparation bundle.
 PREPARED_MANUSCRIPTS = {"emse": ("editable_docx", ".docx"),
-                        "jmlr-mloss": ("review_pdf", ".pdf")}
+                        "jmlr-mloss": ("review_pdf", ".pdf"),
+                        "spe": ("editable_docx", ".docx"),
+                        "scico-osp": ("editable_docx", ".docx"),
+                        "jsys": ("editable_docx", ".docx"),
+                        "ist": ("editable_docx", ".docx"),
+                        "ase": ("review_pdf", ".pdf"),
+                        "jstatsoft": ("review_pdf", ".pdf")}
 VENUES = (*EXPORT_VENUES, *PREPARED_MANUSCRIPTS)

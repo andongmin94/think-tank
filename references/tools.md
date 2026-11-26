@@ -63,7 +63,7 @@ This path does not generate DOCX, call Inara, upload sources, or produce a PDF. 
 
 ## Host-prepared CS manuscripts
 
-For [EMSE Research Articles](emse.md), prepare an editable DOCX. For [JMLR MLOSS](jmlr-mloss.md), prepare the initial-review PDF using the official style and keep the cover letter separate. These two routes do not use the journal-specific `export_manuscript.py` converters or native Word finalizer.
+For [EMSE Research Articles](emse.md), [SPE](spe.md), [SCP OSP](scico-osp.md), [JSS](jsys.md) and [IST](ist.md), prepare an editable DOCX. For [JMLR MLOSS](jmlr-mloss.md), [ASE](ase.md) and [JStatSoft](jstatsoft.md), prepare the initial-review PDF using the official style; keep the MLOSS cover letter separate. These routes do not use the journal-specific `export_manuscript.py` converters or native Word finalizer.
 
 After successful host conversion and inspection of the output against the authored inputs, record their exact versions. Use `record-conversion` with all actual authored inputs: the evidence-bound manuscript, any separate LaTeX source, bibliography and figures. For example, when the canonical manuscript is Markdown and the host prepared a separate TeX source:
 

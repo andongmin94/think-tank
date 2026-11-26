@@ -72,7 +72,10 @@ def test_new_cli_routes_source_export_and_rejects_word_profile(tmp_path, monkeyp
     assert "do not apply" in capsys.readouterr().err
 
 
-@pytest.mark.parametrize('venue,role,suffix', [('emse', 'editable_docx', '.docx'), ('jmlr-mloss', 'review_pdf', '.pdf')])
+@pytest.mark.parametrize('venue,role,suffix', [('emse', 'editable_docx', '.docx'), ('jmlr-mloss', 'review_pdf', '.pdf'),
+                                               ('spe', 'editable_docx', '.docx'), ('scico-osp', 'editable_docx', '.docx'),
+                                               ('jsys', 'editable_docx', '.docx'), ('ist', 'editable_docx', '.docx'),
+                                               ('ase', 'review_pdf', '.pdf'), ('jstatsoft', 'review_pdf', '.pdf')])
 def test_prepared_cs_bundle_needs_the_selected_format_and_conversion_record(tmp_path, venue, role, suffix):
     root = tmp_path / 'sources'
     root.mkdir()
@@ -99,3 +102,11 @@ def test_prepared_cs_bundle_needs_the_selected_format_and_conversion_record(tmp_
     assert 'Recommendation: **not recommended**' in (tmp_path / 'supplied' / 'checklist.md').read_text(encoding='utf-8')
     assert not supplied['submission_ready'] and not supplied['actual_submission_performed']
     assert venue not in exporter.EXPORT_VENUES
+
+
+def test_every_prepared_venue_has_a_guide_with_checked_official_sources():
+    references = Path(__file__).resolve().parents[1] / "references"
+    for venue in support.PREPARED_MANUSCRIPTS:
+        guide = (references / f"{venue}.md").read_text(encoding="utf-8")
+        assert f"`{venue}`" in guide and "## Fees" in guide or venue in {"emse", "jmlr-mloss"}, venue
+        assert "checked 2026-" in guide, venue

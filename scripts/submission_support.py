@@ -534,7 +534,13 @@ def prepare_bundle(plan, root, output_dir):
                     "Confirm genuine author identity, affiliation, contact and contribution selections",
                     {"joss": "Compile with the official JOSS publisher pipeline, inspect its PDF and confirm the exact source package",
                      "emse": "Inspect the editable EMSE manuscript, its data availability statement, declarations and submission-system PDF",
-                     "jmlr-mloss": "Inspect the compiled JMLR-style PDF, its four-page text limit plus references, and prior software publications"}.get(venue, "Inspect every final Word/PDF page and approve the exact files"),
+                     "jmlr-mloss": "Inspect the compiled JMLR-style PDF, its four-page text limit plus references, and prior software publications",
+                     "spe": "Inspect the editable SPE manuscript, the Submission Topic and Scope Form, data availability and conflict of interest statements",
+                     "scico-osp": "Inspect the filled SCP OSP template (about six pages), software licence, documentation, highlights and declarations",
+                     "jsys": "Inspect the editable JSS manuscript, highlights, competing interest and generative AI declarations, and any Open Science package",
+                     "ist": "Inspect the editable IST manuscript, its structured abstract, word count (figures and tables at 200 words), and declarations",
+                     "ase": "Inspect the compiled sn-jnl PDF, its Statements and Declarations section and the complete LaTeX source",
+                     "jstatsoft": "Inspect the compiled JSS-style PDF, the GPL-compatible licence and a clean run of the replication script"}.get(venue, "Inspect every final Word/PDF page and approve the exact files"),
                     "Complete any submission-specific declarations in the actual portal"])
     recommendation = recommendation or ("conditional" if draft_status is not None or missing else "not_assessed")
     folder = _new_output(output_dir)

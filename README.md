@@ -1,6 +1,6 @@
 # Think Tank
 
-GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Agent Skills 형식의 스킬입니다. **Claude Code·Claude.ai·Codex에서 같은 지침과 Python 도구를 재사용**합니다. **IEEE Software, IEEE Security & Privacy, Journal of Open Source Software(JOSS), Empirical Software Engineering(EMSE), JMLR의 MLOSS 트랙**을 지원합니다. 모두 **게재료 없이 낼 수 있는 경로가 있는 곳**만 다루며, 게재료(APC)가 반드시 드는 IEEE Access와 JORS는 지원하지 않습니다. 에이전트가 연구 질문 선정부터 기존 연구 비교·집필·검토까지 직접 조율하고, 파일 도구가 매체별 원고 출력과 투고 준비를 돕습니다.
+GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Agent Skills 형식의 스킬입니다. **Claude Code·Claude.ai·Codex에서 같은 지침과 Python 도구를 재사용**합니다. **IEEE Software, IEEE Security & Privacy, Journal of Open Source Software(JOSS), Empirical Software Engineering(EMSE), JMLR의 MLOSS 트랙, Software: Practice and Experience, Science of Computer Programming(소프트웨어 트랙), Journal of Systems and Software, Information and Software Technology, Automated Software Engineering, Journal of Statistical Software**를 지원합니다. 모두 **게재료 없이 낼 수 있는 경로가 있는 곳**만 다루며, 게재료(APC)가 반드시 드는 IEEE Access와 JORS는 지원하지 않습니다. 에이전트가 연구 질문 선정부터 기존 연구 비교·집필·검토까지 직접 조율하고, 파일 도구가 매체별 원고 출력과 투고 준비를 돕습니다.
 
 ## 3분 사용법
 
@@ -77,7 +77,7 @@ $think-tank https://github.com/owner/repository
 
 에이전트가 실제 파일 트리를 확인하고 README·구현·테스트·기존 실험 자료를 읽습니다. `research_workspace.py repository`는 선택한 원본 파일과 저장소 커밋·해시를 새 작업 폴더에 보존합니다. 파일명이나 README의 설명만으로 프로젝트 분야·성능·연구소프트웨어 적격성을 판정하지 않습니다.
 
-지원하는 다섯 매체·트랙 안에서 **후보 세 곳을 비교하고 근거에 맞는 초안 한 편을 작성**합니다. 보완하면 투고할 수 있는 경우에는 조건을 적고, 신규 투고를 뒷받침할 근거가 없으면 비추천 결정을 유지합니다. 정적 소스 관찰, 실제 측정, 추론과 미확인 근거를 구분하며 저널의 현재 공식 지침과 article type을 확인합니다. 기존 서지 가져오기·근거 ledger·preflight·export·bundle 경로를 이어 사용합니다. [URL에서 초안까지 실행 절차](references/repository-to-draft.md)에 명령과 최소 결과물을 정리했습니다.
+지원하는 열한 매체·트랙 안에서 **후보 세 곳을 비교하고 근거에 맞는 초안 한 편을 작성**합니다. 보완하면 투고할 수 있는 경우에는 조건을 적고, 신규 투고를 뒷받침할 근거가 없으면 비추천 결정을 유지합니다. 정적 소스 관찰, 실제 측정, 추론과 미확인 근거를 구분하며 저널의 현재 공식 지침과 article type을 확인합니다. 기존 서지 가져오기·근거 ledger·preflight·export·bundle 경로를 이어 사용합니다. [URL에서 초안까지 실행 절차](references/repository-to-draft.md)에 명령과 최소 결과물을 정리했습니다.
 
 저자 정보나 근거가 부족하면 이를 보완 과제로 남긴 소스 초안을 전달합니다. Word/PDF 또는 JOSS Inara 렌더링을 수행하지 못했으면 미검증으로 기록하며, 형식 검사를 통과시키기 위해 이름·결과·승인을 만들지 않습니다. 사용자 저장소 수정·코드 실행은 별도 허용 범위를 따르고, 한 사례의 초안 묶음을 전달하면 이번 작업을 마칩니다.
 
@@ -101,6 +101,12 @@ $think-tank https://github.com/owner/repository
 | [JOSS](references/joss.md) / `joss` | 실제 연구 활용과 공개 개발 이력이 있는 연구 소프트웨어 | `paper.md` + `paper.bib` + 로컬 그림 |
 | [EMSE](references/emse.md) / `emse` | 사례·자료·분석이 갖춰진 소프트웨어공학 실증 원저 또는 재현 연구 | 전용 Word 양식 없음. 에이전트가 준비한 편집용 DOCX를 묶음에 포함 |
 | [JMLR MLOSS](references/jmlr-mloss.md) / `jmlr-mloss` | 실제 사용자 기반이 있는 비자명한 공개 ML 구현 | 공식 LaTeX 스타일로 빌드한 심사용 PDF와 별도 커버레터 준비 |
+| [Software: Practice and Experience](references/spe.md) / `spe` | 실제 소프트웨어를 만들고 운영하며 얻은 경험 | 편집용 DOCX(또는 LaTeX PDF), 주제·범위 양식 |
+| [SCP Original Software Publication](references/scico-osp.md) / `scico-osp` | 소프트웨어 자체를 논문으로 (오픈 라이선스 도구 + 6쪽 내외 설명) | 공식 OSP Word/LaTeX 템플릿 |
+| [Journal of Systems and Software](references/jsys.md) / `jsys` | 근거 있는 SE 연구, In Practice(산업 사례), 새 아이디어 | 편집용 DOCX 또는 LaTeX, highlights |
+| [Information and Software Technology](references/ist.md) / `ist` | 개발 실무를 개선하는 연구·경험, 체계적 문헌 연구 | 편집용 DOCX, 구조화 초록 |
+| [Automated Software Engineering](references/ase.md) / `ase` | 자동화된 SE 기법·도구와 평가 | Springer Nature LaTeX로 만든 심사용 PDF |
+| [Journal of Statistical Software](references/jstatsoft.md) / `jstatsoft` | GPL 호환 통계 소프트웨어 + 재현 스크립트 | JSS 스타일 LaTeX PDF |
 
 EMSE와 MLOSS의 저널별 지침에 따라 원고를 준비하고 `submission_support.py bundle`로 실제 파일을 보존합니다. 변환·검수 직후 `record-conversion`으로 입력과 출력 해시를 기록하면, 묶음을 만들 때 원고·서지·그림이나 DOCX/PDF가 달라진 경우 재생성이 필요하다고 표시합니다. 이는 기록 이후 버전 일치 검사이며 변환 성공이나 내용·레이아웃의 증명은 아닙니다. [입력과 기록 선택 방법](references/tools.md#host-prepared-cs-manuscripts)을 따르세요. 두 곳에는 `export_manuscript.py`의 기존 IEEE/JOSS 변환기를 적용하지 않습니다.
 
@@ -125,7 +131,7 @@ JOSS는 2026-11-02에 공식 지침을 확인했습니다. 도구는 확인된 S
 | IEEE 2개 매체 DOCX (`export --docx-only`) | Pandoc, 문서 처리 의존성, 해당 공식 템플릿. Word 불필요; native Word/PDF 검증은 미완료 |
 | 공식 Word/PDF 출력 | 설치된 Microsoft Word가 있는 Windows(PowerShell) 또는 macOS(osascript), Pandoc, 문서 처리 의존성. macOS 경로는 Mac+Word 실기 검증 전까지 미검증 |
 | JOSS 소스 검사·출력 | Python, Pandoc, 기존 서지 파서. Word 불필요; 공식 PDF는 별도 Inara 환경에서 검증 |
-| EMSE / JMLR MLOSS | EMSE는 편집용 DOCX, MLOSS는 공식 스타일로 컴파일한 PDF를 준비해 `bundle`에 포함 |
+| EMSE·SPE·SCP·JSS·IST / MLOSS·ASE·JStatSoft | 앞의 다섯 곳은 편집용 DOCX, 뒤의 세 곳은 공식 스타일로 컴파일한 PDF를 준비해 `bundle`에 포함 |
 
 도구는 PC에 설치된 로컬 Python으로 실행합니다. 다른 관리형 인터프리터로 바꾸지 않습니다. 문서 출력에 필요한 패키지가 없을 때만 그 로컬 Python에 의존성을 설치하거나, 같은 Python으로 만든 작업용 가상환경을 씁니다. 제공되는 런타임과 기존 도구를 먼저 확인하고, 전역 설치나 Word 설치를 자동으로 수행하지 않습니다. Claude.ai의 네트워크·설치 권한은 계정 설정에 따라 다릅니다. [호스트별 설치·실행 범위](references/runtime.md)를 확인하세요.
 
@@ -137,7 +143,7 @@ python -m pip install -r requirements.txt
 
 ## 이름과 제품 구분
 
-**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 소프트웨어 연구 논문 5개 매체 지원과 파일 도구를 제공하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
+**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 소프트웨어 연구 논문 11개 매체 지원과 파일 도구를 제공하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
 
 **[Paper Factory](https://github.com/andongmin94/paper-factory)**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱이나 LaTeX 편집기가 구현된 것은 아닙니다.
 
