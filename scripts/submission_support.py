@@ -288,11 +288,11 @@ def record_conversion(root, inputs, output, output_dir):
     if paths[-1].suffix.casefold() not in {".docx", ".pdf"}:
         raise ValueError("Conversion output must be a prepared DOCX or PDF")
     records = [{"path": name, "bytes": path.stat().st_size, "sha256": digest_file(path)}
-               for name, path in zip(names, paths)]
+               for name, path in zip(names, paths, strict=True)]
     report = {"mode": "host_prepared_conversion", "created_at_utc": datetime.now(timezone.utc).isoformat(),
               "inputs": records[:-1], "output": records[-1], "conversion_executed_by_tool": False,
               "scope": "Byte snapshot after host conversion. Input selection and the conversion relationship are host-declared, not independently verified. No layout, scientific or author approval is implied."}
-    if any(digest_file(path) != record["sha256"] for path, record in zip(paths, records)):
+    if any(digest_file(path) != record["sha256"] for path, record in zip(paths, records, strict=True)):
         raise ValueError("A conversion file changed while recording its hash")
     folder = _new_output(output_dir)
     _write(folder / "conversion.json", report)

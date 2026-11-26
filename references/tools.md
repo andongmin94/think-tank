@@ -6,7 +6,7 @@ Resolve this skill's directory from the loaded `SKILL.md`. Scripts find their as
 
 Use ordinary agent search, repository, browser, and file tools for actual research and writing. Retain the inspected revision and original source/document bytes. Do not execute the input project unless authorized. No special research-response schema wraps the article; canonical authored Markdown is sufficient.
 
-Use the managed Python and libraries when available. The tools require Python 3.11 or later and the dependencies declared by the package. Word output uses an existing Pandoc executable and installed Microsoft Word on Windows for native PDF generation and measurement. JOSS source checks use Pandoc and the existing bibliography parser without Word. Inspect actual dependencies before installing anything; a missing component is a reported preparation issue.
+Use the local Python on `PATH` (`python`; on macOS usually `python3`) and its installed libraries, not a different managed interpreter. The tools require Python 3.11 or later (developed and CI-tested on 3.15 and 3.11) and the dependencies declared by the package. Word output uses an existing Pandoc executable and installed Microsoft Word on Windows for native PDF generation and measurement. JOSS source checks use Pandoc and the existing bibliography parser without Word. Inspect actual dependencies before installing anything; a missing component is a reported preparation issue.
 
 Run the installed scripts' `--help` before using unfamiliar options. Replace `$python`, `$skillDirectory`, `$manuscript`, and `$newOutputDirectory` below with the actual resolved executable and absolute paths. Do not use common system environment names for task variables.
 

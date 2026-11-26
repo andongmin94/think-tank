@@ -266,7 +266,7 @@ def export(manuscript: Path, output_dir: Path, *, bibliography: Path | None = No
     if not report["prefilter_passed"]:
         raise ValueError("JOSS source preflight failed: " + "; ".join(report["blockers"]))
     output_dir.mkdir(parents=True, exist_ok=False)
-    for relative, (source, data) in files.items():
+    for relative, (_source, data) in files.items():
         target = output_dir / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         with target.open("xb") as stream:

@@ -1,2 +1,11 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+# Correctness only: syntax errors, pyflakes findings and bugbear patterns
+# (for example zip() without strict=). Style is left to the existing code.
+select = ["E9", "F", "B"]

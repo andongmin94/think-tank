@@ -122,9 +122,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         result = prepare(args.root, args.cards, args.output_dir)
     except (OSError, ValueError, TypeError, KeyError) as exc:
-        print(json.dumps({"error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(json.dumps({"error": str(exc)}, ensure_ascii=True), file=sys.stderr)
         return 2
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(json.dumps(result, ensure_ascii=True, indent=2))
     return 0 if result["bindings_match"] else 1
 
 

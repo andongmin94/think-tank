@@ -204,7 +204,7 @@ def parse_bibliography(text: str, format: str, *, reference_ids: list[int] | Non
     numbers = reference_ids if reference_ids is not None else range(1, len(records) + 1)
     references, findings, suggestions = [], [], []
     source_keys = defaultdict(list)
-    for number, (raw, key, fields) in zip(numbers, records):
+    for number, (raw, key, fields) in zip(numbers, records, strict=True):
         item = {"id": number, "source": {"format": format, "raw": raw}}
         if key is not None:
             item["source"]["key"] = key
@@ -301,9 +301,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         result = write_import(args.input, args.output_dir, format=args.format, reference_ids=args.reference_ids)
     except (OSError, ValueError, ImportError) as exc:
-        print(json.dumps({"error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(json.dumps({"error": str(exc)}, ensure_ascii=True), file=sys.stderr)
         return 2
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(json.dumps(result, ensure_ascii=True, indent=2))
     return 0
 
 

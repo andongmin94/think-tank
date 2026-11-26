@@ -312,9 +312,9 @@ def main(argv: list[str] | None = None) -> int:
     try:
         result = write_report(args.manuscript, args.output_dir, args.references_json)
     except (OSError, ValueError) as exc:
-        print(json.dumps({"error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        print(json.dumps({"error": str(exc)}, ensure_ascii=True), file=sys.stderr)
         return 2
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print(json.dumps(result, ensure_ascii=True, indent=2))
     return 0
 
 

@@ -1,6 +1,6 @@
 # Researcher convenience tools
 
-Use these tools only for the requested task. They operate on explicit local files, do not call a model or submission portal, and do not create scientific evidence or author approval. Run a tool's `--help` for its current contract. Use Python3.11 or later and new output directories outside the installed skill. Keep author profiles private and outside the distributed package.
+Use these tools only for the requested task. They operate on explicit local files, do not call a model or submission portal, and do not create scientific evidence or author approval. Run a tool's `--help` for its current contract. Use the local Python 3.11 or later on `PATH` and new output directories outside the installed skill. Keep author profiles private and outside the distributed package.
 
 ## Continue research on another PC or conversation
 

@@ -135,7 +135,7 @@ def main() -> int:
         print(json.dumps({"output_dir": str(target), "native_export_prerequisites_detected": result["native_export_prerequisites_detected"]}))
         return 0 if result["native_export_prerequisites_detected"] else 1
     except (ValueError, OSError) as exc:
-        print(str(exc), file=sys.stderr)
+        print(str(exc).encode("ascii", "backslashreplace").decode("ascii"), file=sys.stderr)
         return 2
 
 

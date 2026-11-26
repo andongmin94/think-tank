@@ -652,7 +652,7 @@ references:
     assert (output / "paper.bib").read_bytes() == original[1]
     assert (manuscript.read_bytes(), bibliography.read_bytes()) == original
     rows = json.loads((output / "manifest.json").read_text(encoding="utf-8"))["files"]
-    for name, data in zip(("paper.md", "paper.bib"), original):
+    for name, data in zip(("paper.md", "paper.bib"), original, strict=True):
         row = next(row for row in rows if row["path"] == name)
         assert row["sha256"] == hashlib.sha256(data).hexdigest() and row["bytes"] == len(data)
 

@@ -6,7 +6,7 @@ One `SKILL.md` and one set of scripts serve Claude Code, Claude.ai and other Age
 
 Resolve `scripts/`, `references/`, `assets/` and `requirements.txt` relative to the directory containing the loaded `SKILL.md`, not the user's repository or an assumed Codex/Claude path. Use that actual absolute path in the commands documented in [tools.md](tools.md). Put research inputs and generated outputs outside the installed skill.
 
-Check only the prerequisites needed for the requested task. Use an available Python 3.11+ interpreter. If packages are missing and installation is authorized, use the host's managed environment or a workspace virtual environment with this skill's `requirements.txt`; do not change global packages, credentials or network policy. A metadata field or an installed skill does not install dependencies.
+Check only the prerequisites needed for the requested task. Use the local Python interpreter on `PATH` (`python`; on macOS usually `python3`). The tools are developed and CI-tested on Python 3.15 and 3.11 and require 3.11 or later; do not substitute a different managed interpreter. If packages are missing and installation is authorized, install this skill's `requirements.txt` into that local interpreter or into a workspace virtual environment created from it; do not change global packages, credentials or network policy. A metadata field or an installed skill does not install dependencies.
 
 | Task | Prerequisite / boundary |
 | --- | --- |

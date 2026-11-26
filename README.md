@@ -103,13 +103,13 @@ Access·JORS·JOSS는 2026-11-02에 공식 지침과 템플릿 원문을 확인�
 | --- | --- |
 | 연구·집필 | Claude 또는 Codex와 대상 저장소·문헌에 대한 접근 |
 | 저장소 URL 자료 보존 | 설치된 Git과 대상 GitHub 저장소 읽기 권한; 프로젝트 코드 실행 없음 |
-| 파일 도구 | Python 3.11 이상. 문서 처리 의존성은 [requirements.txt](requirements.txt) 참조 |
+| 파일 도구 | PC에 설치된 로컬 Python(`PATH`의 `python`, macOS는 `python3`). 3.15 기준으로 개발·테스트하며 3.11 이상 지원. 문서 처리 의존성은 [requirements.txt](requirements.txt) 참조 |
 | IEEE 3개 매체·JORS DOCX (`export --docx-only`) | Pandoc, 문서 처리 의존성, 해당 공식 템플릿. Word 불필요; native Word/PDF 검증은 미완료 |
 | 공식 Word/PDF 출력 | Windows, 설치된 Microsoft Word, Pandoc, 문서 처리 의존성 |
 | JOSS 소스 검사·출력 | Python, Pandoc, 기존 서지 파서. Word 불필요; 공식 PDF는 별도 Inara 환경에서 검증 |
 | EMSE / JMLR MLOSS | EMSE는 편집용 DOCX, MLOSS는 공식 스타일로 컴파일한 PDF를 준비해 `bundle`에 포함 |
 
-문서 출력에 필요한 패키지가 없을 때만 호스트의 관리 환경 또는 작업용 가상환경에 의존성을 설치합니다. 제공되는 런타임과 기존 도구를 먼저 확인하고, 전역 설치나 Word 설치를 자동으로 수행하지 않습니다. Claude.ai의 네트워크·설치 권한은 계정 설정에 따라 다릅니다. [호스트별 설치·실행 범위](references/runtime.md)를 확인하세요.
+도구는 PC에 설치된 로컬 Python으로 실행합니다. 다른 관리형 인터프리터로 바꾸지 않습니다. 문서 출력에 필요한 패키지가 없을 때만 그 로컬 Python에 의존성을 설치하거나, 같은 Python으로 만든 작업용 가상환경을 씁니다. 제공되는 런타임과 기존 도구를 먼저 확인하고, 전역 설치나 Word 설치를 자동으로 수행하지 않습니다. Claude.ai의 네트워크·설치 권한은 계정 설정에 따라 다릅니다. [호스트별 설치·실행 범위](references/runtime.md)를 확인하세요.
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -124,7 +124,7 @@ python -m pip install -r requirements.txt "pytest>=8,<10"
 python -m pytest -q
 ```
 
-Windows CI에서 실제 Pandoc 식별과 문서 변환을 필수로 검사합니다. 현재 변경 사항과 테스트 결과는 [커밋 이력](https://github.com/andongmin94/think-tank/commits/main/)과 [GitHub Actions](https://github.com/andongmin94/think-tank/actions/workflows/skill.yml)에서 확인할 수 있습니다. 누락·손상된 그림의 정상 출력 처리, 확인 도중 바뀐 근거, 과거 출력 파일의 평가 재사용과 저자 검사 누락을 방지합니다. Garak·REA의 기존 질문·기여 선택 기록과 프론트론의 공식 원고·평가·횟수는 유지합니다.
+CI는 Windows와 macOS에서 Python 3.15와 3.11로 실제 Pandoc 식별과 문서 변환을 필수로 검사합니다. Microsoft Word 렌더링은 CI 서버에 Word가 없어 자동 검사 대상이 아닙니다. 현재 변경 사항과 테스트 결과는 [커밋 이력](https://github.com/andongmin94/think-tank/commits/main/)과 [GitHub Actions](https://github.com/andongmin94/think-tank/actions/workflows/skill.yml)에서 확인할 수 있습니다. 누락·손상된 그림의 정상 출력 처리, 확인 도중 바뀐 근거, 과거 출력 파일의 평가 재사용과 저자 검사 누락을 방지합니다. Garak·REA의 기존 질문·기여 선택 기록과 프론트론의 공식 원고·평가·횟수는 유지합니다.
 
 - [스킬 지침](SKILL.md)
 - [Claude 설치와 실행 환경](references/runtime.md)

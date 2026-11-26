@@ -236,10 +236,10 @@ def main(argv=None):
         if args.output is not None:
             with args.output.open("x", encoding="utf-8", newline="\n") as stream:
                 stream.write(content)
-        print(content, end="")
+        print(json.dumps(result, ensure_ascii=True, indent=2))
         return 0
     except OrcidLookupError as error:
-        print(json.dumps({"error": str(error)}, ensure_ascii=False), file=sys.stderr)
+        print(json.dumps({"error": str(error)}, ensure_ascii=True), file=sys.stderr)
         return 2
     except OSError:
         print(json.dumps({"error": "Could not create the new output file; no existing file was replaced."}), file=sys.stderr)

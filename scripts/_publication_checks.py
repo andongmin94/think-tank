@@ -236,7 +236,7 @@ def validate_manuscript(markdown: str, venue_id: str, author_metadata: dict | No
     ordered = (author_metadata or {}).get("authors", [])
     bindings, order_matches = _author_blocks(byline, ordered)
     biography_blocks = re.split(r"\n[ \t]*\n", biography_text)
-    for row, entry in zip(authors, ordered):
+    for row, entry in zip(authors, ordered, strict=True):
         author = entry["author"]
         block = bindings.get(entry["id"], "")
         values = {cell.strip() for line in block.splitlines() for cell in line.split("|") if cell.strip()}

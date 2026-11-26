@@ -143,7 +143,7 @@ def capture_repository(url: str, output_dir: Path, *, paths: list[str], ref: str
 
     ensure_unlinked(output_dir)
     output_dir.mkdir(parents=True, exist_ok=False)
-    for source, data in zip(sources, contents):
+    for source, data in zip(sources, contents, strict=True):
         destination = output_dir / source["path"]
         destination.parent.mkdir(parents=True, exist_ok=True)
         with destination.open("xb") as stream:

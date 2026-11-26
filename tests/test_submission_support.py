@@ -260,7 +260,7 @@ def test_response_anchors_follow_markdown_section_boundaries(tmp_path):
     ]})
     original = before.read_bytes(), after.read_bytes(), comments.read_bytes()
     result = support.prepare_responses(comments, before, after, tmp_path / "replies")
-    for row, present in zip(result["comments"], (True, False, True, False, False)):
+    for row, present in zip(result["comments"], (True, False, True, False, False), strict=True):
         assert row["changes"][0]["present_in_revised_manuscript"] is present
         assert bool(row["issues"]) is not present
     assert original == (before.read_bytes(), after.read_bytes(), comments.read_bytes())
