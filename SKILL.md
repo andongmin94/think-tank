@@ -5,30 +5,30 @@ description: Draft, revise or review software-repository papers with traceable e
 
 # Think Tank
 
-Research and write in the current conversation. The scripts collect, inspect and package authored files; they do not choose a contribution or write a paper. Deliver one useful article supported by the available evidence, not a plan or a promised future result.
+Research and write in the current conversation. Scripts collect, inspect and package authored files; they never choose a contribution or write the paper. Deliver one useful article the evidence supports, not a plan or a promised result.
 
 ## Runtime
 
-Use the same instructions in Claude Code, Claude.ai or another Agent Skills host. For installation or missing prerequisites, read [runtime.md](references/runtime.md). Resolve tool paths from this installed skill directory, not from the input repository. No provider API key or separate model runner is required. For the four official-template Word routes, use `export --docx-only` when editable DOCX is needed without native Word. Follow the venue guide for other formats; if the required tools are unavailable, deliver the incomplete source bundle. Leave Word/PDF verification pending.
+Works in Claude Code, Claude.ai or any Agent Skills host, with no provider API key or separate model runner. Resolve tool paths from this installed skill directory, not the input repository. Installation, prerequisites and the `export --docx-only` fallback without native Word: [runtime.md](references/runtime.md). If a venue's tools are unavailable, deliver the incomplete source bundle and leave Word/PDF verification pending.
 
 ## Choose the requested path
 
-- **New repository to draft:** follow [repository-to-draft.md](references/repository-to-draft.md). Read the actual sources, compare three supported venue/article-type candidates by evidence fit, then write the draft, freeze it for one independent review, make **one revision** for the review's evidence-supported corrections, and package the revised draft. Use [contribution-selection.md](references/contribution-selection.md) only when the research question is unclear.
-- **Continue or revise:** start from retained material and the requested change. Revisit changed sources and affected claims, not the entire research workflow. Preserve prior versions and review hashes.
-- **Review:** use [research-and-review.md](references/research-and-review.md). Assess contribution, evidence, comparison and readability. Distinguish publication as written, revision severity and submission suitability; scores are not targets or acceptance probabilities. When an independent review is in scope, use at most one, on the exact manuscript and relevant evidence. Preserve unfavorable findings; do not automatically redraft or rerate.
-- **Prepare files only:** use the relevant command from [tools.md](references/tools.md) or [researcher-convenience.md](references/researcher-convenience.md). Do not restart venue selection, research or full-article review for an export, bibliography import or bundle request.
+- **New repository to draft:** follow [repository-to-draft.md](references/repository-to-draft.md): read actual sources, compare three supported venue/article-type candidates by evidence fit, write, take one independent review, make **one revision**, package. Use [contribution-selection.md](references/contribution-selection.md) only when the research question is unclear.
+- **Continue or revise:** start from retained material and the requested change; revisit only changed sources and affected claims. Preserve prior versions and review hashes.
+- **Review:** follow [research-and-review.md](references/research-and-review.md): at most one independent review, on the exact manuscript and relevant evidence. Preserve unfavorable findings; never automatically redraft or rerate.
+- **Prepare files only:** run the relevant command from [tools.md](references/tools.md) or [researcher-convenience.md](references/researcher-convenience.md). Never restart venue selection, research or full review for an export, bibliography import or bundle.
 
-Read detailed references only for the active task. Continuation, author-profile, anonymity, response-letter, environment and final-preparation helpers are optional tools, not mandatory stages.
+Read references only for the active task. Continuation, author-profile, anonymity, response-letter, environment and final-preparation helpers are optional, not stages.
 
 ## Evidence and writing
 
-Read consequential code, README, tests, retained experiments and nearby primary literature before making claims. Retain the inspected commit, exact source witnesses, URLs, dates and hashes. Identify partial reading or inaccessible sources; an abstract is not a full paper. Distinguish source-declared, statically observed, measured, derived and proposed claims using the existing evidence ledger. A matching hash or quote does not establish truth, novelty or runtime behavior.
-
-Write in English unless requested otherwise. Lead with the reader's problem, the supported contribution, competent alternatives, evidence and limitations. Remove repetition and defensive framing without hiding uncertainty. Keep collection logs, scores and missing author details outside the article. Do not invent results, adoption, citations, quotations, author facts, funding, consent or model identity. Deliver supported prose with an explicit incomplete status when evidence is missing, rather than padding or fabricating a finished study.
-
-Caution limits what you claim, not how concretely you show what is supported. Before drafting, read [writing-quality.md](references/writing-quality.md): make each main point concrete with a verified code excerpt, figure, number or commit; mine the project's history for decisions that changed; compare real alternatives on the same criteria; write lessons that could only come from this work; and run its self-review before export.
-
-Two optional sources raise a draft beyond what the records show. When the user built the project and agrees, interview them about reasons, incidents and rejected options as described in [author-interview.md](references/author-interview.md), and record the answers as author-stated evidence. When the user explicitly authorizes execution, measure the article's central claims in an isolated copy as described in [measurement.md](references/measurement.md), and record the results as measured evidence.
+- Before claiming, read consequential code, README, tests, retained experiments and nearby primary literature. Retain the inspected commit, exact source witnesses, URLs, dates and hashes.
+- Flag partial reading and inaccessible sources; an abstract is not a full paper.
+- Label each claim's basis in the existing evidence ledger ([kinds](references/researcher-convenience.md#link-manuscript-claims-to-actual-evidence)). A matching hash or quote does not establish truth, novelty or runtime behavior.
+- Write in English unless asked otherwise. Lead with the reader's problem, the supported contribution, competent alternatives, evidence and limitations. Cut repetition and defensive framing without hiding uncertainty. Keep collection logs, scores and missing author details out of the article.
+- Never invent results, adoption, citations, quotations, author facts, funding, consent or model identity. When evidence is missing, deliver supported prose marked incomplete, not padding or a fabricated study.
+- Caution limits what you claim, not how concretely you show it. Before drafting, read and follow [writing-quality.md](references/writing-quality.md), including its self-review before export.
+- Optional: interview the user about reasons and rejected options only if they built the project and agree ([author-interview.md](references/author-interview.md)); measure central claims in an isolated copy only with explicit execution authorization ([measurement.md](references/measurement.md)).
 
 ## Venue and output
 
@@ -46,12 +46,16 @@ Two optional sources raise a draft beyond what the records show. When the user b
 | [Automated Software Engineering](references/ase.md) | Automated SE techniques and tools with evaluation | Springer Nature LaTeX → review PDF |
 | [Journal of Statistical Software](references/jstatsoft.md) | GPL-compatible statistical software with replication materials | JSS-style LaTeX → review PDF; replication script |
 
-Every supported venue has a route to publish without a mandatory fee; do not recommend venues that always charge an article processing charge. Choose by contribution and evidence, not impact factor. A generic application is not automatically research software; topic labels are not approved-journal lists. Verify current official article rules and template provenance directly, including licensing and AI policy. Retained templates do not prove current compliance. For JOSS, automated review is author-side diagnostics only; publication verdicts belong to humans, and editor/reviewer conversations must not be AI-written except for translation.
+- Every supported venue has a fee-free route; never recommend venues that always charge an article processing charge. Choose by contribution and evidence, not impact factor.
+- A generic application is not automatically research software; topic labels are not approved-journal lists.
+- Verify current official rules and template provenance directly, including licensing and AI policy; retained templates do not prove current compliance.
+- JOSS: automated review is author-side diagnostics only; humans give verdicts; no AI-written editor/reviewer conversations except translation ([joss.md](references/joss.md#limits-and-human-decisions)).
 
 ## Preserve and deliver
 
-Keep original data, manuscripts, reviews, failures and historical counts unchanged. Work outside the installed skill in a new output directory. Do not modify or execute the input repository without authorization. Reuse the existing evidence and preparation reports; do not create parallel catalogs, controllers or repeated status documents. Rerun checks only for changed inputs, a new failure or a concrete unresolved concern.
-
-Deliver editable source, bibliography, needed figures and a checklist with the source revision, actual checks and unresolved evidence. Include requested exports only when actually produced. Record real AI assistance and review scope. Hash consistency, scientific assessment, format checks, visual inspection and human approval are separate: none substitutes for another. Inspect every page of a final PDF; unavailable Word/Inara rendering remains unverified. The native Word finalizer applies only to its four official-template venues.
-
-Leave author identity/consent, eligibility, ethics, rights, funding/conflicts and data/code availability pending without genuine confirmation. ORCID data is not consent. Do not publish, upload, submit or contact others without separate authorization. Stop after the requested draft (including its one post-review revision), revision, review or preparation bundle; do not start another improvement cycle.
+- Keep original data, manuscripts, reviews, failures and historical counts unchanged. Work in a new output directory outside the installed skill. Never modify or execute the input repository without authorization.
+- Reuse the existing evidence and preparation reports; no parallel catalogs, controllers or repeated status documents. Rerun checks only for changed inputs, a new failure or a concrete unresolved concern.
+- Deliver editable source, bibliography, needed figures and a checklist (source revision, actual checks, unresolved evidence). Include exports only when actually produced. Record real AI assistance and review scope.
+- Hash consistency, scientific assessment, format checks, visual inspection and human approval are separate; none substitutes for another. Inspect every page of a final PDF ([how](references/tools.md#exact-file-verification)); unavailable Word/Inara rendering stays unverified. The native Word finalizer applies only to the two IEEE magazine venues with retained official templates.
+- Without genuine confirmation, leave author identity/consent, eligibility, ethics, rights, funding/conflicts and data/code availability pending. ORCID data is not consent.
+- Never publish, upload, submit or contact others without separate authorization. Stop after the requested draft (with its one post-review revision), revision, review or bundle; start no further improvement cycle.

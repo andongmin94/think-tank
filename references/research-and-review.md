@@ -2,81 +2,99 @@
 
 ## Make the additional value inspectable
 
-Select a question the actual material can answer and a decision that matters to the intended reader. Read the sources far enough to establish the central behavior, normal reachability, relevant guards, counterexamples, and boundaries. Record why cases were chosen. A bounded source construction can be valuable without being an execution, an exhaustive survey, or evidence of prevalence.
+- Pick a question the material can answer and a decision that matters to the intended reader. Read enough to establish central behavior, normal reachability, guards, counterexamples and boundaries. Record why cases were chosen. A bounded source construction can be valuable without being an execution, exhaustive survey or prevalence evidence.
+- If angles compete, use the worked example in [contribution-selection.md](contribution-selection.md). Reuse retained reading and witnesses to drop unsupported or low-value questions before writing.
+- Test the contribution against the closest existing method at its strongest (guarantees, assumptions), applied fairly to the same cases. Say what it already establishes, what the article adds, and whether that changes a decision. Agreement with established guidance is a result; never weaken a baseline to manufacture novelty.
+- State the supported result and the reader's decision plainly before committing to a full article. A narrow case justifies an integration lesson only if it differs from a polished restatement of familiar advice. If value stays unclear, narrow or reconsider; accurate citations and a filled template are not a submission recommendation.
+- Separate source-declared behavior, static and executed observations, interpretation and hypothetical applications. A recorded expectation does not establish runtime harm; a worked policy is not an implemented, safe or effective fix. Missing external evidence or an inaccessible paper is a research limitation, not the project's demonstrated ceiling; reviewers must keep the two apart too.
 
-If several angles compete, [contribution-selection.md](contribution-selection.md) provides a short worked selection example. Reuse retained reading and source witnesses to rule out unsupported or low-value questions before investing in a full article.
-
-Challenge the contribution with the closest existing method, including its strongest relevant guarantees and assumptions. Apply it fairly to the same supported cases. Explain what the existing method already establishes, what the article adds, and whether the additional work changes a decision. Agreement with established guidance remains a result; do not weaken a baseline to manufacture novelty.
-
-State the supported result and the reader's resulting decision plainly before spending a full article on it. A narrow case may justify a useful integration lesson; make that lesson specific enough to distinguish it from a polished restatement of familiar advice. When the value remains unclear, narrow or reconsider the article rather than treating accurate citations and a completed template as a submission recommendation.
-
-Separate source-declared behavior, static observations, executed observations, interpretation, and hypothetical applications. A recorded expectation does not by itself establish runtime harm. A worked policy is not an implemented, safe, or effective fix. Missing external evidence or an inaccessible paper is a research limitation, not proof that the project has reached an intrinsic ceiling.
-
-For a revision, prefer changes that resolve a real inference or adoption problem: a missing premise, an unfair comparison, an unexplained state transition, an ambiguous result, a needed failure condition, or evidence readers cannot locate. Distinguish those from a new study requiring execution, another independent case, measurements, or a maintainer response. More prose, more checks, and a higher rating are not new evidence.
+Revisions should fix real inference or adoption problems: a missing premise, unfair comparison, unexplained state transition, ambiguous result, needed failure condition, or unlocatable evidence. A new study (execution, another independent case, measurements, a maintainer response) is different. More prose, checks or a higher rating are not new evidence.
 
 ## Write for a reader, then freeze
 
-Build the abstract around the problem, what was actually done, the supported result, and why that result changes a decision. Describe a static study as static without turning the abstract's conclusion into a catalogue of unclaimed discoveries. Introduce concrete actors, state changes, and consequences before using abstractions such as membership or restoration authority. Use technical terms when they improve precision; word lists and subjective AI-detection scores do not establish authorship or publication quality.
+Abstract: the problem, what was actually done, the supported result, why it changes a decision. Call a static study static; do not turn the conclusion into a catalogue of unclaimed discoveries. Introduce concrete actors, state changes and consequences before abstractions (e.g., membership, restoration authority). Use technical terms for precision; word lists and AI-detection scores establish neither authorship nor quality.
 
-Perform one author editorial pass before freezing the article for independent review. Read the argument as the venue's intended reader: can that reader restate the problem, principal result, additional value over existing work, and practical consequence? Lead evidence and analysis with the source findings and the conditions under which they hold; remove openings that defend an interpretation before presenting its evidence. Once a worked case or comparison demonstrates the additional value, remove later announcements that it is a contribution or integration lesson. Consolidate conclusions and advice by whether each passage adds a new premise, mechanism, consequence, or action, even when repeated advice uses different wording. Retain a useful actionable recap. If the central result cannot be explained clearly, resolve that problem before export instead of adding more defensive prose.
+One author editorial pass, then freeze for independent review:
 
-Place the study's general scope in the method and its consequential limits in the limitations discussion. Keep a local qualification wherever removing it would overstate a source-derived finding, a proposed design, or the empirical support. Consolidation must not turn a hypothetical repair into an implemented result or imply execution that did not occur. Distinguish counterexamples and qualifications that change a claim's reach or the reader's decision from anticipated-objection rebuttals that add no evidence or reasoning. Retain useful case controls and refusal conditions; their purpose is to test the argument, not repeat a generic disclaimer.
+- Can the venue's intended reader restate the problem, principal result, added value over existing work and practical consequence?
+- Lead with source findings and the conditions under which they hold; cut openings that defend an interpretation before its evidence.
+- Once a case or comparison shows the added value, cut later announcements that it is a contribution or lesson.
+- Consolidate conclusions and advice unless a passage adds a new premise, mechanism, consequence or action, however reworded. Keep a useful actionable recap.
+- If the central result cannot be explained clearly, fix that before export instead of adding defensive prose.
 
-Keep the venue-required AI-use acknowledgment truthful and proportionate: identify the actual tool, affected material or sections, and extent of assistance. Methodological facts such as unexecuted code belong in the study description and need not be repeated in the acknowledgment unless that repetition is necessary to describe the assistance. Do not conceal AI-generated material, relabel extensive generation as grammar correction, or invent human work to make the article sound more natural.
+Qualifications:
+
+- General scope goes in the method; consequential limits in the limitations discussion.
+- Keep a local qualification wherever removing it would overstate a source-derived finding, proposed design or empirical support. Consolidation must not turn a hypothetical repair into an implemented result or imply unperformed execution.
+- Keep counterexamples and qualifications that change a claim's reach or the reader's decision, and useful case controls and refusal conditions (they test the argument). Cut anticipated-objection rebuttals that add no evidence or reasoning.
+
+The venue-required AI-use acknowledgment names the actual tool, affected material or sections, and extent of assistance, truthfully and proportionately. Methodological facts such as unexecuted code belong in the study description, not repeated there unless needed to describe the assistance. Never conceal AI-generated material, relabel extensive generation as grammar correction, or invent human work.
 
 ## Evidence-grounded review criteria
 
-Use these criteria to judge the strongest useful manuscript supported by the inspected project and primary evidence, and its actual suitability for the selected venue. They are review dimensions, not numerical targets, publisher peer review or an acceptance predictor. A manuscript needs a worthwhile supported contribution, adequate evidence and a coherent argument for the intended reader; the absence of a detected error alone is insufficient. Material difficulty understanding the central result, or repetition that obscures its value, warrants `revise_before_submission` even when individual claims are correct. Distinguish missing research from the project's demonstrated limits rather than declaring a ceiling from an evidence gap.
+Judge the strongest useful manuscript the inspected project and primary evidence support, and its actual fit for the selected venue. Criteria are review dimensions, not numerical targets, publisher peer review or an acceptance predictor.
 
-The quality target is an internal recommendation to publish the article as written. A near-ready article requiring minor revision still falls short of that strict target. Decide whether the article's actual claims and the venue require further central evidence, a consequential comparison, a redesigned study or substantial rewriting, and distinguish those needs from localized corrections. Execution restrictions or a narrow scope do not make an essential gap nonblocking; neither does a static method automatically require experiments for every bounded claim.
+- Needed: a worthwhile supported contribution, adequate evidence, a coherent argument for the intended reader. No detected error is not enough.
+- Material difficulty understanding the central result, or repetition obscuring its value, warrants `revise_before_submission` even with correct claims.
+- The quality target is an internal recommendation to publish as written; minor revision falls short. Decide whether claims and venue need further central evidence, a consequential comparison, a redesigned study or substantial rewriting, versus localized corrections. Execution restrictions or narrow scope do not make an essential gap nonblocking; a static method does not automatically need experiments for every bounded claim.
 
 | Criterion | What the reviewer judges |
 | --- | --- |
-| `contribution` | A consequential, specific advance in readers' decisions beyond existing guidance; a polished restatement is insufficient. |
-| `evidence` | Accurate, adequate, inspectable evidence for central claims, with scope and confidence matching what was actually observed. |
-| `method` | A traceable analytical procedure, selection rationale, counterexamples, and meaningful checks that another reader can follow. |
-| `comparison` | Fair comparison with the closest existing work and alternatives, grounded in actual primary bodies and identifying additional value. |
-| `practical_value` | Usable decisions, worked cases, costs, failure conditions, and residual risks for the intended practitioner. |
-| `logic` | Evidence supports the argument and conclusions without an unsupported generalization or hidden premise. |
-| `presentation` | The intended reader can restate the central problem, result and practical consequence; prose and visuals explain them precisely and economically, without repetitive caveats or conclusions obscuring the argument. |
-| `venue_fit` | A compelling feature article for the selected magazine's audience, scope, and applicable article requirements. |
+| `contribution` | A specific, consequential advance in readers' decisions beyond existing guidance; not a polished restatement. |
+| `evidence` | Accurate, adequate, inspectable support for central claims; scope and confidence match what was actually observed. |
+| `method` | A traceable procedure, selection rationale, counterexamples and meaningful checks another reader can follow. |
+| `comparison` | Fair comparison with the closest existing work and alternatives, grounded in actual primary bodies, identifying the added value. |
+| `practical_value` | Usable decisions, worked cases, costs, failure conditions and residual risks for the intended practitioner. |
+| `logic` | Evidence supports the argument and conclusions; no unsupported generalization or hidden premise. |
+| `presentation` | The intended reader can restate the central problem, result and practical consequence; prose and visuals are precise and economical, not obscured by repetitive caveats or conclusions. |
+| `venue_fit` | A compelling feature article for the selected magazine's audience, scope and applicable article requirements. |
 | `limitations` | Specific, consequential limits and alternatives integrated into claims and advice. |
 
 ## One independent review
 
-Give a separate reviewer the complete frozen article, relevant raw sources and primary bodies, exact exported files when available, and this rubric. Do not provide prior ratings, a desired score, or a preferred winner unless the user specifically requested a comparison requiring that information. An independent technical review should check the claims, not merely the author's evidence summary.
+Give a separate reviewer the complete frozen article, relevant raw sources and primary bodies, exact exported files when available, and this rubric. Withhold prior ratings, desired scores and preferred winners unless the user asked for a comparison needing them. The reviewer checks the claims, not just the author's evidence summary.
 
-The author and independent critic provide complementary scrutiny in a bounded pass. Do not turn their feedback into an automatic model-to-model revision loop, or infer that two agreeing models establish research validity. Review the argument and reader comprehension directly rather than asking the critic to make the article appear human-written. Name a particular second model only when its actual use is established.
+- One bounded pass of complementary scrutiny: no automatic model-to-model revision loop; two agreeing models do not establish research validity.
+- Review argument and reader comprehension directly; never ask the critic to make the article seem human-written.
+- Name a specific second model only when its actual use is established.
 
-Cover all nine criteria in the single assessment with uncertainty, short literal article anchors, evidence-based reasons and consequential remaining improvements. Lead with an internal `publication_recommendation` and `as_written_publication_target_met`, and retain `no_major_revision_target_met` as a separate diagnostic, using the distinctions below. Preserve the separate `recommendation` of `consider_submission`, `revise_before_submission`, or `not_recommended` for existing preparation tools, explaining submission suitability for the selected audience and article category. Retain essential factual, citation or source defects separately; an essential defect prevents an unqualified recommendation to consider submission. Explain which remaining issues are blocking and which are useful future research, without manufacturing new observations or novelty to remove the distinction.
+The single assessment:
+
+- covers all nine criteria with uncertainty, short literal article anchors, evidence-based reasons and consequential remaining improvements;
+- leads with internal `publication_recommendation` and `as_written_publication_target_met`; `no_major_revision_target_met` is a separate diagnostic;
+- keeps the separate `recommendation` (`consider_submission`, `revise_before_submission`, `not_recommended`) for preparation tools, explaining submission suitability for the audience and article category;
+- lists essential factual, citation or source defects separately; any one blocks an unqualified recommendation to consider submission;
+- separates blocking issues from useful future research, without manufacturing observations or novelty.
 
 | Internal publication recommendation | Meaning for the exact reviewed article |
 | --- | --- |
-| `accept` | Its contribution, evidence, comparisons and presentation warrant publication as written; no required article revision is identified. |
-| `minor_revision` | Only identified, localized corrections remain; no new central evidence, consequential comparison, redesigned study or substantial rewriting is needed. List those corrections explicitly. |
-| `major_revision` | At least one such substantive change is needed before recommending publication. State the unmet need and why it matters to the current claim. |
-| `reject` | The current contribution, evidence or venue fit does not justify recommending publication; distinguish a different study from revision of this article. |
+| `accept` | Contribution, evidence, comparisons and presentation warrant publication as written; no required revision. |
+| `minor_revision` | Only identified, localized corrections remain (no new central evidence, consequential comparison, redesigned study or substantial rewriting); list them explicitly. |
+| `major_revision` | At least one such substantive change is needed before recommending publication; state the unmet need and why it matters to the current claim. |
+| `reject` | Contribution, evidence or venue fit does not justify recommending publication; distinguish a different study from revising this article. |
 
-Set `as_written_publication_target_met` true only for `accept`. A `minor_revision` outcome is near-ready but does not meet the strict target; list the required localized corrections explicitly. Set the separate `no_major_revision_target_met` diagnostic true only for `accept` or `minor_revision`. None of these labels is a publisher decision, a prediction of first-round acceptance, or a probability estimate. Older reviews without these explicit judgments remain unassessed against the stronger target. A legacy `consider_submission` or a passing format/final-preparation report does not establish that target and must not be relabeled as doing so.
+- `as_written_publication_target_met`: true only for `accept`. `no_major_revision_target_met`: true only for `accept` or `minor_revision`.
+- No label is a publisher decision, first-round acceptance prediction or probability.
+- Older reviews without these judgments stay unassessed against the stronger target; never relabel a legacy `consider_submission` or passing format/final-preparation report as meeting it.
 
-Numerical ratings are optional when useful or requested. If supplied, use integer scores from zero to ten across all nine criteria, retain uncertainty, and explain the evidence behind them. Scores and averages never determine readiness by a fixed threshold or override an essential defect. If a simple arithmetic mean is displayed, calculate it from all nine scores without rounding individual judgments or choosing a favorable subset. Keep the original assessment and reviewed article/output hashes, whether the assessment is qualitative or scored. Different one-pass reviewers are not a controlled paired comparison, and a score change does not prove improvement or deterioration. Do not call a replacement reviewer to obtain a preferred result.
+Scores are optional (when useful or requested): integers 0–10 on all nine criteria, with uncertainty and evidence. They never set readiness by threshold or override an essential defect. A displayed mean uses all nine unrounded scores, no favorable subset. Keep the original assessment and reviewed article/output hashes, scored or not. One-pass reviewers are not a controlled paired comparison; a score change proves neither improvement nor deterioration. Never call a replacement reviewer for a preferred result.
 
-Separate an independent agent review from human author approval and publisher peer review. If independent review is unavailable or interrupted, deliver its actual status rather than inventing an assessment or silently treating self-review as independent. Report content recommendation, native format checks, page inspection and human preparation separately; administrative completion and actual submission do not establish acceptance. After the one review, deliver the result and stop automatic rewriting or rating loops, except for the single revision below when the request was to write a draft.
+Agent review is separate from human author approval and publisher peer review. If it is unavailable or interrupted, report its actual status; never invent an assessment or pass off self-review as independent. Keep outcomes separate ([delivery record](#evidence-and-delivery-record)). After the one review, deliver and stop rewriting or rating, except the single revision below for drafting requests.
 
 ## One revision after review (drafting requests)
 
-When the user asked for a draft, make exactly one revision after the independent review, then stop:
+When the user asked for a draft, make exactly one revision after the review, then stop:
 
 - Keep the reviewed draft, its hash and the review unchanged; write the revision as a new file.
-- Make every localized correction the review identifies that the retained evidence supports: wrong or stretched claims, table cells not backed by an actual run, numbers that mix gross and net or include generated files, quotations stretched beyond their words, missing baselines, rule violations, placeholders, and unclear structure. Re-verify each changed claim against its source, log or interview record.
-- Do not add claims the evidence does not support to satisfy a reviewer. If a requested change needs new evidence (a new measurement, an interview answer, a source you cannot read), leave it as an explicit open item instead.
-- Record a short change log mapping each review finding to the change made or to why it stays open.
-- Rerun the deterministic checks (preflight, editorial checks, evidence ledger) on the revision. Do not request a second review or rerate the revision yourself; report that the revision is unreviewed unless the user asks for another review.
+- Make every localized correction the review identifies that retained evidence supports: wrong or stretched claims, table cells not backed by an actual run, numbers mixing gross and net or including generated files, quotations stretched beyond their words, missing baselines, rule violations, placeholders, unclear structure. Re-verify each changed claim against its source, log or interview record.
+- Never add unsupported claims to satisfy a reviewer. A change needing new evidence (measurement, interview answer, unreadable source) stays an explicit open item.
+- Log each finding with the change made or why it stays open.
+- Rerun deterministic checks (preflight, editorial checks, evidence ledger) on the revision. No second review or self-rerating; report the revision as unreviewed unless the user asks for another review.
 
 ## Evidence and delivery record
 
-Use ordinary files in a fresh research directory. A useful compact record identifies the source revision and byte hashes, retained primary-body identities and reading scope, exact article/export/review hashes, actual helper outcomes, known model identity, and unresolved limits. Existing counts and failures remain historical records. Current agent model use is not zero merely because no separate API instrumentation exists.
+Use ordinary files in a fresh research directory. Record source revision and byte hashes, retained primary-body identities and reading scope, exact article/export/review hashes, actual helper outcomes, known model identity and unresolved limits. Existing counts and failures stay historical. Current model use is not zero just because no API instrumentation exists.
 
-Keep long command recipes, source witnesses, and auxiliary policy calculations in an identified companion. The article must still explain its argument without requiring the companion to substitute for a missing result. Preserve original licenses when redistributing repository sources and respect third-party paper redistribution rights.
+Put long command recipes, source witnesses and auxiliary policy calculations in an identified companion; the article must still make its argument without the companion substituting for a missing result. Preserve original licenses when redistributing repository sources; respect third-party paper redistribution rights.
 
-Preparation gaps belong beside the manuscript. Do not invent affiliation, contact, biography, photograph, funding, conflicts, rights, originality, author responsibility, or approval to pass a check. Content recommendation, native format compliance, page inspection, administrative readiness, actual submission, and acceptance are separate facts.
+Preparation gaps sit beside the manuscript. Never invent affiliation, contact, biography, photograph, funding, conflicts, rights, originality, author responsibility or approval to pass a check. Content recommendation, native format compliance, page inspection, human/administrative preparation, actual submission and acceptance are separate facts; administrative completion and submission do not establish acceptance.
