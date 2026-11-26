@@ -30,6 +30,10 @@ SELF_COUNT_SENTENCE = re.compile(r"\b(?:the|this|our)\s+(?:manuscript|article|pa
 
 EDITORIAL_MARKERS = re.compile(r"(?i:\b(?:TODO|TBD|FIXME)\b|(?:\[|<|\{\{?)\s*placeholder\b|\{\{(?:source|document|citation):)|\bPLACEHOLDER\b")
 
+# Unfilled skeleton slots such as "<Article title>" or "<term one>". HTML tags,
+# autolinks and comments (no spaces, "=", "/", "!" or ":") are not slots.
+SKELETON_SLOT = re.compile(r"<(?![!/])(?:[A-Z][^<>\n=:]*|[a-z][^<>\n=:]*\s[^<>\n=:]*)>")
+
 def format_guidance(venue_id: str, author_metadata: dict | None = None) -> dict:
     try:
         rules = VENUE_RULES[venue_id]
@@ -159,6 +163,7 @@ def validate_manuscript(markdown: str, venue_id: str, author_metadata: dict | No
     entries = list(re.finditer(r"(?ms)^\[(\d+)\]\s+(.+?)(?=\n\[\d+\]\s|\Z)", references))
     numbers = [int(entry[1]) for entry in entries]
     insight_blocks = _insights(markdown)
+    slots = list(dict.fromkeys(SKELETON_SLOT.findall(prose)))
     acknowledgment = next((text for heading, text in parts.items()
                            if re.search(r"\backnowledg(?:e)?ments?\b", heading)), "")
     ai_disclosed = bool(re.search(r"\b(?:artificial intelligence|generative AI|AI[- ]assist\w*|language model|OpenAI|ChatGPT|GPT(?:[- ]\d+(?:\.\d+)*(?:-[a-z0-9]+)*)?)\b", acknowledgment, re.I)
@@ -192,6 +197,9 @@ def validate_manuscript(markdown: str, venue_id: str, author_metadata: dict | No
                    "Use real paragraph breaks in prose; code escapes are preserved."),
              _item("placeholders", "failed" if EDITORIAL_MARKERS.search(body_prose) else "passed",
                    "Resolve placeholders and evidence tokens before native format preflight."),
+             _item("unfilled_slots", "failed" if slots else "passed",
+                   (f"Replace {len(slots)} unfilled skeleton slot(s) with real content, for example " + ", ".join(slots[:3]) + "."
+                    if slots else "No unfilled skeleton slots remain.")),
              _item("ai_disclosure", "passed" if ai_disclosed else "failed", "Acknowledge actual AI tools, their use and affected manuscript parts from retained provenance. Disclosure presence is checked; it never asserts author approval or verifies tool-name accuracy.", source=source if venue_id == "jors" else AI_GUIDANCE)]
     estimate = (_words(body) if limits["word_count_scope"] == "body_excluding_references_and_bios" else _words(markdown)) + limits["visual_word_cost"] * (table_count + figure_count)
     max_words = limits["max_words"]

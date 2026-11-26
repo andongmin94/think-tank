@@ -1,45 +1,47 @@
 # Quickstart: check and export one manuscript
 
-This walks a person (or an agent) through the file tools once, from a fresh install to an editable IEEE Software DOCX. It does not write the article; the host agent does that from real evidence.
+This walks a person through the file tools once, from a fresh install to an editable IEEE Software DOCX. It does not write the article; the host agent does that from real evidence. Every command runs from the installed skill directory; relative paths are fine.
 
 ## 1. Prepare the local Python
 
-Use the local Python 3.11+ on `PATH` (`python`; on macOS usually `python3`). From the installed skill directory:
+Use the local Python 3.11+ on `PATH` (`python`; on macOS usually `python3`).
 
 ```sh
 python -m pip install -r requirements.txt
+python scripts/think_tank.py doctor
 ```
 
-## 2. Check the environment (optional)
+`doctor` says whether this computer can check manuscripts, export Word (DOCX) and render a PDF through Microsoft Word (Windows or macOS). Without Word, everything except the PDF still works.
+
+## 2. Start from the skeleton
 
 ```sh
-python scripts/environment_check.py --output-dir /absolute/new/env-report
+python scripts/think_tank.py new article.md
 ```
 
-Exit 0 means native Word export is available on this machine (Windows with Word, or macOS with Word). Exit 1 only means native Word/PDF is unavailable; DOCX export, checks and bundles still work.
+Replace every `<...>` slot with real content. An unfilled slot is reported by `check`; leave missing facts as pending in the checklist, never as invented text.
 
-## 3. Start from the skeleton
-
-Copy [`assets/examples/ieee-software-skeleton.md`](../assets/examples/ieee-software-skeleton.md) outside the skill directory and replace every `<...>` slot with real content. Leave a slot unfilled only as a pending item in the checklist, never as invented text.
-
-## 4. Preflight and read the fixes
+## 3. Check and fix
 
 ```sh
-python scripts/export_manuscript.py preflight --manuscript /absolute/article.md --venue ieee-software
+python scripts/think_tank.py check article.md
 ```
 
-Exit 0 means the structural checks passed. Exit 1 prints a report: `blockers` says what failed, and `fixes` gives each failed check a `how_to_fix` and an `example` in Markdown the checker accepts. Repair the manuscript and run preflight again.
+The summary separates **Fix these** (each with how to fix and a Markdown example the checker accepts) from **Needs a person** (author identity, photo, declarations: confirmations, not format errors). Exit 0 means the format checks passed; 1 means something to fix; 2 means the command could not run.
 
-## 5. Export
+## 4. Export
 
 ```sh
-python scripts/export_manuscript.py export --manuscript /absolute/article.md --venue ieee-software --output-dir /absolute/new/export --docx-only
+python scripts/think_tank.py export article.md             # DOCX, plus PDF through Microsoft Word
+python scripts/think_tank.py export article.md --docx-only # DOCX without Word
 ```
 
-`--docx-only` produces the official-template DOCX without Microsoft Word. Without it, the tool also renders a PDF through the installed Word (Windows or macOS) and measures native counts. Inspect every PDF page yourself; a passing report is not scientific approval or author consent.
+A new folder `article-ieee-software-<date>-<time>` is created next to the manuscript. Inspect every PDF page yourself; a passing report is not scientific approval or author consent.
 
-## Where to go next
+## Options
 
-- Full tool contracts: [tools.md](tools.md)
-- Venue rules: [ieee-software.md](ieee-software.md) and the other venue guides
-- Host installation: [runtime.md](runtime.md)
+- `--venue ieee-access` (or `ieee-security-privacy`, `jors`, `joss`) selects another venue; Access and JORS also need `--template` with the downloaded official file.
+- `--json` prints the full machine-readable report.
+- `--lang ko|en` overrides the message language (default: system locale, or `THINK_TANK_LANG`).
+
+The underlying tools (`export_manuscript.py`, `environment_check.py`) keep their exact contracts for agents; see [tools.md](tools.md). Venue rules are in [ieee-software.md](ieee-software.md) and the other venue guides; host installation is in [runtime.md](runtime.md).

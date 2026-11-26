@@ -47,6 +47,10 @@ FIX_HINTS = {
         "how_to_fix": "Remove editorial markers such as TODO, TBD, FIXME and [placeholder]; deliver missing content as pending in the checklist instead of in the article.",
         "example": "",
     },
+    "unfilled_slots": {
+        "how_to_fix": "Replace every <...> slot copied from the skeleton with real, verified content, or remove the sentence; list anything still missing as pending in the checklist.",
+        "example": "",
+    },
     "escaped_prose": {
         "how_to_fix": "Replace literal '\\n' sequences with real line breaks; the manuscript was probably pasted from an escaped string.",
         "example": "",

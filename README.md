@@ -2,15 +2,35 @@
 
 GitHub 저장소와 1차 문헌을 바탕으로 영문 논문을 작성하는 Agent Skills 형식의 스킬입니다. **Claude Code·Claude.ai·Codex에서 같은 지침과 Python 도구를 재사용**합니다. **IEEE Software, IEEE Security & Privacy, IEEE Access, Journal of Open Research Software(JORS), Journal of Open Source Software(JOSS), Empirical Software Engineering(EMSE), JMLR의 MLOSS 트랙**을 지원합니다. 에이전트가 연구 질문 선정부터 기존 연구 비교·집필·검토까지 직접 조율하고, 파일 도구가 매체별 원고 출력과 투고 준비를 돕습니다.
 
-## 이름과 제품 구분
+## 3분 사용법
 
-**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 소프트웨어 연구 논문 7개 매체 지원과 파일 도구를 제공하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
+Think Tank는 두 가지로 씁니다.
 
-**[Paper Factory](https://github.com/andongmin94/paper-factory)**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱이나 LaTeX 편집기가 구현된 것은 아닙니다.
+**1. AI와 함께 논문 쓰기 (주 용도)** — 아래 [설치](#설치)를 마친 뒤 Claude Code에서 저장소 주소를 주면 됩니다.
 
-기존 스킬 저장소는 [`andongmin94/think-tank`](https://github.com/andongmin94/think-tank)로 개명했으며, 구현과 Git 이력을 유지합니다. 아래 설치 명령은 Think Tank 저장소를 `think-tank` 스킬 폴더에 설치합니다. 과거 `docs/*verification*` 기록과 기존 연구 산출물은 당시의 기록으로 보존합니다. 이전 호출명을 위한 별칭이나 자동 마이그레이션은 제공하지 않습니다.
+```text
+/think-tank https://github.com/owner/repository
+```
 
-## 빠른 시작
+AI가 저장소와 관련 문헌을 읽고, 맞는 학술지 후보를 비교해 근거에 맞는 영문 초안과 확인 목록을 만듭니다.
+
+**2. 원고 파일을 직접 검사·출력하기** — 스킬 폴더에서 `think_tank.py` 하나로 합니다. 경로는 상대 경로로 써도 되고, 결과는 한국어로 요약됩니다(시스템 언어가 한국어일 때; `--lang en`으로 영어).
+
+```sh
+python scripts/think_tank.py doctor                    # 이 PC에서 무엇이 되는지 확인
+python scripts/think_tank.py new article.md            # IEEE Software 원고 뼈대 만들기
+python scripts/think_tank.py check article.md          # 형식 검사 + 고치는 법과 예시
+python scripts/think_tank.py export article.md         # 공식 템플릿 DOCX(+ Word가 있으면 PDF)
+```
+
+- `check`는 **고쳐야 할 것**(예시 포함)과 **사람이 확인할 것**(저자 정보, 사진, 최종 승인 등)을 나눠 보여 줍니다. 뼈대의 `<...>` 자리를 비워 두면 검사에서 잡힙니다.
+- `export`는 원고 옆에 `article-ieee-software-날짜-시간` 폴더를 새로 만듭니다. Word가 없으면 `--docx-only`를 붙이세요.
+- 다른 매체는 `--venue ieee-access`처럼 지정합니다. 전체 기계용 보고서가 필요하면 `--json`을 붙입니다.
+- macOS는 `python` 대신 `python3`을 씁니다. 먼저 `python -m pip install -r requirements.txt`로 문서 패키지를 설치합니다.
+
+자세한 흐름은 [빠른 시작 문서](references/quickstart.md)에 있습니다.
+
+## 설치
 
 아래 `git clone` 명령은 기본 브랜치(`main`)를 설치합니다. 아직 병합되지 않은 PR을 사용하려면 해당 PR 커밋의 CI에서 만든 설치 ZIP을 사용하세요.
 
@@ -116,6 +136,14 @@ python -m pip install -r requirements.txt
 ```
 
 `pypandoc_binary`가 Pandoc을 제공하며, 기존 실행 파일을 직접 지정할 수도 있습니다. Microsoft Word와 출판사의 전용 글꼴은 별도로 준비해야 합니다. 환경 진단은 설치 상태를 확인하며, 실제 출력과 글꼴 대체 여부는 최종 페이지에서 검수합니다. DOCX 생성·구조 검사만 실행했으면 Word/PDF 렌더링과 시각 검수는 미검증으로 남깁니다.
+
+## 이름과 제품 구분
+
+**Think Tank**는 이 저장소의 연구·집필 스킬입니다. 호출명은 `$think-tank`, 설치 폴더는 `think-tank`입니다. 소프트웨어 연구 논문 7개 매체 지원과 파일 도구를 제공하며, 새 이름이 지원 분야 확대를 뜻하지는 않습니다.
+
+**[Paper Factory](https://github.com/andongmin94/paper-factory)**는 별도로 개발할 Rust + GPUI 논문 작성 데스크톱 앱의 이름입니다. 앱은 `gpui-design`을 화면 구성에 사용하고 Think Tank를 연구·집필 스킬로 활용하는 방향입니다. 현재 이 저장소에 데스크톱 앱이나 LaTeX 편집기가 구현된 것은 아닙니다.
+
+기존 스킬 저장소는 [`andongmin94/think-tank`](https://github.com/andongmin94/think-tank)로 개명했으며, 구현과 Git 이력을 유지합니다. 아래 설치 명령은 Think Tank 저장소를 `think-tank` 스킬 폴더에 설치합니다. 과거 `docs/*verification*` 기록과 기존 연구 산출물은 당시의 기록으로 보존합니다. 이전 호출명을 위한 별칭이나 자동 마이그레이션은 제공하지 않습니다.
 
 ## 개발과 상세 문서
 
