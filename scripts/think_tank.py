@@ -21,7 +21,7 @@ from pathlib import Path
 SKILL = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SKILL / "scripts"))
 
-from _publication_venues import EXPORT_VENUES  # noqa: E402
+from _publication_venues import PREPARED_MANUSCRIPTS, VENUES  # noqa: E402
 
 SKELETONS = {"ieee-software": SKILL / "assets/examples/ieee-software-skeleton.md"}
 DEFAULT_VENUE = "ieee-software"
@@ -56,6 +56,7 @@ TEXT = {
         "word_hint": "PDF export needs Microsoft Word on Windows or macOS; --docx-only works without it.",
         "error": "Error",
         "not_found": "File not found: {file}",
+        "no_export": "{venue} has no official Word template here; prepare its DOCX or PDF as described in references/{venue}.md, then bundle it.",
     },
     "ko": {
         "check_title": "검사: {venue} | {file}",
@@ -86,6 +87,7 @@ TEXT = {
         "word_hint": "PDF 출력은 Windows나 macOS의 Microsoft Word가 필요해요. --docx-only는 Word 없이 돼요.",
         "error": "오류",
         "not_found": "파일을 찾을 수 없어요: {file}",
+        "no_export": "{venue}는 여기서 공식 Word 템플릿으로 출력하지 않아요. references/{venue}.md 안내대로 DOCX나 PDF를 준비한 뒤 묶으세요.",
     },
 }
 
@@ -190,9 +192,13 @@ def _new(args, words: dict) -> int:
 
 
 def _check(args, words: dict) -> int:
-    from export_manuscript import preflight
     manuscript = _path(args.manuscript)
-    report = preflight(manuscript, args.venue)
+    if args.venue in PREPARED_MANUSCRIPTS:
+        from _prepared_checks import validate_prepared
+        report = validate_prepared(manuscript.read_text(encoding="utf-8-sig"), args.venue)
+    else:
+        from export_manuscript import preflight
+        report = preflight(manuscript, args.venue)
     if args.json:
         print(json.dumps(report, ensure_ascii=True, indent=2))
     else:
@@ -202,6 +208,9 @@ def _check(args, words: dict) -> int:
 
 
 def _export(args, words: dict) -> int:
+    if args.venue in PREPARED_MANUSCRIPTS:
+        print(words["no_export"].format(venue=args.venue), file=sys.stderr)
+        return 2
     from export_manuscript import export
     manuscript = _path(args.manuscript)
     output = _path(args.out) if args.out else _default_output(manuscript, args.venue)
@@ -234,7 +243,7 @@ def main(argv: list[str] | None = None) -> int:
                             ("export", "Create the official-template Word file (and PDF with Word)")):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("manuscript", help="Markdown manuscript (.md); relative paths are fine")
-        command.add_argument("--venue", choices=EXPORT_VENUES, default=DEFAULT_VENUE,
+        command.add_argument("--venue", choices=VENUES, default=DEFAULT_VENUE,
                              help=f"Target venue (default: {DEFAULT_VENUE})")
         if name in {"check", "export"}:
             command.add_argument("--json", action="store_true", help="Print the full machine-readable report")

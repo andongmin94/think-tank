@@ -51,6 +51,30 @@ FIX_HINTS = {
         "how_to_fix": "Replace every <...> slot copied from the skeleton with real, verified content, or remove the sentence; list anything still missing as pending in the checklist.",
         "example": "",
     },
+    "structured_abstract": {
+        "how_to_fix": "Write the abstract as five labelled parts in this order: Context, Objectives, Methods, Results, Conclusion.",
+        "example": "## Abstract\n\nContext: <the problem setting>\n\nObjectives: <what the study set out to do>\n\nMethods: <how>\n\nResults: <what was found>\n\nConclusion: <what it means>",
+    },
+    "highlights": {
+        "how_to_fix": "Add a '## Highlights' section with 3–5 bullets of at most 85 characters each (spaces included); submit it as a separate file named with 'highlights'.",
+        "example": "## Highlights\n\n- <Novel result in at most 85 characters>\n- <Second result>\n- <Method or evidence>",
+    },
+    "statements_and_declarations": {
+        "how_to_fix": "Add a '## Statements and Declarations' section with the competing-interest, funding and other statements the journal lists, using the authors' actual answers.",
+        "example": "## Statements and Declarations\n\nCompeting interests: <the authors' actual statement>\n\nFunding: <actual funding, or none>",
+    },
+    "data_availability": {
+        "how_to_fix": "Add a data availability statement saying where the data, code and other evidence can be accessed, or why access is restricted.",
+        "example": "## Data Availability\n\n<Where the evidence is archived, with a persistent identifier, or the actual restriction.>",
+    },
+    "competing_interests": {
+        "how_to_fix": "Add a declaration of competing interests with the authors' actual answer.",
+        "example": "## Declaration of Competing Interest\n\n<The authors' actual declaration.>",
+    },
+    "ai_declaration": {
+        "how_to_fix": "Add Elsevier's separate section declaring the generative AI tools actually used and why, stating that the authors reviewed the output.",
+        "example": "## Declaration of generative AI and AI-assisted technologies in the manuscript preparation process\n\nDuring the preparation of this work the author(s) used <actual tool> to <actual purpose>. After using this tool, the author(s) reviewed and edited the content as needed and take(s) full responsibility for the content of the published article.",
+    },
     "escaped_prose": {
         "how_to_fix": "Replace literal '\\n' sequences with real line breaks; the manuscript was probably pasted from an escaped string.",
         "example": "",

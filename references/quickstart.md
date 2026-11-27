@@ -40,7 +40,7 @@ A new folder `article-ieee-software-<date>-<time>` is created next to the manusc
 
 ## Options
 
-- `--venue ieee-security-privacy` (or `joss`) selects another venue.
+- `--venue ieee-security-privacy` selects another venue. `check` works for all eleven venues; `export` covers the two IEEE magazines and JOSS, and the other venues' guides describe how to prepare their DOCX or PDF.
 - `--json` prints the full machine-readable report.
 - `--lang ko|en` overrides the message language (default: system locale, or `THINK_TANK_LANG`).
 
