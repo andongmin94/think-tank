@@ -75,6 +75,22 @@ FIX_HINTS = {
         "how_to_fix": "Add Elsevier's separate section declaring the generative AI tools actually used and why, stating that the authors reviewed the output.",
         "example": "## Declaration of generative AI and AI-assisted technologies in the manuscript preparation process\n\nDuring the preparation of this work the author(s) used <actual tool> to <actual purpose>. After using this tool, the author(s) reviewed and edited the content as needed and take(s) full responsibility for the content of the published article.",
     },
+    "license": {
+        "how_to_fix": "Release the software under a licence the venue accepts (JStatSoft: GPL-2, GPL-3 or GPL-compatible; SCP OSP: OSI-approved) with a LICENSE file or package metadata. Changing a licence is the copyright holders' decision.",
+        "example": "",
+    },
+    "replication_script": {
+        "how_to_fix": "Add one standalone, commented script that reproduces every result in the article (fixed random seeds, about an hour on a normal PC, or a quicker companion script), for example replication.R.",
+        "example": "",
+    },
+    "tex_template": {
+        "how_to_fix": "Write the manuscript with the venue's official LaTeX class or style as described in its guide (ASE: \\documentclass{sn-jnl}; JStatSoft: \\documentclass[article]{jss}; JMLR: \\usepackage{jmlr2e}).",
+        "example": "",
+    },
+    "pdf_pages": {
+        "how_to_fix": "Shorten the text so the References begin within the page limit; move detail to the repository documentation rather than shrinking fonts or margins.",
+        "example": "",
+    },
     "escaped_prose": {
         "how_to_fix": "Replace literal '\\n' sequences with real line breaks; the manuscript was probably pasted from an escaped string.",
         "example": "",

@@ -7,8 +7,10 @@ highlights, word budgets and required statement sections. Everything else in
 the venue guide stays a pending human or host check. Rules are taken from the
 guide files in references/ and carry the date they were checked.
 """
+from pathlib import Path
 import re
 
+from _artifact_checks import license_item, pdf_pages_item, replication_item, tex_item
 from _publication_checks import EDITORIAL_MARKERS, SKELETON_SLOT, _parts, _words
 from _publication_hints import fixes_for
 from _publication_text import mask_code, mask_inline_markup
@@ -32,8 +34,8 @@ PREPARED_RULES = {
     "jmlr-mloss": {
         "publication": "JMLR Machine Learning Open Source Software", "guide": "references/jmlr-mloss.md",
         "checked_at": "2026-11-06",
-        "pending": ["Check the compiled JMLR-style PDF: at most four pages of text plus references.",
-                    "Supply the separate cover letter naming track, version, repository, licence and community evidence."],
+        "pdf_text_pages": 4, "tex_template": "jmlr2e",
+        "pending": ["Supply the separate cover letter naming track, version, repository, licence and community evidence."],
     },
     "spe": {
         "publication": "Software: Practice and Experience", "guide": "references/spe.md", "checked_at": "2026-11-26",
@@ -48,8 +50,8 @@ PREPARED_RULES = {
         "checked_at": "2026-11-26", "abstract_words": (1, 250), "keywords": (1, 7),
         "highlights": {"required": True, "count": (3, 5), "max_chars": 85},
         "statements": ELSEVIER_STATEMENTS,
-        "pending": ["Fill the official OSP template (about six pages) without changing its formatting.",
-                    "Confirm the software uses a recognised (for example OSI-approved) licence and include its documentation."],
+        "license": "osi",
+        "pending": ["Fill the official OSP template (about six pages) without changing its formatting, and include the software's documentation."],
     },
     "jsys": {
         "publication": "Journal of Systems and Software", "guide": "references/jsys.md", "checked_at": "2026-11-26",
@@ -72,14 +74,14 @@ PREPARED_RULES = {
         "abstract_words": (150, 250), "keywords": (4, 6),
         "statements": (("statements_and_declarations", r"statements and declarations", "a 'Statements and Declarations' section"),
                        ("data_availability", r"data availability", "a data availability statement")),
-        "pending": ["Compile with the Springer Nature LaTeX template (sn-jnl) and submit sources with the PDF.",
+        "tex_template": "sn-jnl",
+        "pending": ["Submit the LaTeX sources with the compiled PDF.",
                     "Document substantive LLM use in the Methods (or a suitable) section."],
     },
     "jstatsoft": {
         "publication": "Journal of Statistical Software", "guide": "references/jstatsoft.md", "checked_at": "2026-11-26",
-        "pending": ["Confirm the code is licensed GPL-2, GPL-3 or GPL-compatible.",
-                    "Supply a standalone replication script reproducing every result, with seeds and output.",
-                    "Write in LaTeX with the JSS style and compare against existing open-source implementations."],
+        "license": "gpl_compatible", "replication": True, "tex_template": "jss",
+        "pending": ["Compare against existing open-source implementations and include a non-trivial case study."],
     },
 }
 
@@ -101,8 +103,41 @@ def _labelled(prose: str, pattern: str) -> bool:
     return re.search(rf"(?mi)^\s*(\*\*|__)?\s*({pattern})\b[^\n]*?[:.]", prose) is not None
 
 
-def validate_prepared(markdown: str, venue_id: str) -> dict:
-    """Checks a Markdown manuscript against the venue's countable rules."""
+UNCHECKED = {
+    "license": "Supply --repo so the licence can be checked ({requirement}).",
+    "replication": "Supply --repo so the standalone replication script can be found.",
+    "tex_template": "Supply --tex so the LaTeX template can be checked.",
+    "pdf_text_pages": "Supply --pdf so the compiled page count can be checked (at most {pages} pages of text).",
+}
+
+
+def _artifact_items(rules: dict, repo: Path | None, pdf: Path | None, tex: Path | None) -> list[dict]:
+    items = []
+    if "license" in rules:
+        requirement = "GPL-2, GPL-3 or GPL-compatible" if rules["license"] == "gpl_compatible" else "OSI-approved"
+        result = license_item(repo, rules["license"]) if repo else {"status": "pending",
+                                                                     "reason": UNCHECKED["license"].format(requirement=requirement)}
+        items.append(_item("license", result["status"], result["reason"], stage="manuscript" if repo else "submission"))
+    if rules.get("replication"):
+        result = replication_item(repo) if repo else {"status": "pending", "reason": UNCHECKED["replication"]}
+        items.append(_item("replication_script", result["status"], result["reason"], stage="manuscript" if repo else "submission"))
+    if "tex_template" in rules:
+        result = tex_item(tex, rules["tex_template"]) if tex else {"status": "pending", "reason": UNCHECKED["tex_template"]}
+        items.append(_item("tex_template", result["status"], result["reason"], stage="manuscript" if tex else "submission"))
+    if "pdf_text_pages" in rules:
+        pages = rules["pdf_text_pages"]
+        result = pdf_pages_item(pdf, pages) if pdf else {"status": "pending",
+                                                         "reason": UNCHECKED["pdf_text_pages"].format(pages=pages)}
+        items.append(_item("pdf_pages", result["status"], result["reason"], stage="manuscript" if pdf else "submission"))
+    return items
+
+
+def validate_prepared(markdown: str, venue_id: str, *, repo: Path | None = None, pdf: Path | None = None,
+                      tex: Path | None = None) -> dict:
+    """Checks a Markdown manuscript, and any supplied files, against the venue's countable rules."""
+    for path, kind in ((repo, "directory"), (pdf, "file"), (tex, "file")):
+        if path is not None and not (path.is_dir() if kind == "directory" else path.is_file()):
+            raise ValueError(f"Not an existing {kind}: {path}")
     if venue_id not in PREPARED_RULES:
         raise ValueError(f"No prepared-manuscript rules for {venue_id}")
     rules = PREPARED_RULES[venue_id]
@@ -178,6 +213,7 @@ def validate_prepared(markdown: str, venue_id: str) -> dict:
                        if slots else "No unfilled skeleton slots remain."))
     items.append(_item("escaped_prose", "failed" if re.search(r"\\n(?:\\n|## |[-*] |Keywords:)", prose) else "passed",
                        "Use real paragraph breaks in prose."))
+    items.extend(_artifact_items(rules, repo, pdf, tex))
     for note in rules.get("pending", []):
         items.append(_item("venue_requirement", "pending", note, stage="submission"))
     items.append(_item("author_declarations", "pending",

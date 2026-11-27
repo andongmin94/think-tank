@@ -72,7 +72,7 @@ Read [JOSS guidance](joss.md) first: it holds the `paper.md` YAML and section ru
 
 - Editable DOCX: [EMSE Research Articles](emse.md), [SPE](spe.md), [SCP OSP](scico-osp.md), [JSS](jsys.md), [IST](ist.md).
 - Initial-review PDF in the official style: [JMLR MLOSS](jmlr-mloss.md) (cover letter kept separate), [ASE](ase.md), [JStatSoft](jstatsoft.md).
-- Before converting, check the Markdown against the venue's countable rules: `python scripts/think_tank.py check paper.md --venue ist` (abstract and keyword limits, structured abstract, highlights, word budget, required statement sections). Rules not countable from Markdown (templates, page limits, licences, declarations) are listed as pending.
+- Before converting, check the Markdown against the venue's countable rules: `python scripts/think_tank.py check paper.md --venue ist` (abstract and keyword limits, structured abstract, highlights, word budget, required statement sections). Add `--repo FOLDER` (licence and replication script), `--pdf FILE` (pages of text before References) and `--tex FILE` (official LaTeX class or style) to check those too; without them the items stay pending. Declarations and forms stay human items.
 - These routes use neither the journal-specific `export_manuscript.py` converters nor the native Word finalizer.
 
 After successful host conversion and inspection of the output against the authored inputs, record exact versions with `record-conversion`, listing all actual authored inputs: the evidence-bound manuscript, any separate LaTeX source, bibliography and figures. For a Markdown manuscript with a host-prepared TeX source:

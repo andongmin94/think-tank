@@ -25,7 +25,7 @@ python scripts/think_tank.py export article.md         # 공식 템플릿 DOCX(+
 
 - `check`는 **고쳐야 할 것**(예시 포함)과 **사람이 확인할 것**(저자 정보, 사진, 최종 승인 등)을 나눠 보여 줍니다. 뼈대의 `<...>` 자리를 비워 두면 검사에서 잡힙니다.
 - `export`는 원고 옆에 `article-ieee-software-날짜-시간` 폴더를 새로 만듭니다. Word가 없으면 `--docx-only`를 붙이세요.
-- 다른 매체는 `--venue ist`처럼 지정합니다. `check`는 11개 매체 모두 그 매체의 규칙(초록·키워드 수, 구조화 초록, highlights, 단어 수, 필수 선언 섹션)으로 검사합니다. `export`는 IEEE 2곳과 JOSS만 지원하고, 나머지는 각 안내 문서대로 DOCX나 PDF를 준비합니다. 전체 기계용 보고서가 필요하면 `--json`을 붙입니다.
+- 다른 매체는 `--venue ist`처럼 지정합니다. `check`는 11개 매체 모두 그 매체의 규칙(초록·키워드 수, 구조화 초록, highlights, 단어 수, 필수 선언 섹션)으로 검사합니다. `--repo`(라이선스, 재현 스크립트), `--pdf`(참고문헌 전 본문 쪽수), `--tex`(공식 LaTeX 템플릿)를 주면 원고 밖 요건도 자동 확인합니다. `export`는 IEEE 2곳과 JOSS만 지원하고, 나머지는 각 안내 문서대로 DOCX나 PDF를 준비합니다. 전체 기계용 보고서가 필요하면 `--json`을 붙입니다.
 - macOS는 `python` 대신 `python3`을 씁니다. 먼저 `python -m pip install -r requirements.txt`로 문서 패키지를 설치합니다.
 
 자세한 흐름은 [빠른 시작 문서](references/quickstart.md)에 있습니다.

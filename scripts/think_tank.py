@@ -195,8 +195,13 @@ def _check(args, words: dict) -> int:
     manuscript = _path(args.manuscript)
     if args.venue in PREPARED_MANUSCRIPTS:
         from _prepared_checks import validate_prepared
-        report = validate_prepared(manuscript.read_text(encoding="utf-8-sig"), args.venue)
+        report = validate_prepared(manuscript.read_text(encoding="utf-8-sig"), args.venue,
+                                   repo=_path(args.repo) if args.repo else None,
+                                   pdf=_path(args.pdf) if args.pdf else None,
+                                   tex=_path(args.tex) if args.tex else None)
     else:
+        if args.repo or args.pdf or args.tex:
+            raise ValueError("--repo, --pdf and --tex apply to venues prepared outside the IEEE/JOSS exporters")
         from export_manuscript import preflight
         report = preflight(manuscript, args.venue)
     if args.json:
@@ -247,6 +252,10 @@ def main(argv: list[str] | None = None) -> int:
                              help=f"Target venue (default: {DEFAULT_VENUE})")
         if name in {"check", "export"}:
             command.add_argument("--json", action="store_true", help="Print the full machine-readable report")
+        if name == "check":
+            command.add_argument("--repo", help="Software repository folder: licence and replication-script checks")
+            command.add_argument("--pdf", help="Compiled PDF: page-limit check")
+            command.add_argument("--tex", help="LaTeX source: official template check")
         if name == "export":
             command.add_argument("--out", help="New output folder (default: next to the manuscript, timestamped)")
             command.add_argument("--docx-only", action="store_true", help="Skip Microsoft Word; create DOCX only")
