@@ -24,6 +24,7 @@ Read references only for the active task. Continuation, author-profile, anonymit
 
 - Before claiming, read consequential code, README, tests, retained experiments and nearby primary literature. Retain the inspected commit, exact source witnesses, URLs, dates and hashes.
 - Flag partial reading and inaccessible sources; an abstract is not a full paper.
+- Text extraction mangles tables, charts and equations. When a claim depends on one in a source PDF, render that page with `scripts/render_pages.py paper.pdf --pages N --output-dir NEW` and read the image; transcribe the values you use with their page numbers into a notes file and cite it in the evidence ledger.
 - Label each claim's basis in the existing evidence ledger ([kinds](references/researcher-convenience.md#link-manuscript-claims-to-actual-evidence)). A matching hash or quote does not establish truth, novelty or runtime behavior.
 - Write in English unless asked otherwise. Lead with the reader's problem, the supported contribution, competent alternatives, evidence and limitations. Cut repetition and defensive framing without hiding uncertainty. Keep collection logs, scores and missing author details out of the article.
 - Never invent results, adoption, citations, quotations, author facts, funding, consent or model identity. When evidence is missing, deliver supported prose marked incomplete, not padding or a fabricated study.

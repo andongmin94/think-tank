@@ -6,6 +6,8 @@ Resolve this skill's directory from the loaded `SKILL.md`. Scripts find assets r
 
 - Research and write with ordinary agent search, repository, browser and file tools. Retain the inspected revision and original source/document bytes. Do not execute the input project unless authorized. Canonical authored Markdown is enough; no research-response schema wraps the article.
 - Python version, interpreter, dependencies and per-task prerequisites (Pandoc, Word automation): [runtime.md](runtime.md#locate-and-use-the-installed-skill). Inspect actual dependencies before installing anything; a missing component is a reported preparation issue.
+- Source PDFs: `scripts/render_pages.py PDF --pages 3,5-7 --output-dir NEW` renders chosen pages to PNG (bundled pypdfium2, at most 30 pages per call) with a manifest of the source hash and page numbers, so tables, figures and equations can be read as images. Values read from an image are transcriptions; cite the page.
+- Figures for the article: `scripts/render_figure.py figure.svg figure.png` (installed Chrome or Edge).
 - Word for Mac: quit Word before export; the tools stage exact copies in Word's sandbox container and never save the document. A statistic Word for Mac cannot provide is reported as a failed native measurement, never estimated.
 
 Run a script's `--help` before using unfamiliar options. Replace `$python`, `$skillDirectory`, `$manuscript` and `$newOutputDirectory` below with the resolved executable and absolute paths. Do not use common system environment names for task variables.
